@@ -24,5 +24,9 @@ public class Main
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+
+        // To start the game
+        panel.setupGame();
+        panel.startGameThread();
     }
 }
