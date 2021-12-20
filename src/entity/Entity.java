@@ -10,8 +10,8 @@ import java.util.Objects;
 
 public abstract class Entity
 {
-    private int worldX;
-    private int worldY;
+    protected int worldX;
+    protected int worldY;
     protected int speed;
 
     // Sprites Image

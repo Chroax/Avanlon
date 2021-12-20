@@ -166,7 +166,24 @@ public class Player extends Entity
             }
         }
 
-        g2.drawImage(image, getWorldX(), getWorldY(), null);
+        // Stop moving camera at the edge
+        int x = screenX;
+        int y = screenY;
+
+        if(screenX > worldX)
+            x = worldX;
+        if(screenY > worldY)
+            y = worldY;
+
+        int rightOffset = gp.screenWidth - screenX;
+        if(rightOffset > gp.getWorldWidth() - worldX)
+            x = gp.screenWidth - (gp.getWorldWidth() - worldX);
+
+        int bottomOffset = gp.screenHeight - screenY;
+        if(bottomOffset > gp.getWorldHeight() - worldY)
+            y = gp.screenHeight - (gp.getWorldHeight() - worldY);
+
+        g2.drawImage(image, x, y, null);
     }
 
     // Getter
