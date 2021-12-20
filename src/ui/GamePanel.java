@@ -1,5 +1,8 @@
 package ui;
 
+import entity.Player;
+import util.UtilityTool;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -7,7 +10,7 @@ public class GamePanel extends JPanel implements Runnable
 {
     // Default setting for the screen and tile size
     private final int oriTileSize = 16;
-    private final int scale = 3;
+    private final int scale = 4;
     public final int tileSize = oriTileSize * scale;
     private final int maxScreenCol = 12;
     private final int maxScreenRow = 16;
@@ -26,15 +29,21 @@ public class GamePanel extends JPanel implements Runnable
     // Thread in game (Function as time in game)
     Thread gameThread;
 
+    // ui.KeyHandler
+    public KeyHandler keyH = new KeyHandler(this);
+
+    // Utility Tool
+    public UtilityTool uTool = new UtilityTool(this);
+
     // Game state
     public int gameState;
     public final int playState = 1;
 
-    // ui.KeyHandler
-    KeyHandler keyH = new KeyHandler(this);
-
     // Map pick
     private int mapPick;
+
+    // Player
+    public Player player = new Player(this);
 
     public GamePanel()
     {
@@ -82,13 +91,21 @@ public class GamePanel extends JPanel implements Runnable
 
     public void update()
     {
-
+        if(gameState == playState)
+        {
+            player.update();
+        }
     }
 
     public void paintComponent(Graphics g)
     {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
+        if(gameState == playState)
+        {
+            player.draw(g2);
+        }
 
+        g2.dispose();
     }
 }
