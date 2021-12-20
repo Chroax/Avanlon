@@ -1,6 +1,7 @@
 package ui;
 
 import entity.Player;
+import tile.PlainTile;
 import util.UtilityTool;
 
 import javax.swing.*;
@@ -19,7 +20,7 @@ public class GamePanel extends JPanel implements Runnable
 
     // Default setting for world in game
     private int maxWorldCol;
-    private int getMaxWorldRow;
+    private int maxWorldRow;
     private int worldWidth;
     private int worldHeight;
 
@@ -40,10 +41,12 @@ public class GamePanel extends JPanel implements Runnable
     public final int playState = 1;
 
     // Map pick
-    private int mapPick;
+    private int mapPick = 1;
 
     // Player
     public Player player = new Player(this);
+
+    PlainTile plain = new PlainTile(this);
 
     public GamePanel()
     {
@@ -57,7 +60,35 @@ public class GamePanel extends JPanel implements Runnable
     public void setupGame()
     {
         gameState = playState;
-        mapPick = 0;
+        adjustWorldWidth(mapPick);
+        adjustWorldHeight(mapPick);
+    }
+
+    public void adjustWorldWidth(int i)
+    {
+        switch (i)
+        {
+            case 0,1 -> maxWorldCol = 50;
+            case 2 -> maxWorldCol = 66;
+            case 3 -> maxWorldCol = 69;
+            case 4 -> maxWorldCol = 31;
+        }
+        worldWidth = tileSize * maxWorldCol;
+        mapPick = i;
+    }
+
+    public void adjustWorldHeight(int i)
+    {
+        switch (i)
+        {
+            case 0 -> maxWorldRow = 38;
+            case 1 -> maxWorldRow = 50;
+            case 2 -> maxWorldRow = 35;
+            case 3 -> maxWorldRow = 40;
+            case 4 -> maxWorldRow = 39;
+        }
+        worldHeight = tileSize * maxWorldRow;
+        mapPick = i;
     }
 
     public void startGameThread()
@@ -103,6 +134,7 @@ public class GamePanel extends JPanel implements Runnable
         Graphics2D g2 = (Graphics2D) g;
         if(gameState == playState)
         {
+            plain.draw(g2);
             player.draw(g2);
         }
 
@@ -113,10 +145,12 @@ public class GamePanel extends JPanel implements Runnable
     public int getScale() { return scale; }
     public int getMaxWorldCol() { return maxWorldCol; }
     public void setMaxWorldCol(int maxWorldCol) { this.maxWorldCol = maxWorldCol; }
-    public int getGetMaxWorldRow() { return getMaxWorldRow; }
-    public void setGetMaxWorldRow(int getMaxWorldRow) { this.getMaxWorldRow = getMaxWorldRow; }
+    public int getMaxWorldRow() { return maxWorldRow; }
+    public void setMaxWorldRow(int maxWorldRow) { this.maxWorldRow = maxWorldRow; }
     public int getWorldWidth() { return worldWidth; }
     public void setWorldWidth(int worldWidth) { this.worldWidth = worldWidth; }
     public int getWorldHeight() { return worldHeight; }
     public void setWorldHeight(int worldHeight) { this.worldHeight = worldHeight; }
+    public int getMapPick() {return mapPick;}
+    public void setMapPick(int mapPick) {this.mapPick = mapPick;}
 }
