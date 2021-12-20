@@ -31,13 +31,39 @@ public class Player extends Entity
 
     private void setDefaultValues()
     {
-        setWorldX(100);
-        setWorldY(100);
+        setXAndY(gp.getMapPick());
         speed = 4;
         direction = "down";
         spriteNum = 2;
         spriteCounter = 0;
         dialogueIndex = 0;
+    }
+
+    public void setXAndY(int i)
+    {
+        switch (i)
+        {
+            case 0 -> {
+                setWorldX((int)(gp.tileSize * 11.5));
+                setWorldY(gp.tileSize * 34);
+            }
+            case 1 -> {
+                setWorldX(gp.tileSize * 23);
+                setWorldY(gp.tileSize * 21);
+            }
+            case 2 -> {
+                setWorldX(gp.tileSize * 16);
+                setWorldY(gp.tileSize * 32);
+            }
+            case 3 -> {
+                setWorldX(gp.tileSize * 9);
+                setWorldY(gp.tileSize * 34);
+            }
+            case 4 -> {
+                setWorldX(gp.tileSize * 20);
+                setWorldY(gp.tileSize * 21);
+            }
+        }
     }
 
     private void getPlayerImage()
