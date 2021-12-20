@@ -10,8 +10,8 @@ import java.util.Objects;
 
 public abstract class Entity
 {
-    protected int worldX;
-    protected int worldY;
+    private int worldX;
+    private int worldY;
     protected int speed;
 
     // Sprites Image
@@ -94,4 +94,10 @@ public abstract class Entity
     }
 
     public void draw(Graphics2D g2){}
+
+    // Getter & Setter
+    public int getWorldX() { return worldX; }
+    public void setWorldX(int worldX) { this.worldX = worldX; }
+    public int getWorldY() { return worldY;}
+    public void setWorldY(int worldY) { this.worldY = worldY; }
 }
