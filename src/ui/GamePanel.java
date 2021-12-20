@@ -11,7 +11,7 @@ public class GamePanel extends JPanel implements Runnable
     // Default setting for the screen and tile size
     private final int oriTileSize = 16;
     private final int scale = 4;
-    public final int tileSize = oriTileSize * scale;
+    public final int tileSize = oriTileSize * getScale();
     private final int maxScreenCol = 12;
     private final int maxScreenRow = 16;
     public final int screenWidth = tileSize * maxScreenRow;
@@ -108,4 +108,15 @@ public class GamePanel extends JPanel implements Runnable
 
         g2.dispose();
     }
+
+    // Getter and Setter
+    public int getScale() { return scale; }
+    public int getMaxWorldCol() { return maxWorldCol; }
+    public void setMaxWorldCol(int maxWorldCol) { this.maxWorldCol = maxWorldCol; }
+    public int getGetMaxWorldRow() { return getMaxWorldRow; }
+    public void setGetMaxWorldRow(int getMaxWorldRow) { this.getMaxWorldRow = getMaxWorldRow; }
+    public int getWorldWidth() { return worldWidth; }
+    public void setWorldWidth(int worldWidth) { this.worldWidth = worldWidth; }
+    public int getWorldHeight() { return worldHeight; }
+    public void setWorldHeight(int worldHeight) { this.worldHeight = worldHeight; }
 }
