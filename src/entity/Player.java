@@ -142,4 +142,8 @@ public class Player extends Entity
 
         g2.drawImage(image, worldX, worldY, null);
     }
+
+    // Getter
+    public int getScreenX() { return screenX; }
+    public int getScreenY() { return screenY; }
 }
