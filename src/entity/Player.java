@@ -31,8 +31,8 @@ public class Player extends Entity
 
     private void setDefaultValues()
     {
-        worldX = 100;
-        worldY = 100;
+        setWorldX(100);
+        setWorldY(100);
         speed = 4;
         direction = "down";
         spriteNum = 2;
@@ -72,10 +72,10 @@ public class Player extends Entity
 
             switch (direction)
             {
-                case "up" -> worldY -= speed;
-                case "down" -> worldY += speed;
-                case "left" -> worldX -= speed;
-                case "right" -> worldX += speed;
+                case "up" -> setWorldY(getWorldY() - speed);
+                case "down" -> setWorldY(getWorldY() + speed);
+                case "left" -> setWorldX(getWorldX() - speed);
+                case "right" -> setWorldX(getWorldX() + speed);
             }
 
             spriteCounter++;
@@ -140,7 +140,7 @@ public class Player extends Entity
             }
         }
 
-        g2.drawImage(image, worldX, worldY, null);
+        g2.drawImage(image, getWorldX(), getWorldY(), null);
     }
 
     // Getter
