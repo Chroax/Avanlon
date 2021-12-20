@@ -1,5 +1,9 @@
-# Ignore folder res
+# Ignore folder res, bin, .idea, .settings
 res/
-
-# Ignore folder bin
 bin/
+.idea/
+.settings/
+
+# Ignore file .classpath and .project
+.classpath
+.project
