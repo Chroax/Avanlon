@@ -2,6 +2,7 @@ package ui;
 
 import entity.Player;
 import tile.PlainTile;
+import util.CollisionChecker;
 import util.UtilityTool;
 
 import javax.swing.*;
@@ -11,7 +12,6 @@ public class GamePanel extends JPanel implements Runnable
 {
     // Default setting for the screen and tile size
     private final int oriTileSize = 16;
-    private final int scale = 4;
     public final int tileSize = oriTileSize * getScale();
     private final int maxScreenCol = 12;
     private final int maxScreenRow = 16;
@@ -24,9 +24,6 @@ public class GamePanel extends JPanel implements Runnable
     private int worldWidth;
     private int worldHeight;
 
-    // FPS in Game
-    private final int FPS = 60;
-
     // Thread in game (Function as time in game)
     Thread gameThread;
 
@@ -36,6 +33,9 @@ public class GamePanel extends JPanel implements Runnable
     // Utility Tool
     public UtilityTool uTool = new UtilityTool(this);
 
+    // Collision Checker
+    public CollisionChecker cChecker = new CollisionChecker(this);
+
     // Game state
     public int gameState;
     public final int playState = 1;
@@ -43,10 +43,11 @@ public class GamePanel extends JPanel implements Runnable
     // Map pick
     private int mapPick = 1;
 
+    // Map
+    public PlainTile plain = new PlainTile(this);
+
     // Player
     public Player player = new Player(this);
-
-    PlainTile plain = new PlainTile(this);
 
     public GamePanel()
     {
@@ -142,7 +143,7 @@ public class GamePanel extends JPanel implements Runnable
     }
 
     // Getter and Setter
-    public int getScale() { return scale; }
+    public int getScale() { return 4; }
     public int getMaxWorldCol() { return maxWorldCol; }
     public void setMaxWorldCol(int maxWorldCol) { this.maxWorldCol = maxWorldCol; }
     public int getMaxWorldRow() { return maxWorldRow; }

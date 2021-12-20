@@ -21,7 +21,7 @@ public class Player extends Entity
         screenX = gp.screenWidth/2 - (gp.tileSize/2);
         screenY = gp.screenHeight/2 - (gp.tileSize/2);
 
-        solidArea = new Rectangle(8, 16, 64, 64);
+        solidArea = new Rectangle(10, 32, 32, 32);
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
 
@@ -32,8 +32,8 @@ public class Player extends Entity
     private void setDefaultValues()
     {
         setXAndY(gp.getMapPick());
-        speed = 4;
-        direction = "down";
+        setSpeed(4);
+        setDirection("down");
         spriteNum = 2;
         spriteCounter = 0;
         dialogueIndex = 0;
@@ -89,19 +89,26 @@ public class Player extends Entity
         if(gp.keyH.upPressed || gp.keyH.downPressed || gp.keyH.leftPressed || gp.keyH.rightPressed)
         {
             if (gp.keyH.upPressed)
-                direction = "up";
+                setDirection("up");
             else if (gp.keyH.downPressed)
-                direction = "down";
+                setDirection("down");
             else if (gp.keyH.leftPressed)
-                direction = "left";
-            else direction = "right";
+                setDirection("left");
+            else setDirection("right");
 
-            switch (direction)
+            // Check Tile Collision
+            this.setCollisionOn(false);
+            gp.cChecker.checkTile(this);
+
+            if(!isCollisionOn())
             {
-                case "up" -> setWorldY(getWorldY() - speed);
-                case "down" -> setWorldY(getWorldY() + speed);
-                case "left" -> setWorldX(getWorldX() - speed);
-                case "right" -> setWorldX(getWorldX() + speed);
+                switch (getDirection())
+                {
+                    case "up" -> setWorldY(getWorldY() - getSpeed());
+                    case "down" -> setWorldY(getWorldY() + getSpeed());
+                    case "left" -> setWorldX(getWorldX() - getSpeed());
+                    case "right" -> setWorldX(getWorldX() + getSpeed());
+                }
             }
 
             spriteCounter++;
@@ -130,7 +137,7 @@ public class Player extends Entity
     {
         BufferedImage image = null;
 
-        switch (direction)
+        switch (getDirection())
         {
             case "up" -> {
                 if (spriteNum == 1)
@@ -184,6 +191,8 @@ public class Player extends Entity
             y = gp.screenHeight - (gp.getWorldHeight() - worldY);
 
         g2.drawImage(image, x, y, null);
+        g2.setColor(Color.red);
+        g2.drawRect(solidArea.x + screenX, solidArea.y + screenY, solidArea.width, solidArea.height);
     }
 
     // Getter
