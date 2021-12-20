@@ -13,7 +13,7 @@ import java.util.Objects;
 public abstract class TileManager
 {
     GamePanel gp;
-    protected Tile[] tile;
+    public Tile[] tile;
     public int[][] mapTileNum;
     protected int col;
     protected int row;

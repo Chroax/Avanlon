@@ -12,14 +12,14 @@ public abstract class Entity
 {
     protected int worldX;
     protected int worldY;
-    protected int speed;
+    private int speed;
 
     // Sprites Image
     protected BufferedImage up1, up2, up3;
     protected BufferedImage down1, down2, down3;
     protected BufferedImage left1, left2, left3;
     protected BufferedImage right1, right2, right3;
-    protected String direction;
+    private String direction;
     public int spriteCounter;
     public int spriteNum;
     protected int imgWidth;
@@ -30,7 +30,7 @@ public abstract class Entity
     protected int dialogueIndex;
 
     // Collision
-    protected boolean collisionOn;
+    private boolean collisionOn;
     public Rectangle solidArea;
     protected int solidAreaDefaultX;
     protected int solidAreaDefaultY;
@@ -100,4 +100,10 @@ public abstract class Entity
     public void setWorldX(int worldX) { this.worldX = worldX; }
     public int getWorldY() { return worldY;}
     public void setWorldY(int worldY) { this.worldY = worldY; }
+    public boolean isCollisionOn() { return collisionOn; }
+    public void setCollisionOn(boolean collisionOn) { this.collisionOn = collisionOn; }
+    public String getDirection() { return direction; }
+    public void setDirection(String direction) { this.direction = direction; }
+    public int getSpeed() { return speed; }
+    public void setSpeed(int speed) { this.speed = speed; }
 }
