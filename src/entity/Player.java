@@ -9,7 +9,6 @@ public class Player extends Entity
 {
     private final int screenX;
     private final int screenY;
-    private int standCounter = 0;
 
     public Player(GamePanel gp)
     {

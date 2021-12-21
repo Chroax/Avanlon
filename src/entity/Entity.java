@@ -10,7 +10,7 @@ import java.util.Objects;
 
 public abstract class Entity
 {
-    protected String name;
+    private String name;
 
     protected int worldX;
     protected int worldY;
@@ -24,6 +24,9 @@ public abstract class Entity
     private String direction;
     public int spriteCounter;
     public int spriteNum;
+    protected int standCounter = 0;
+    protected int actionLockCounter = 0;
+
     protected int imgWidth;
     protected int imgHeight;
 
@@ -108,4 +111,6 @@ public abstract class Entity
     public void setDirection(String direction) { this.direction = direction; }
     public int getSpeed() { return speed; }
     public void setSpeed(int speed) { this.speed = speed; }
+    public String getName() {return name;}
+    public void setName(String name) {this.name = name;}
 }
