@@ -52,7 +52,15 @@ public class GamePanel extends JPanel implements Runnable
     public final int startState = 0;
     public final int playState = 1;
     public final int battleState = 2;
-    public final int pauseState = 3;
+    public final int loadingBattleState = 3;
+    public final int winBattleState = 4;
+    public final int pauseState = 5;
+    public final int dialogState = 6;
+    public final int chooseMapState = 7;
+    public final int loadMapState = 8;
+    public final int inventoryState = 9;
+    public final int merchantState = 10;
+    public final int showStatusState = 11;
 
     // Map pick
     private int mapPick = 0;
@@ -148,7 +156,9 @@ public class GamePanel extends JPanel implements Runnable
         Graphics2D g2 = (Graphics2D) g;
         if(gameState == startState)
             ui.draw(g2);
-        else if(gameState == playState)
+        else if(gameState == battleState || gameState == pauseState)
+            ui.draw(g2);
+        else
         {
             map[mapPick].draw(g2);
 
@@ -168,8 +178,6 @@ public class GamePanel extends JPanel implements Runnable
 
             ui.draw(g2);
         }
-        else if(gameState == battleState || gameState == pauseState)
-            ui.draw(g2);
 
         g2.dispose();
     }

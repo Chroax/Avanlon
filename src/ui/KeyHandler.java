@@ -211,6 +211,56 @@ public class KeyHandler implements KeyListener
                 case KeyEvent.VK_P -> gp.gameState = gp.returnState;
             }
         }
+        else if(gp.gameState == gp.chooseMapState) {
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_W -> {
+                    gp.ui.commandNum--;
+                    if (gp.ui.commandNum < 0)
+                        gp.ui.commandNum = 4;
+                }
+                case KeyEvent.VK_S -> {
+                    gp.ui.commandNum++;
+                    if (gp.ui.commandNum > 4)
+                        gp.ui.commandNum = 0;
+                }
+                case KeyEvent.VK_ENTER -> {
+                    switch (gp.ui.commandNum) {
+                        case 0 -> {
+                            gp.adjustWorldWidth(gp.plain);
+                            gp.adjustWorldHeight(gp.plain);
+                            gp.setMapPick(gp.plain);
+                            gp.gameState = gp.playState;
+                            gp.player.setXAndY(gp.plain);
+                        }
+                        case 1 -> {
+                            gp.adjustWorldWidth(gp.dungeon);
+                            gp.adjustWorldHeight(gp.dungeon);
+                            gp.setMapPick(gp.dungeon);
+                            gp.gameState = gp.playState;
+                            gp.player.setXAndY(gp.dungeon);
+                        }
+                        case 2 -> {
+                            gp.adjustWorldWidth(gp.castle);
+                            gp.adjustWorldHeight(gp.castle);
+                            gp.setMapPick(gp.castle);
+                            gp.gameState = gp.playState;
+                            gp.player.setXAndY(gp.castle);
+                        }
+                        case 3 -> {
+                            gp.adjustWorldWidth(gp.snow);
+                            gp.adjustWorldHeight(gp.snow);
+                            gp.setMapPick(gp.snow);
+                            gp.gameState = gp.playState;
+                            gp.player.setXAndY(gp.snow);
+                        }
+                        case 4 -> {
+                            gp.ui.commandNum = 0;
+                            gp.gameState = gp.playState;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Override

@@ -14,16 +14,21 @@ public class UI
 {
     GamePanel gp;
     Graphics2D g2;
+
     BufferedImage imageEquip;
     BufferedImage imagePlayer;
+
     public static Font maruMonica;
     public static Font pokemon;
+
     public int homeState = 0;
     public int titleState = 1;
     public int chooseState = 2;
     public int battleState = 3;
     public int startScreenState = homeState;
     public State[] states = new State[4];
+
+    public int commandNum = 0;
 
     public UI(GamePanel gp)
     {
@@ -82,6 +87,43 @@ public class UI
             drawPlayUI();
         else if(gp.gameState == gp.pauseState)
             drawPauseScreen();
+        else if(gp.gameState == gp.chooseMapState)
+            drawChooseMapScreen();
+    }
+
+    public void drawChooseMapScreen()
+    {
+        String mapOption = "PLAIN\nDUNGEON\nCASTLE\nSNOW\nBACK";
+        int i = 0;
+        int x = gp.tileSize * 2;
+        int y = gp.tileSize / 2;
+        int width = gp.screenWidth - (gp.tileSize * 4);
+        int height = (int) (gp.tileSize * 5);
+        drawSubWindow(x, y, width, height);
+
+        x += gp.tileSize;
+        y += gp.tileSize;
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 40F));
+        for (String line: mapOption.split("\n"))
+        {
+            g2.drawString(line, x, y);
+            if(commandNum == i)
+                g2.drawString(">", x - 15, y);
+            i++;
+            if(i == 4)
+                y += 80;
+            else
+                y += 40;
+        }
+    }
+
+    public void drawSubWindow(int x, int y, int width, int height)
+    {
+        g2.setColor(new Color(0, 0, 0, 215));
+        g2.fillRoundRect(x, y, width, height, 35, 35);
+        g2.setColor(new Color(255, 255, 255));
+        g2.setStroke(new BasicStroke(5));
+        g2.drawRoundRect(x + 5, y + 5, width - 10, height -10, 25, 25);
     }
 
     public void drawPlayUI()

@@ -61,7 +61,7 @@ public class Player extends Entity
 
         setName("Player");
         setXAndY(gp.getMapPick());
-        setSpeed(4);
+        setSpeed(40);
         setDirection("down");
         spriteNum = 2;
         spriteCounter = 0;
@@ -224,7 +224,17 @@ public class Player extends Entity
 
     public void interactObj(int i)
     {
-
+        if(i != 999)
+        {
+            String objectName = gp.map[gp.getMapPick()].obj[i].getName();
+            switch (objectName)
+            {
+                case "Stair" -> {
+                    if(gp.keyH.enterPressed)
+                        gp.gameState = gp.chooseMapState;
+                }
+            }
+        }
     }
 
     public void defeatMonster(Entity entity)
