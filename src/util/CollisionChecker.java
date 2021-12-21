@@ -54,4 +54,53 @@ public class CollisionChecker
             }
         }
     }
+
+    public void checkEntity(Entity entity, Entity[] target)
+    {
+
+    }
+
+    public void checkPlayer(Entity entity)
+    {
+        // Get entity solid area position
+        entity.solidArea.x = entity.getWorldX() + entity.solidArea.x;
+        entity.solidArea.y = entity.getWorldY() + entity.solidArea.y;
+
+        // Get the object solid area position
+        gp.player.solidArea.x += gp.player.getWorldX();
+        gp.player.solidArea.y += gp.player.getWorldY();
+
+        switch (entity.getDirection())
+        {
+            case "up" -> {
+                // To predict what tiles are player to step in
+                entity.solidArea.y -= entity.getSpeed();
+                if(entity.solidArea.intersects(gp.player.solidArea))
+                    entity.setCollisionOn(true);
+            }
+            case "down" -> {
+                // To predict what tiles are player to step in
+                entity.solidArea.y += entity.getSpeed();
+                if(entity.solidArea.intersects(gp.player.solidArea))
+                    entity.setCollisionOn(true);
+            }
+            case "left" -> {
+                // To predict what tiles are player to step in
+                entity.solidArea.x -= entity.getSpeed();
+                if(entity.solidArea.intersects(gp.player.solidArea))
+                    entity.setCollisionOn(true);
+            }
+            case "right" -> {
+                // To predict what tiles are player to step in
+                entity.solidArea.x += entity.getSpeed();
+                if(entity.solidArea.intersects(gp.player.solidArea))
+                    entity.setCollisionOn(true);
+            }
+        }
+
+        entity.solidArea.x = entity.getSolidAreaDefaultX();
+        entity.solidArea.y = entity.getSolidAreaDefaultY();
+        gp.player.solidArea.x = gp.player.getSolidAreaDefaultX();
+        gp.player.solidArea.y = gp.player.getSolidAreaDefaultY();
+    }
 }

@@ -37,8 +37,8 @@ public abstract class Entity
     // Collision
     private boolean collisionOn;
     public Rectangle solidArea;
-    protected int solidAreaDefaultX;
-    protected int solidAreaDefaultY;
+    private int solidAreaDefaultX;
+    private int solidAreaDefaultY;
 
     public GamePanel gp;
 
@@ -184,4 +184,8 @@ public abstract class Entity
     public void setSpeed(int speed) { this.speed = speed; }
     public String getName() {return name;}
     public void setName(String name) {this.name = name;}
+    public int getSolidAreaDefaultX() {return solidAreaDefaultX;}
+    public void setSolidAreaDefaultX(int solidAreaDefaultX) {this.solidAreaDefaultX = solidAreaDefaultX;}
+    public int getSolidAreaDefaultY() {return solidAreaDefaultY;}
+    public void setSolidAreaDefaultY(int solidAreaDefaultY) {this.solidAreaDefaultY = solidAreaDefaultY;}
 }

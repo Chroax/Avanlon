@@ -13,6 +13,9 @@ public class Werewolf extends Monster
         imgHeight = 48;
         imgWidth = 48;
         solidArea = new Rectangle(0, 0, 64, 64);
+        setSolidAreaDefaultX(solidArea.x);
+        setSolidAreaDefaultY(solidArea.y);
+
         setDefaultValues();
         getWerewolfImage();
     }
@@ -76,6 +79,7 @@ public class Werewolf extends Monster
 
             setCollisionOn(false);
             gp.cChecker.checkTile(this);
+            gp.cChecker.checkPlayer(this);
 
             if(!isCollisionOn())
             {
