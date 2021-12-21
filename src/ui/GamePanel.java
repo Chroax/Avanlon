@@ -3,9 +3,7 @@ package ui;
 import entity.JobClass;
 import entity.Player;
 import entity.monster.Monster;
-import tile.PlainTile;
-import tile.TileManager;
-import tile.VillageTile;
+import tile.*;
 import util.AssetSetter;
 import util.CollisionChecker;
 import util.UtilityTool;
@@ -56,7 +54,7 @@ public class GamePanel extends JPanel implements Runnable
     public final int pauseState = 3;
 
     // Map pick
-    private int mapPick = 0;
+    private int mapPick = 4;
 
     // Map
     public TileManager[] map;
@@ -65,7 +63,6 @@ public class GamePanel extends JPanel implements Runnable
     public final int dungeon = 2;
     public final int castle = 3;
     public final int snow = 4;
-//    public PlainTile plain = new PlainTile(this);
 
     // Player
     public Player player;
@@ -93,6 +90,9 @@ public class GamePanel extends JPanel implements Runnable
         map = new TileManager[5];
         map[village] = new VillageTile(this);
         map[plain] = new PlainTile(this);
+        map[dungeon] = new DungeonTile(this);
+        map[castle] = new CastleTile(this);
+        map[snow] = new SnowTile(this);
     }
 
     public void startGameThread()
@@ -173,7 +173,7 @@ public class GamePanel extends JPanel implements Runnable
             case 0,1 -> maxWorldCol = 50;
             case 2 -> maxWorldCol = 66;
             case 3 -> maxWorldCol = 69;
-            case 4 -> maxWorldCol = 31;
+            case 4 -> maxWorldCol = 42;
         }
         worldWidth = tileSize * maxWorldCol;
         mapPick = i;
@@ -187,7 +187,7 @@ public class GamePanel extends JPanel implements Runnable
             case 1 -> maxWorldRow = 50;
             case 2 -> maxWorldRow = 35;
             case 3 -> maxWorldRow = 40;
-            case 4 -> maxWorldRow = 39;
+            case 4 -> maxWorldRow = 30;
         }
         worldHeight = tileSize * maxWorldRow;
         mapPick = i;
