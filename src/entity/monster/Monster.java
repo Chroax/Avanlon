@@ -29,6 +29,9 @@ public class Monster extends Entity
     private int xp;
     private int gold;
 
+    protected boolean stopMov = false;
+    protected int stopCounter = 0;
+
     public Monster(GamePanel gp) { super(gp); }
 
     // Getter & Setter

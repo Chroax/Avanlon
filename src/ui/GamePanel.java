@@ -1,7 +1,9 @@
 package ui;
 
 import entity.Player;
+import entity.monster.Monster;
 import tile.PlainTile;
+import util.AssetSetter;
 import util.CollisionChecker;
 import util.UtilityTool;
 
@@ -36,6 +38,9 @@ public class GamePanel extends JPanel implements Runnable
     // Collision Checker
     public CollisionChecker cChecker = new CollisionChecker(this);
 
+    // Asset setter (Object, monster, npc)
+    public AssetSetter aSetter = new AssetSetter(this);
+
     // Game state
     public int gameState;
     public final int playState = 1;
@@ -63,6 +68,7 @@ public class GamePanel extends JPanel implements Runnable
         gameState = playState;
         adjustWorldWidth(mapPick);
         adjustWorldHeight(mapPick);
+        aSetter.setMonster();
     }
 
     public void adjustWorldWidth(int i)
@@ -126,6 +132,14 @@ public class GamePanel extends JPanel implements Runnable
         if(gameState == playState)
         {
             player.update();
+
+            for(Monster monster: plain.monsters)
+            {
+                if(monster != null)
+                {
+                    monster.update();
+                }
+            }
         }
     }
 
@@ -137,6 +151,12 @@ public class GamePanel extends JPanel implements Runnable
         {
             plain.draw(g2);
             player.draw(g2);
+
+            for(Monster monster: plain.monsters)
+            {
+                if(monster != null)
+                    monster.draw(g2);
+            }
         }
 
         g2.dispose();

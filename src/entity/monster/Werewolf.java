@@ -12,7 +12,7 @@ public class Werewolf extends Monster
         super(gp);
         imgHeight = 48;
         imgWidth = 48;
-        solidArea = new Rectangle(0, 0, 48, 48);
+        solidArea = new Rectangle(0, 0, 64, 64);
         setDefaultValues();
         getWerewolfImage();
     }
@@ -44,7 +44,7 @@ public class Werewolf extends Monster
         setXp(10);
         setGold(100);
 
-        setSpeed(4);
+        setSpeed(3);
         setDirection("down");
         spriteNum = 2;
         spriteCounter = 0;
@@ -52,47 +52,72 @@ public class Werewolf extends Monster
 
     public void getWerewolfImage()
     {
-        String txt = "/monster/48x48/werewolf/werewolf";
-        down1 = setup(txt + " 1", 1.5, 1.5);
-        down2 = setup(txt + " 2", 1.5, 1.5);
-        down3 = setup(txt + " 3", 1.5, 1.5);
-        left1 = setup(txt + " 4", 1.5, 1.5);
-        left2 = setup(txt + " 5", 1.5, 1.5);
-        left3 = setup(txt + " 6", 1.5, 1.5);
-        right1 = setup(txt + " 7", 1.5, 1.5);
-        right2 = setup(txt + " 8", 1.5, 1.5);
-        right3 = setup(txt + " 9", 1.5, 1.5);
-        up1 = setup(txt + " 10", 1.5, 1.5);
-        up2 = setup(txt + " 11", 1.5, 1.5);
-        up3 = setup(txt + " 12", 1.5, 1.5);
+        String txt = "/monster/48x48/icewerewolf/ice_werewolf";
+        down1 = setup(txt + " 1");
+        down2 = setup(txt + " 2");
+        down3 = setup(txt + " 3");
+        left1 = setup(txt + " 4");
+        left2 = setup(txt + " 5");
+        left3 = setup(txt + " 6");
+        right1 = setup(txt + " 7");
+        right2 = setup(txt + " 8");
+        right3 = setup(txt + " 9");
+        up1 = setup(txt + " 10");
+        up2 = setup(txt + " 11");
+        up3 = setup(txt + " 12");
     }
 
     @Override
     public void update()
     {
-        setAction();
-        setCollisionOn(false);
-        gp.cChecker.checkTile(this);
-
-        if(!isCollisionOn())
+        if(!stopMov)
         {
-            switch (getDirection())
+            setAction();
+
+            setCollisionOn(false);
+            gp.cChecker.checkTile(this);
+
+            if(!isCollisionOn())
             {
-                case "up" -> worldY -= getSpeed();
-                case "down" -> worldY += getSpeed();
-                case "left" -> worldX -= getSpeed();
-                case "right" -> worldX += getSpeed();
+                switch (getDirection())
+                {
+                    case "up" -> worldY -= getSpeed();
+                    case "down" -> worldY += getSpeed();
+                    case "left" -> worldX -= getSpeed();
+                    case "right" -> worldX += getSpeed();
+                }
+            }
+
+            spriteCounter++;
+            stopCounter++;
+            if (spriteCounter > 15)
+            {
+                if (spriteNum == 1)
+                    spriteNum = 3;
+                else if (spriteNum == 3 || spriteNum == 2)
+                    spriteNum = 1;
+                spriteCounter = 0;
+            }
+            if(stopCounter == 120)
+            {
+                stopMov = true;
+                stopCounter = 0;
             }
         }
-
-        spriteCounter++;
-        if (spriteCounter > 8)
+        else
         {
-            if (spriteNum == 1)
+            standCounter++;
+            stopCounter++;
+            if(standCounter == 8)
+            {
                 spriteNum = 2;
-            else if (spriteNum == 2)
-                spriteNum = 1;
-            spriteCounter = 0;
+                standCounter = 0;
+            }
+            if(stopCounter == 60)
+            {
+                stopMov = false;
+                stopCounter = 0;
+            }
         }
     }
 
@@ -100,7 +125,7 @@ public class Werewolf extends Monster
     public void setAction()
     {
         actionLockCounter++;
-        if(actionLockCounter == 120)
+        if(actionLockCounter == 80)
         {
             Random random = new Random();
             int i = random.nextInt(100) + 1;

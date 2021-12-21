@@ -98,7 +98,78 @@ public abstract class Entity
         return scaledImage;
     }
 
-    public void draw(Graphics2D g2){}
+    public void draw(Graphics2D g2)
+    {
+        BufferedImage image = null;
+        int screenX = worldX - gp.player.worldX + gp.player.getScreenX();
+        int screenY = worldY - gp.player.worldY + gp.player.getScreenY();
+
+        // STOP MOVING CAMERA
+        if(gp.player.worldX < gp.player.getScreenX())
+            screenX = worldX;
+        if(gp.player.worldY < gp.player.getScreenY())
+            screenY = worldY;
+
+        int rightOffset = gp.screenWidth - gp.player.getScreenX();
+        if(rightOffset > gp.getWorldWidth() - gp.player.worldX)
+            screenX = gp.screenWidth - (gp.getWorldWidth() - worldX);
+
+        int bottomOffset = gp.screenHeight - gp.player.getScreenY();
+        if(bottomOffset > gp.getWorldHeight() - gp.player.worldY)
+            screenY = gp.screenHeight - (gp.getWorldHeight() - worldY);
+
+        switch (direction)
+        {
+            case "up" -> {
+                if (spriteNum == 1)
+                    image = up1;
+                else if (spriteNum == 2)
+                    image = up2;
+                else if (spriteNum == 3)
+                    image = up3;
+            }
+            case "down" -> {
+                if (spriteNum == 1)
+                    image = down1;
+                else if (spriteNum == 2)
+                    image = down2;
+                else if (spriteNum == 3)
+                    image = down3;
+            }
+            case "left" -> {
+                if (spriteNum == 1)
+                    image = left1;
+                else if (spriteNum == 2)
+                    image = left2;
+                else if (spriteNum == 3)
+                    image = left3;
+            }
+            case "right" -> {
+                if (spriteNum == 1)
+                    image = right1;
+                else if (spriteNum == 2)
+                    image = right2;
+                else if (spriteNum == 3)
+                    image = right3;
+            }
+        }
+
+        if(worldX + gp.tileSize > gp.player.worldX - gp.player.getScreenX() &&
+                worldX - gp.tileSize < gp.player.worldX + gp.player.getScreenX() &&
+                worldY + gp.tileSize > gp.player.worldY - gp.player.getScreenY() &&
+                worldY - gp.tileSize < gp.player.worldY + gp.player.getScreenY())
+            g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+
+            // If player is around the edge, draw everything
+        else if(gp.player.worldX < gp.player.getScreenX() ||
+                gp.player.worldY < gp.player.getScreenY() ||
+                rightOffset > gp.getWorldWidth() - gp.player.worldX ||
+                bottomOffset > gp.getWorldHeight() - gp.player.worldY)
+            g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+
+        g2.setColor(Color.red);
+        g2.drawRect(solidArea.x + screenX, solidArea.y + screenY, solidArea.width, solidArea.height);
+    }
 
     // Getter & Setter
     public int getWorldX() { return worldX; }

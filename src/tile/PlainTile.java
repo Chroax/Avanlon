@@ -1,9 +1,11 @@
 package tile;
 
+import entity.monster.Monster;
 import ui.GamePanel;
 
 public class PlainTile extends TileManager
 {
+    public Monster[] monsters = new Monster[5];
 
     public PlainTile(GamePanel gp)
     {
