@@ -15,8 +15,14 @@ import java.util.Objects;
 public class BattleState extends State
 {
     BufferedImage pointer;
+    BufferedImage dialogPointer;
+    BufferedImage playerHPBar;
+    BufferedImage playerMPBar;
     Rectangle[] rectangles;
     public boolean messageOn = false;
+    private String message1 = "";
+    private String message2 = "";
+    private int messageCounter = 0;
 
     public BattleState(GamePanel gp)
     {
@@ -52,6 +58,9 @@ public class BattleState extends State
         try
         {
             pointer = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/pointer2.png")));
+            playerHPBar = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/health_bar.png")));
+            playerMPBar = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/mana_bar.png")));
+            dialogPointer = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/dialog_pointer.png")));
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -152,16 +161,73 @@ public class BattleState extends State
 
        if(!messageOn)
        {
-           health = (double) gp.player.getHP() / gp.player.getMaxHP();
-           healthBar = (int) (163 * health);
+           g2.setColor(new Color(95, 94, 110));
+           g2.drawString("HP", 82, 642);
+           g2.drawString("MP", 82, 712);
 
-           g2.setColor(new Color(82, 106, 90));
-           g2.fillRect(163, 91, 163, 12);
-           if(health <= 0.3)
-               g2.setColor(new Color(252, 89 , 58));
+           g2.setColor(new Color(236, 239, 244));
+           g2.drawString("HP", 80, 640);
+           g2.drawString("MP", 80, 710);
+
+           g2.drawImage(playerHPBar, 140, 610, 340, 44, null);
+           g2.drawImage(playerMPBar, 140, 680, 340, 44, null);
+           health = (double) gp.player.getHP() / gp.player.getMaxHP();
+           healthBar = (int) (228 * health);
+           double mp = (double) gp.player.getMP() / gp.player.getMaxMP();
+           int mpBar = (int) (228 * mp);
+
+           if(healthBar != 0)
+           {
+               g2.setColor(new Color(208, 70, 72));
+               g2.fillRect(196 , 622, healthBar, 19);
+               g2.setColor(new Color(210, 170, 153));
+               g2.fillRect(199 , 622, healthBar - 3, 9);
+           }
            else
-               g2.setColor(new Color(96, 232 , 208));
-           g2.fillRect(163, 91, healthBar, 12);
+           {
+               g2.setColor(new Color(133, 149, 161));
+               g2.fillRect(199 , 622, healthBar - 3, 9);
+           }
+
+           if(mpBar != 0)
+           {
+               g2.setColor(new Color(89, 125, 206));
+               g2.fillRect(196 , 692, mpBar, 19);
+               g2.setColor(new Color(109, 194, 202));
+               g2.fillRect(199 , 692, mpBar - 3, 9);
+           }
+           else
+           {
+               g2.setColor(new Color(133, 149, 161));
+               g2.fillRect(199 , 692, mpBar - 3, 9);
+           }
+       }
+       else
+       {
+           attributes.put(TextAttribute.TRACKING, 0);
+           g2.setFont(g2.getFont().deriveFont(attributes));
+
+           g2.setColor(new Color(95, 94, 110));
+           g2.drawString(message1, 70, 654);
+           g2.drawString(message2, 70, 702);
+
+           g2.setColor(new Color(236, 239, 244));
+           g2.drawString(message1, 70, 652);
+           g2.drawString(message2, 70, 700);
+           messageCounter++;
+           if(messageCounter < 15)
+               g2.drawImage(dialogPointer, 490, 710, 18, 11, null);
+           else if(messageCounter > 30)
+               messageCounter = 0;
        }
    }
+
+    public void showMessage(String text, int index)
+    {
+        if(index == 1)
+            message1 = text;
+        else
+            message2 = text;
+        messageOn = true;
+    }
 }

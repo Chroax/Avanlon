@@ -1,5 +1,6 @@
 package entity;
 
+import state.BattleState;
 import ui.GamePanel;
 import ui.UI;
 
@@ -72,11 +73,11 @@ public abstract class Entity
 
     public void speak(){}
 
-    public void attack(Entity entity)
+    public void attack(Entity entity, int index)
     {
         Random random = new Random();
         if(random.nextDouble() < 0.15 * entity.getEVD() / getACC())
-            System.out.println( entity.getName() + " DODGE");
+            ((BattleState)gp.ui.states[0]).showMessage(entity.name + "   dodge   the   attack", index);
         else
         {
             int phyAtt = getSTR() * 2 - entity.getDEF();
@@ -85,6 +86,7 @@ public abstract class Entity
             if(random.nextDouble() < 0.15 * getCRIT() / entity.getEVD())
                 totalAtt *= 2;
             entity.setHP(entity.getHP() - totalAtt);
+            ((BattleState)gp.ui.states[0]).showMessage(name + "   give   " + totalAtt + "   damage", index);
         }
     }
 

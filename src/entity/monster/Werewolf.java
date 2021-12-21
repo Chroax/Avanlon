@@ -26,7 +26,7 @@ public class Werewolf extends Monster
         setType("Common");
         setHP(100);setMaxHP(100);
         setMP(50);setMaxMP(50);
-        setSTR(100);setMaxSTR(100);
+        setSTR(10);setMaxSTR(10);
         setINT(3);setMaxINT(3);
         setACC(6);setMaxACC(6);
         setEVD(10);setMaxEVD(10);

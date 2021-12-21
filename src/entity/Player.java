@@ -1,5 +1,6 @@
 package entity;
 
+import state.BattleState;
 import ui.GamePanel;
 
 import java.awt.*;
@@ -157,6 +158,7 @@ public class Player extends Entity
         {
             if(gp.keyH.enterPressed)
             {
+                ((BattleState)gp.ui.states[0]).messageOn = false;
                 gp.gameState = gp.battleState;
                 gp.monsterIndex = i;
             }

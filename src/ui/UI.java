@@ -3,14 +3,19 @@ package ui;
 import state.BattleState;
 import state.State;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 
 public class UI
 {
     GamePanel gp;
     Graphics2D g2;
+    BufferedImage imageEquip;
+    BufferedImage imagePlayer;
     public static Font maruMonica;
     public static Font pokemon;
     public State[] states = new State[1];
@@ -43,7 +48,15 @@ public class UI
 
     public void getUIImage()
     {
-
+        try
+        {
+            imageEquip = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/equip_ui.png")));
+            imagePlayer = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/player_ui.png")));
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public void draw(Graphics2D g2)
@@ -61,7 +74,59 @@ public class UI
 
     public void drawPlayUI()
     {
+        g2.drawImage(imagePlayer, 10,20, 200, 62, null);
+        g2.drawImage(imageEquip, 10, 85, 130, 48, null);
+        g2.setFont(pokemon);
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 20F));
+        g2.drawString("Level    " + gp.player.getLvl(), 60, 18);
 
+        double health = (double) gp.player.getHP() / gp.player.getMaxHP();
+        int healthBar = (int) (102 * health);
+        double mp = (double) gp.player.getMP() / gp.player.getMaxMP();
+        int mpBar = (int) (102 * mp);
+        double exp = (double) gp.player.getEXP() / gp.player.getMaxEXP();
+        int expBar = (int) (102 * exp);
+
+        if(healthBar != 0)
+        {
+            g2.setColor(new Color(208, 70, 72));
+            g2.fillRect(82 , 28, healthBar, 8);
+            g2.setColor(new Color(210, 170, 153));
+            g2.fillRect(84 , 28, healthBar - 2, 4);
+        }
+        else
+        {
+            g2.setColor(new Color(133, 149, 161));
+            g2.fillRect(84 , 28, healthBar - 2, 4);
+        }
+
+        if(mpBar != 0)
+        {
+            g2.setColor(new Color(109, 170, 44));
+            g2.fillRect(82 , 47, mpBar, 8);
+            g2.setColor(new Color(218, 212, 94));
+            g2.fillRect(84 , 47, mpBar - 2, 4);
+        }
+        else
+        {
+            g2.setColor(new Color(133, 149, 161));
+            g2.fillRect(84 , 47, healthBar - 2, 4);
+        }
+
+        if(expBar != 0)
+        {
+            g2.setColor(new Color(89, 125, 206));
+            g2.fillRect(82 , 67, expBar, 8);
+            g2.setColor(new Color(109, 194, 202));
+            g2.fillRect(84 , 67, expBar - 2, 4);
+        }
+        else
+        {
+            g2.setColor(new Color(133, 149, 161));
+            g2.fillRect(84 , 67, healthBar - 2, 4);
+        }
+
+        g2.drawImage(gp.player.down2, 22, 23, 48, 48, null);
     }
 
     public int getXCenteredText(String text)
