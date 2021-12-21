@@ -2,18 +2,22 @@ package object;
 
 import ui.GamePanel;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Objects;
 
 public abstract class SuperObject
 {
     private String name;
+    private String description;
     private int sellPrice;
     private int buyPrice;
     private boolean sellAble;
     
     public BufferedImage image;
-    GamePanel gp;
+    public GamePanel gp;
 
     private boolean collision = false;
     private int worldX;
@@ -58,6 +62,21 @@ public abstract class SuperObject
             g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
     }
 
+    public BufferedImage setup(String imagePath)
+    {
+        BufferedImage scaledImage = null;
+        try
+        {
+            scaledImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(imagePath + ".png")));
+            scaledImage = gp.uTool.scaleImage(scaledImage, gp.tileSize, gp.tileSize);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return scaledImage;
+    }
+
     public String getName() {return name;}
     public void setName(String name) {this.name = name;}
     public int getSellPrice() {return sellPrice;}
@@ -72,4 +91,6 @@ public abstract class SuperObject
     public void setWorldX(int worldX) {this.worldX = worldX;}
     public int getWorldY() {return worldY;}
     public void setWorldY(int worldY) {this.worldY = worldY;}
+    public String getDescription() {return description;}
+    public void setDescription(String description) {this.description = description;}
 }

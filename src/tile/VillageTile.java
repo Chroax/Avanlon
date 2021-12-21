@@ -11,7 +11,7 @@ public class VillageTile extends TileManager
         super(gp);
         tile = new Tile[400];
         monsters = new Monster[0];
-        obj = new SuperObject[2];
+        obj = new SuperObject[3];
         mapTileNum = new int[50][38];
         col = 50;
         row = 38;

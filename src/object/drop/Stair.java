@@ -15,16 +15,9 @@ public class Stair extends SuperObject
         super(gp);
         solidArea  = new Rectangle(0, 0, gp.tileSize, gp.tileSize);
         setName("Stair");
+        setDescription("A Magical Stair that can make player teleport to another place");
         setSellAble(false);
-        try
-        {
-            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/object/16x16/other/stairs.png")));
-            image = gp.uTool.scaleImage(image, gp.tileSize, gp.tileSize);
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        image = setup("/object/16x16/other/stairs");
 
         setCollision(true);
     }

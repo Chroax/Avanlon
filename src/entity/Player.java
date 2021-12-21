@@ -1,10 +1,12 @@
 package entity;
 
+import object.weapon.Weapon;
 import state.BattleState;
 import ui.GamePanel;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 public class Player extends Entity
 {
@@ -14,6 +16,7 @@ public class Player extends Entity
     private final int screenY;
     public final JobClass jobClass;
     private final boolean gender;
+    private Weapon weapon;
 
     public Player(GamePanel gp, JobClass jobClass, boolean gender)
     {
@@ -61,7 +64,7 @@ public class Player extends Entity
 
         setName("Player");
         setXAndY(gp.getMapPick());
-        setSpeed(40);
+        setSpeed(10);
         setDirection("down");
         spriteNum = 2;
         spriteCounter = 0;
@@ -233,6 +236,10 @@ public class Player extends Entity
                     if(gp.keyH.enterPressed)
                         gp.gameState = gp.chooseMapState;
                 }
+                case "Rusty Sword" -> {
+                    this.equipWeapon((Weapon) gp.map[gp.getMapPick()].obj[i]);
+                    gp.map[gp.getMapPick()].obj[i] = null;
+                }
             }
         }
     }
@@ -257,6 +264,29 @@ public class Player extends Entity
         setXAndY(gp.getMapPick());
     }
 
+    @Override
+    public void attack(Entity entity, int index)
+    {
+        Random random = new Random();
+        if(getWeapon() != null)
+        {
+            if(random.nextDouble() < 0.15 * (entity.getEVD() + getWeapon().getSpd()) / getACC())
+                ((BattleState)gp.ui.states[gp.ui.battleState]).showMessage(entity.name + "   dodge   the   attack", index);
+            else
+            {
+                int phyAtt = getSTR() * 2 - entity.getDEF() + getWeapon().getPhyDamage();
+                int magAtt = getINT() * 2 - entity.getRST() + getWeapon().getMagDamage();
+                int totalAtt = phyAtt + magAtt;
+                if(random.nextDouble() < 0.15 * getCRIT() / entity.getEVD())
+                    totalAtt *= 2;
+                entity.setHP(entity.getHP() - totalAtt);
+                ((BattleState)gp.ui.states[gp.ui.battleState]).showMessage(name + "   give   " + totalAtt + "   damage", index);
+            }
+        }
+        else
+            super.attack(entity, index);
+    }
+
     public void levelUp()
     {
         setMaxHP(getMaxHP() + 10);setMaxMP(getMaxMP() + 10);
@@ -270,6 +300,11 @@ public class Player extends Entity
         setLvl(getLvl() + 1);
         resetStat();
         System.out.println("You LEVEL UP    Lvl "  + getLvl());
+    }
+
+    public void equipWeapon(Weapon weapon)
+    {
+        this.setWeapon(weapon);
     }
 
     @Override
@@ -338,4 +373,6 @@ public class Player extends Entity
     public int getScreenY() { return screenY; }
     public int getMaxEXP() {return maxEXP;}
     public void setMaxEXP(int maxEXP) {this.maxEXP = maxEXP;}
+    public Weapon getWeapon() {return weapon;}
+    public void setWeapon(Weapon weapon) {this.weapon = weapon;}
 }

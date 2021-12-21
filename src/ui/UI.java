@@ -130,6 +130,10 @@ public class UI
     {
         g2.drawImage(imagePlayer, 10,20, 200, 62, null);
         g2.drawImage(imageEquip, 10, 85, 130, 48, null);
+
+        if(gp.player.getWeapon() != null)
+            g2.drawImage(gp.player.getWeapon().image, 33, 92, 32, 32, null);
+
         g2.setFont(pokemon);
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 20F));
         g2.drawString("Level    " + gp.player.getLvl(), 60, 18);
