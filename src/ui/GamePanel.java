@@ -3,6 +3,7 @@ package ui;
 import entity.JobClass;
 import entity.Player;
 import entity.monster.Monster;
+import object.SuperObject;
 import tile.*;
 import util.AssetSetter;
 import util.CollisionChecker;
@@ -54,7 +55,7 @@ public class GamePanel extends JPanel implements Runnable
     public final int pauseState = 3;
 
     // Map pick
-    private int mapPick = 4;
+    private int mapPick = 0;
 
     // Map
     public TileManager[] map;
@@ -83,6 +84,7 @@ public class GamePanel extends JPanel implements Runnable
     {
         gameState = startState;
         aSetter.setMonster();
+        aSetter.setObj();
     }
 
     public void setupMap()
@@ -149,6 +151,12 @@ public class GamePanel extends JPanel implements Runnable
         else if(gameState == playState)
         {
             map[mapPick].draw(g2);
+
+            for(SuperObject obj: map[mapPick].obj)
+            {
+                if(obj != null)
+                    obj.draw(g2);
+            }
 
             for(Monster monster: map[mapPick].monsters)
             {
@@ -217,6 +225,6 @@ public class GamePanel extends JPanel implements Runnable
     public void setWorldWidth(int worldWidth) { this.worldWidth = worldWidth; }
     public int getWorldHeight() { return worldHeight; }
     public void setWorldHeight(int worldHeight) { this.worldHeight = worldHeight; }
-    public int getMapPick() {return mapPick;}
-    public void setMapPick(int mapPick) {this.mapPick = mapPick;}
+    public int getMapPick() { return mapPick; }
+    public void setMapPick(int mapPick) { this.mapPick = mapPick; }
 }

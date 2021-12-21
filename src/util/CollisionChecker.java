@@ -162,4 +162,76 @@ public class CollisionChecker
         gp.player.solidArea.x = gp.player.getSolidAreaDefaultX();
         gp.player.solidArea.y = gp.player.getSolidAreaDefaultY();
     }
+    
+    public int checkObj(Entity entity, boolean player)
+    {
+        int index = 999;
+
+        for (int i = 0; i < gp.map[gp.getMapPick()].obj.length; i++)
+        {
+            if(gp.map[gp.getMapPick()].obj != null)
+            {
+                // Get entity solid area position
+                entity.solidArea.x = entity.getWorldX() + entity.solidArea.x;
+                entity.solidArea.y = entity.getWorldY() + entity.solidArea.y;
+
+                // Get the object solid area position
+                gp.map[gp.getMapPick()].obj[i].solidArea.x += gp.map[gp.getMapPick()].obj[i].getWorldX();
+                gp.map[gp.getMapPick()].obj[i].solidArea.y += gp.map[gp.getMapPick()].obj[i].getWorldY();
+
+                switch (entity.getDirection())
+                {
+                    case "up" -> {
+                        // To predict what tiles are player to step in
+                        entity.solidArea.y -= entity.getSpeed();
+                        if(entity.solidArea.intersects(gp.map[gp.getMapPick()].obj[i].solidArea))
+                        {
+                            if(gp.map[gp.getMapPick()].obj[i].isCollision())
+                                entity.setCollisionOn(true);
+                            if(player)
+                                index = i;
+                        }
+                    }
+                    case "down" -> {
+                        // To predict what tiles are player to step in
+                        entity.solidArea.y += entity.getSpeed();
+                        if(entity.solidArea.intersects(gp.map[gp.getMapPick()].obj[i].solidArea))
+                        {
+                            if(gp.map[gp.getMapPick()].obj[i].isCollision())
+                                entity.setCollisionOn(true);
+                            if(player)
+                                index = i;
+                        }
+                    }
+                    case "left" -> {
+                        // To predict what tiles are player to step in
+                        entity.solidArea.x -= entity.getSpeed();
+                        if(entity.solidArea.intersects(gp.map[gp.getMapPick()].obj[i].solidArea))
+                        {
+                            if(gp.map[gp.getMapPick()].obj[i].isCollision())
+                                entity.setCollisionOn(true);
+                            if(player)
+                                index = i;
+                        }
+                    }
+                    case "right" -> {
+                        // To predict what tiles are player to step in
+                        entity.solidArea.x += entity.getSpeed();
+                        if(entity.solidArea.intersects(gp.map[gp.getMapPick()].obj[i].solidArea))
+                        {
+                            if(gp.map[gp.getMapPick()].obj[i].isCollision())
+                                entity.setCollisionOn(true);
+                            if(player)
+                                index = i;
+                        }
+                    }
+                }
+                entity.solidArea.x = entity.getSolidAreaDefaultX();
+                entity.solidArea.y = entity.getSolidAreaDefaultY();
+                gp.map[gp.getMapPick()].obj[i].solidArea.x = gp.map[gp.getMapPick()].obj[i].solidAreaDefaultX;
+                gp.map[gp.getMapPick()].obj[i].solidArea.y = gp.map[gp.getMapPick()].obj[i].solidAreaDefaultY;
+            }
+        }
+        return index;
+    }
 }

@@ -70,6 +70,7 @@ public class Werewolf extends Monster
 
             setCollisionOn(false);
             gp.cChecker.checkTile(this);
+            gp.cChecker.checkObj(this, false);
             gp.cChecker.checkPlayer(this);
 
             if(!isCollisionOn())

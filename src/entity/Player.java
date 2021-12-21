@@ -170,6 +170,9 @@ public class Player extends Entity
             this.setCollisionOn(false);
             gp.cChecker.checkTile(this);
 
+            int objIndex = gp.cChecker.checkObj(this, true);
+            interactObj(objIndex);
+
             int monsterIndex = gp.cChecker.checkEntity(this, gp.map[gp.getMapPick()].monsters);
             interactMonster(monsterIndex);
 
@@ -218,6 +221,11 @@ public class Player extends Entity
         }
         gp.keyH.enterPressed = false;
     };
+
+    public void interactObj(int i)
+    {
+
+    }
 
     public void defeatMonster(Entity entity)
     {

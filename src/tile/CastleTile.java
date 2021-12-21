@@ -1,6 +1,7 @@
 package tile;
 
 import entity.monster.Monster;
+import object.SuperObject;
 import ui.GamePanel;
 
 public class CastleTile extends TileManager
@@ -10,6 +11,7 @@ public class CastleTile extends TileManager
     {
         super(gp);
         monsters = new Monster[5];
+        obj = new SuperObject[2];
         tile = new Tile[100];
         mapTileNum = new int[69][40];
         col = 69;

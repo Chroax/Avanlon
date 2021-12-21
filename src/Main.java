@@ -9,7 +9,6 @@ public class Main
         // Make JFrame window
         GamePanel panel = new GamePanel();
         panel.setupMap();
-
         JFrame frame = new JFrame();
 
         ImageIcon icon = new ImageIcon("D:\\User\\Cahyadi\\Documents\\Project\\Java Project\\AVANLON\\res\\screen\\logo.png");
