@@ -41,9 +41,13 @@ public class GamePanel extends JPanel implements Runnable
     // Asset setter (Object, monster, npc)
     public AssetSetter aSetter = new AssetSetter(this);
 
+    // UI Handler
+    public UI ui = new UI(this);
+
     // Game state
     public int gameState;
     public final int playState = 1;
+    public final int battleState = 2;
 
     // Map pick
     private int mapPick = 1;
@@ -158,6 +162,8 @@ public class GamePanel extends JPanel implements Runnable
                     monster.draw(g2);
             }
         }
+        if(gameState == battleState)
+            ui.draw(g2);
 
         g2.dispose();
     }

@@ -100,7 +100,7 @@ public class Player extends Entity
             gp.cChecker.checkTile(this);
 
             int monsterIndex = gp.cChecker.checkEntity(this, gp.plain.monsters);
-            interactEntity(monsterIndex);
+            interactMonster(monsterIndex);
 
             if(!isCollisionOn())
             {
@@ -134,7 +134,15 @@ public class Player extends Entity
         }
     }
 
-    public void interactEntity(int i){};
+    public void interactMonster(int i)
+    {
+        if(i != 999)
+        {
+            if(gp.keyH.enterPressed)
+                gp.gameState = gp.battleState;
+        }
+        gp.keyH.enterPressed = false;
+    };
 
     @Override
     public void draw(Graphics2D g2)
