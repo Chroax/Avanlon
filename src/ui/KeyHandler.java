@@ -58,7 +58,27 @@ public class KeyHandler implements KeyListener
                 case KeyEvent.VK_ENTER -> {
                     switch (gp.ui.states[0].commandNum)
                     {
-                        case 0 -> System.out.println("DO ATTACK MONSTER");
+                        case 0 -> {
+                            {
+                                gp.player.attack(gp.plain.monsters[gp.monsterIndex]);
+                                gp.plain.monsters[gp.monsterIndex].attack(gp.player);
+                                if(gp.plain.monsters[gp.monsterIndex].getHP() <= 0)
+                                {
+                                    gp.player.defeatMonster(gp.plain.monsters[gp.monsterIndex]);
+                                    gp.gameState = gp.playState;
+                                    gp.plain.monsters[gp.monsterIndex].generateMonster();
+                                }
+                                else if(gp.player.getHP() <= 0)
+                                {
+                                    System.out.println("YOU DIED");
+                                    gp.gameState = gp.playState;
+                                    gp.player.respawn();
+                                    gp.player.resetStat();
+                                    gp.plain.monsters[gp.monsterIndex].generateMonster();
+                                }
+                                System.out.println(gp.player.getHP());
+                            }
+                        }
                         case 1 -> System.out.println("DO OPEN INVENTORY");
                         case 2 -> {
                             gp.gameState = gp.playState;

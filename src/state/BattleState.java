@@ -16,6 +16,7 @@ public class BattleState extends State
 {
     BufferedImage pointer;
     Rectangle[] rectangles;
+    public boolean messageOn = false;
 
     public BattleState(GamePanel gp)
     {
@@ -124,6 +125,43 @@ public class BattleState extends State
                }
            }
            g2.drawImage(gp.plain.monsters[gp.monsterIndex].down2, x, y, width, height, null);
+       }
+
+       g2.setFont(g2.getFont().deriveFont(Font.BOLD, 30F));
+       g2.setColor(new Color(216, 208, 176));
+       g2.drawString(Integer.toString(gp.plain.monsters[gp.monsterIndex].getLvl()), 312, 74);
+       g2.setColor(new Color(64, 64, 64));
+       g2.drawString(Integer.toString(gp.plain.monsters[gp.monsterIndex].getLvl()), 310, 72);
+
+       g2.setFont(g2.getFont().deriveFont(Font.BOLD, 40F));
+       g2.setColor(new Color(216, 208, 176));
+       g2.drawString(gp.plain.monsters[gp.monsterIndex].getName(), 56,74);
+       g2.setColor(new Color(64, 64, 64));
+       g2.drawString(gp.plain.monsters[gp.monsterIndex].getName(), 54,72);
+
+       double health = (double) gp.plain.monsters[gp.monsterIndex].getHP() / gp.plain.monsters[gp.monsterIndex].getMaxHP();
+       int healthBar = (int) (163 * health);
+
+       g2.setColor(new Color(82, 106, 90));
+       g2.fillRect(163, 91, 163, 12);
+       if(health <= 0.3)
+           g2.setColor(new Color(252, 89 , 58));
+       else
+           g2.setColor(new Color(96, 232 , 208));
+       g2.fillRect(163, 91, healthBar, 12);
+
+       if(!messageOn)
+       {
+           health = (double) gp.player.getHP() / gp.player.getMaxHP();
+           healthBar = (int) (163 * health);
+
+           g2.setColor(new Color(82, 106, 90));
+           g2.fillRect(163, 91, 163, 12);
+           if(health <= 0.3)
+               g2.setColor(new Color(252, 89 , 58));
+           else
+               g2.setColor(new Color(96, 232 , 208));
+           g2.fillRect(163, 91, healthBar, 12);
        }
    }
 }

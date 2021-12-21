@@ -12,7 +12,7 @@ public class Werewolf extends Monster
         super(gp);
         setImgHeight(48);
         setImgWidth(48);
-        solidArea = new Rectangle(0, 0, 64, 64);
+        solidArea = new Rectangle(0, 0, 60, 60);
         setSolidAreaDefaultX(solidArea.x);
         setSolidAreaDefaultY(solidArea.y);
 
@@ -22,29 +22,20 @@ public class Werewolf extends Monster
 
     public void setDefaultValues()
     {
-        setName("Werewolf");
+        setName("Ice Werewolf");
         setType("Common");
-        setHP(100);
-        setMaxHP(100);
-        setMP(50);
-        setMaxMP(50);
-        setSTR(10);
-        setMaxSTR(10);
-        setINT(3);
-        setMaxINT(3);
-        setACC(6);
-        setMaxACC(6);
-        setEVD(10);
-        setMaxEVD(10);
-        setDEF(10);
-        setMaxDEF(10);
-        setRST(1);
-        setMaxRST(1);
-        setCRIT(3);
-        setMaxCRIT(3);
+        setHP(100);setMaxHP(100);
+        setMP(50);setMaxMP(50);
+        setSTR(100);setMaxSTR(100);
+        setINT(3);setMaxINT(3);
+        setACC(6);setMaxACC(6);
+        setEVD(10);setMaxEVD(10);
+        setDEF(10);setMaxDEF(10);
+        setRST(1);setMaxRST(1);
+        setCRIT(3);setMaxCRIT(3);
 
         setLvl(1);
-        setXp(10);
+        setEXP(10);
         setGold(100);
 
         setSpeed(3);

@@ -32,13 +32,18 @@ public class UI
         } catch (FontFormatException | IOException e) {
             e.printStackTrace();
         }
-
+        getUIImage();
         setState();
     }
 
     public void setState()
     {
         states[0] = new BattleState(gp);
+    }
+
+    public void getUIImage()
+    {
+
     }
 
     public void draw(Graphics2D g2)
@@ -50,6 +55,13 @@ public class UI
 
         if(gp.gameState == gp.battleState)
             states[0].draw(g2);
+        else if(gp.gameState == gp.playState)
+            drawPlayUI();
+    }
+
+    public void drawPlayUI()
+    {
+
     }
 
     public int getXCenteredText(String text)

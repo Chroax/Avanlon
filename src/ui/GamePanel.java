@@ -157,13 +157,14 @@ public class GamePanel extends JPanel implements Runnable
         if(gameState == playState)
         {
             plain.draw(g2);
-            player.draw(g2);
 
             for(Monster monster: plain.monsters)
             {
                 if(monster != null)
                     monster.draw(g2);
             }
+
+            player.draw(g2);
         }
         if(gameState == battleState)
             ui.draw(g2);

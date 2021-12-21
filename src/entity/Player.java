@@ -7,6 +7,8 @@ import java.awt.image.BufferedImage;
 
 public class Player extends Entity
 {
+    private int maxEXP;
+
     private final int screenX;
     private final int screenY;
 
@@ -30,6 +32,21 @@ public class Player extends Entity
 
     private void setDefaultValues()
     {
+        setHP(150);setMaxHP(150);
+        setMP(100);setMaxMP(100);
+        setSTR(12);setMaxSTR(12);
+        setINT(6);setMaxINT(6);
+        setACC(8);setMaxACC(8);
+        setEVD(15);setMaxEVD(15);
+        setDEF(15);setMaxDEF(15);
+        setRST(1);setMaxRST(1);
+        setCRIT(6);setMaxCRIT(6);
+        setLvl(1);
+        setGold(0);
+        setEXP(0);
+        setMaxEXP(100);
+
+        setName("Player");
         setXAndY(gp.getMapPick());
         setSpeed(4);
         setDirection("down");
@@ -147,6 +164,41 @@ public class Player extends Entity
         gp.keyH.enterPressed = false;
     };
 
+    public void defeatMonster(Entity entity)
+    {
+        setGold(getGold() + entity.getGold());
+        setEXP(getEXP() + entity.getEXP());
+        while(getEXP() >= getMaxEXP())
+            levelUp();
+    }
+
+    public void respawn()
+    {
+        if(getLvl() > 1)
+            setLvl(getLvl() - 1);
+
+        setGold(getGold() - 100);
+        if(getGold() < 0)
+            setGold(0);
+
+        setXAndY(gp.getMapPick());
+    }
+
+    public void levelUp()
+    {
+        setMaxHP(getMaxHP() + 10);setMaxMP(getMaxMP() + 10);
+        setMaxSTR(getMaxSTR() + 1);setMaxINT(getMaxINT() + 1);
+        setMaxACC(getMaxACC() + 1);setMaxEVD(getMaxEVD() + 1);
+        setMaxDEF(getMaxDEF() + 1);setMaxRST(getMaxRST() + 1);
+        setMaxCRIT(getMaxSTR() + 1);
+
+        setEXP(getEXP() - getMaxEXP());
+        setMaxEXP(getMaxEXP() + (int) (getMaxEXP() * 0.5));
+        setLvl(getLvl() + 1);
+        resetStat();
+        System.out.println("You LEVEL UP    Lvl "  + getLvl());
+    }
+
     @Override
     public void draw(Graphics2D g2)
     {
@@ -213,4 +265,6 @@ public class Player extends Entity
     // Getter
     public int getScreenX() { return screenX; }
     public int getScreenY() { return screenY; }
+    public int getMaxEXP() {return maxEXP;}
+    public void setMaxEXP(int maxEXP) {this.maxEXP = maxEXP;}
 }
