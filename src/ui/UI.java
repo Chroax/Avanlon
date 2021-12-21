@@ -70,6 +70,8 @@ public class UI
             states[0].draw(g2);
         else if(gp.gameState == gp.playState)
             drawPlayUI();
+        else if(gp.gameState == gp.pauseState)
+            drawPauseScreen();
     }
 
     public void drawPlayUI()
@@ -127,6 +129,18 @@ public class UI
         }
 
         g2.drawImage(gp.player.down2, 22, 23, 48, 48, null);
+    }
+
+    public void drawPauseScreen()
+    {
+        g2.setFont(maruMonica);
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 80F));
+        String text = "PAUSED";
+        int x = getXCenteredText(text);
+        int y = gp.screenHeight / 2;
+
+        g2.drawString(text, x, y);
+        g2.setFont(pokemon);
     }
 
     public int getXCenteredText(String text)

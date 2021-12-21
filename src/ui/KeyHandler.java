@@ -31,9 +31,13 @@ public class KeyHandler implements KeyListener
                 case KeyEvent.VK_A -> leftPressed = true;
                 case KeyEvent.VK_D -> rightPressed = true;
                 case KeyEvent.VK_ENTER -> enterPressed = true;
+                case KeyEvent.VK_P -> {
+                    gp.returnState = gp.gameState;
+                    gp.gameState = gp.pauseState;
+                }
             }
         }
-        if(gp.gameState == gp.battleState)
+        else if(gp.gameState == gp.battleState)
         {
             if(((BattleState)gp.ui.states[0]).messageOn)
             {
@@ -95,7 +99,18 @@ public class KeyHandler implements KeyListener
                             case 3 -> System.out.println("DO SHOW STATUS");
                         }
                     }
+                    case KeyEvent.VK_P -> {
+                        gp.returnState = gp.gameState;
+                        gp.gameState = gp.pauseState;
+                    }
                 }
+            }
+        }
+        else if(gp.gameState == gp.pauseState)
+        {
+            switch (e.getKeyCode())
+            {
+                case KeyEvent.VK_P -> gp.gameState = gp.returnState;
             }
         }
     }

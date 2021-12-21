@@ -46,8 +46,10 @@ public class GamePanel extends JPanel implements Runnable
 
     // Game state
     public int gameState;
+    public int returnState;
     public final int playState = 1;
     public final int battleState = 2;
+    public final int pauseState = 3;
 
     // Map pick
     private int mapPick = 1;
@@ -168,7 +170,7 @@ public class GamePanel extends JPanel implements Runnable
 
             ui.draw(g2);
         }
-        if(gameState == battleState)
+        else if(gameState == battleState || gameState == pauseState)
             ui.draw(g2);
 
         g2.dispose();
