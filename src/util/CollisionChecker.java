@@ -26,30 +26,30 @@ public class CollisionChecker
         {
             case "up" ->{
                 entityTRow = (entityTWY - entity.getSpeed()) / gp.tileSize;
-                tileNum1 = gp.plain.mapTileNum[entityLCol][entityTRow];
-                tileNum2 = gp.plain.mapTileNum[entityRCol][entityTRow];
-                if(gp.plain.tile[tileNum1].isCollision() || gp.plain.tile[tileNum2].isCollision())
+                tileNum1 = gp.map[gp.getMapPick()].mapTileNum[entityLCol][entityTRow];
+                tileNum2 = gp.map[gp.getMapPick()].mapTileNum[entityRCol][entityTRow];
+                if(gp.map[gp.getMapPick()].tile[tileNum1].isCollision() || gp.map[gp.getMapPick()].tile[tileNum2].isCollision())
                     entity.setCollisionOn(true);
             }
             case "down" ->{
                 entityBRow = (entityBWY + entity.getSpeed()) / gp.tileSize;
-                tileNum1 = gp.plain.mapTileNum[entityLCol][entityBRow];
-                tileNum2 = gp.plain.mapTileNum[entityRCol][entityBRow];
-                if(gp.plain.tile[tileNum1].isCollision() || gp.plain.tile[tileNum2].isCollision())
+                tileNum1 = gp.map[gp.getMapPick()].mapTileNum[entityLCol][entityBRow];
+                tileNum2 = gp.map[gp.getMapPick()].mapTileNum[entityRCol][entityBRow];
+                if(gp.map[gp.getMapPick()].tile[tileNum1].isCollision() || gp.map[gp.getMapPick()].tile[tileNum2].isCollision())
                     entity.setCollisionOn(true);
             }
             case "left" ->{
                 entityLCol = (entityLWX - entity.getSpeed()) / gp.tileSize;
-                tileNum1 = gp.plain.mapTileNum[entityLCol][entityTRow];
-                tileNum2 = gp.plain.mapTileNum[entityLCol][entityBRow];
-                if(gp.plain.tile[tileNum1].isCollision() || gp.plain.tile[tileNum2].isCollision())
+                tileNum1 = gp.map[gp.getMapPick()].mapTileNum[entityLCol][entityTRow];
+                tileNum2 = gp.map[gp.getMapPick()].mapTileNum[entityLCol][entityBRow];
+                if(gp.map[gp.getMapPick()].tile[tileNum1].isCollision() || gp.map[gp.getMapPick()].tile[tileNum2].isCollision())
                     entity.setCollisionOn(true);
             }
             case "right" ->{
                 entityRCol = (entityRWX + entity.getSpeed()) / gp.tileSize;
-                tileNum1 = gp.plain.mapTileNum[entityRCol][entityTRow];
-                tileNum2 = gp.plain.mapTileNum[entityRCol][entityBRow];
-                if(gp.plain.tile[tileNum1].isCollision() || gp.plain.tile[tileNum2].isCollision())
+                tileNum1 = gp.map[gp.getMapPick()].mapTileNum[entityRCol][entityTRow];
+                tileNum2 = gp.map[gp.getMapPick()].mapTileNum[entityRCol][entityBRow];
+                if(gp.map[gp.getMapPick()].tile[tileNum1].isCollision() || gp.map[gp.getMapPick()].tile[tileNum2].isCollision())
                     entity.setCollisionOn(true);
             }
         }

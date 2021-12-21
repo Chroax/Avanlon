@@ -171,13 +171,13 @@ public class KeyHandler implements KeyListener
                         {
                             case 0 -> {
                                 {
-                                    gp.player.attack(gp.plain.monsters[gp.monsterIndex], 1);
-                                    gp.plain.monsters[gp.monsterIndex].attack(gp.player, 2);
-                                    if(gp.plain.monsters[gp.monsterIndex].getHP() <= 0)
+                                    gp.player.attack(gp.map[gp.getMapPick()].monsters[gp.monsterIndex], 1);
+                                    gp.map[gp.getMapPick()].monsters[gp.monsterIndex].attack(gp.player, 2);
+                                    if(gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getHP() <= 0)
                                     {
-                                        gp.player.defeatMonster(gp.plain.monsters[gp.monsterIndex]);
+                                        gp.player.defeatMonster(gp.map[gp.getMapPick()].monsters[gp.monsterIndex]);
                                         gp.gameState = gp.playState;
-                                        gp.plain.monsters[gp.monsterIndex].generateMonster();
+                                        gp.map[gp.getMapPick()].monsters[gp.monsterIndex].generateMonster();
                                     }
                                     else if(gp.player.getHP() <= 0)
                                     {
@@ -185,14 +185,14 @@ public class KeyHandler implements KeyListener
                                         gp.gameState = gp.playState;
                                         gp.player.respawn();
                                         gp.player.resetStat();
-                                        gp.plain.monsters[gp.monsterIndex].generateMonster();
+                                        gp.map[gp.getMapPick()].monsters[gp.monsterIndex].generateMonster();
                                     }
                                 }
                             }
                             case 1 -> System.out.println("DO OPEN INVENTORY");
                             case 2 -> {
                                 gp.gameState = gp.playState;
-                                gp.plain.monsters[gp.monsterIndex].generateMonster();
+                                gp.map[gp.getMapPick()].monsters[gp.monsterIndex].generateMonster();
                             }
                             case 3 -> System.out.println("DO SHOW STATUS");
                         }

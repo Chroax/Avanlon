@@ -1,5 +1,6 @@
 package tile;
 
+import entity.monster.Monster;
 import ui.GamePanel;
 
 import javax.imageio.ImageIO;
@@ -18,6 +19,7 @@ public abstract class TileManager
     protected int col;
     protected int row;
     protected String filePath;
+    public Monster[] monsters;
 
     public TileManager(GamePanel gp)
     {

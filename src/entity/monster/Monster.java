@@ -10,8 +10,6 @@ public class Monster extends Entity
 {
     private String type;
 
-
-
     protected boolean stopMov = false;
     protected int stopCounter = 0;
 
@@ -30,8 +28,8 @@ public class Monster extends Entity
             Random random = new Random();
             col = random.nextInt(gp.getMaxWorldCol());
             row = random.nextInt(gp.getMaxWorldRow());
-            int tileNum = gp.plain.mapTileNum[col][row];
-            if(!gp.plain.tile[tileNum].isCollision())
+            int tileNum = gp.map[gp.getMapPick()].mapTileNum[col][row];
+            if(!gp.map[gp.getMapPick()].tile[tileNum].isCollision())
                 spawn = true;
         }
 

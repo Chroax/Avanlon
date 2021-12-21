@@ -5,11 +5,11 @@ import ui.GamePanel;
 
 public class PlainTile extends TileManager
 {
-    public Monster[] monsters = new Monster[5];
 
     public PlainTile(GamePanel gp)
     {
         super(gp);
+        monsters = new Monster[5];
         tile = new Tile[42];
         mapTileNum = new int[50][50];
         col = 50;

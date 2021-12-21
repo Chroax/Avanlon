@@ -12,8 +12,8 @@ public class Player extends Entity
 
     private final int screenX;
     private final int screenY;
-    private final JobClass jobClass;
-    private boolean gender;
+    public final JobClass jobClass;
+    private final boolean gender;
 
     public Player(GamePanel gp, JobClass jobClass, boolean gender)
     {
@@ -170,7 +170,7 @@ public class Player extends Entity
             this.setCollisionOn(false);
             gp.cChecker.checkTile(this);
 
-            int monsterIndex = gp.cChecker.checkEntity(this, gp.plain.monsters);
+            int monsterIndex = gp.cChecker.checkEntity(this, gp.map[gp.getMapPick()].monsters);
             interactMonster(monsterIndex);
 
             if(!isCollisionOn())
@@ -313,8 +313,6 @@ public class Player extends Entity
             y = gp.screenHeight - (gp.getWorldHeight() - worldY);
 
         g2.drawImage(image, x, y, null);
-        g2.setColor(Color.red);
-        g2.drawRect(solidArea.x + screenX, solidArea.y + screenY, solidArea.width, solidArea.height);
     }
 
     // Getter

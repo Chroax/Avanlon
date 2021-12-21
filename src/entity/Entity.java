@@ -216,12 +216,14 @@ public abstract class Entity
                 bottomOffset > gp.getWorldHeight() - gp.player.worldY)
             g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
 
-        g2.setColor(Color.red);
-        g2.drawRect(solidArea.x + screenX, solidArea.y + screenY, solidArea.width, solidArea.height);
         g2.setColor(Color.BLACK);
         g2.setFont(UI.pokemon);
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 14F));
-        String text = name + "   Lvl-" + lvl;
+        String text = name;
+
+        if(lvl != 0)
+            text += "   Lvl-" + lvl;
+
         int x = ((int) g2.getFontMetrics().getStringBounds(text, g2).getWidth() - solidArea.width) / 2;
         g2.drawString(text, screenX - x, solidArea.y + solidArea.height + screenY + 10);
     }

@@ -7,6 +7,9 @@ public class Main
     public static void main(String[] args)
     {
         // Make JFrame window
+        GamePanel panel = new GamePanel();
+        panel.setupMap();
+
         JFrame frame = new JFrame();
 
         ImageIcon icon = new ImageIcon("D:\\User\\Cahyadi\\Documents\\Project\\Java Project\\AVANLON\\res\\screen\\logo.png");
@@ -17,7 +20,6 @@ public class Main
         frame.setResizable(false);
 
         // Add JPanel to frame
-        GamePanel panel = new GamePanel();
         frame.add(panel);
 
         // The frame adjusts to the size of the component

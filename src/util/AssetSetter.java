@@ -14,8 +14,8 @@ public class AssetSetter
 
     public void setMonster()
     {
-        gp.plain.monsters[0] = new Werewolf(gp);
-        gp.plain.monsters[0].setWorldX(gp.tileSize * 20);
-        gp.plain.monsters[0].setWorldY(gp.tileSize * 20);
+        gp.map[gp.plain].monsters[0] = new Werewolf(gp);
+        gp.map[gp.plain].monsters[0].setWorldX(gp.tileSize * 20);
+        gp.map[gp.plain].monsters[0].setWorldY(gp.tileSize * 20);
     }
 }

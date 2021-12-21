@@ -93,12 +93,12 @@ public class BattleState extends State
                g2.drawImage(pointer, rectangles[i].x, rectangles[i].y + 13, 24, 40, null);
        }
 
-       if(!Objects.equals(gp.plain.monsters[gp.monsterIndex].getType(), "Boss"))
+       if(!Objects.equals(gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getType(), "Boss"))
        {
-           if(gp.plain.monsters[gp.monsterIndex].getImgWidth() == gp.plain.monsters[gp.monsterIndex].getImgHeight())
-               g2.drawImage(gp.plain.monsters[gp.monsterIndex].down2, 600, 270, 192, 192, null);
+           if(gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getImgWidth() == gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getImgHeight())
+               g2.drawImage(gp.map[gp.getMapPick()].monsters[gp.monsterIndex].down2, 600, 270, 192, 192, null);
            else
-               g2.drawImage(gp.plain.monsters[gp.monsterIndex].down2, 620, 270, 144, 192, null);
+               g2.drawImage(gp.map[gp.getMapPick()].monsters[gp.monsterIndex].down2, 620, 270, 144, 192, null);
        }
        else
        {
@@ -106,7 +106,7 @@ public class BattleState extends State
            int height = 0;
            int x = 0;
            int y = 0;
-           switch (gp.plain.monsters[gp.monsterIndex].getName())
+           switch (gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getName())
            {
                case "Dragon" -> {
                    width = 576;
@@ -133,22 +133,22 @@ public class BattleState extends State
                    x = 450;
                }
            }
-           g2.drawImage(gp.plain.monsters[gp.monsterIndex].down2, x, y, width, height, null);
+           g2.drawImage(gp.map[gp.getMapPick()].monsters[gp.monsterIndex].down2, x, y, width, height, null);
        }
 
        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 30F));
        g2.setColor(new Color(216, 208, 176));
-       g2.drawString(Integer.toString(gp.plain.monsters[gp.monsterIndex].getLvl()), 312, 74);
+       g2.drawString(Integer.toString(gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getLvl()), 312, 74);
        g2.setColor(new Color(64, 64, 64));
-       g2.drawString(Integer.toString(gp.plain.monsters[gp.monsterIndex].getLvl()), 310, 72);
+       g2.drawString(Integer.toString(gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getLvl()), 310, 72);
 
        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 40F));
        g2.setColor(new Color(216, 208, 176));
-       g2.drawString(gp.plain.monsters[gp.monsterIndex].getName(), 56,74);
+       g2.drawString(gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getName(), 56,74);
        g2.setColor(new Color(64, 64, 64));
-       g2.drawString(gp.plain.monsters[gp.monsterIndex].getName(), 54,72);
+       g2.drawString(gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getName(), 54,72);
 
-       double health = (double) gp.plain.monsters[gp.monsterIndex].getHP() / gp.plain.monsters[gp.monsterIndex].getMaxHP();
+       double health = (double) gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getHP() / gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getMaxHP();
        int healthBar = (int) (163 * health);
 
        g2.setColor(new Color(82, 106, 90));

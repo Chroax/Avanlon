@@ -1,5 +1,6 @@
 package ui;
 
+import entity.JobClass;
 import state.*;
 
 import javax.imageio.ImageIO;
@@ -136,8 +137,10 @@ public class UI
             g2.setColor(new Color(133, 149, 161));
             g2.fillRect(84 , 67, healthBar - 2, 4);
         }
-
-        g2.drawImage(gp.player.down2, 22, 23, 48, 48, null);
+        if(gp.player.jobClass == JobClass.PALADIN)
+            g2.drawImage(gp.player.down2, 18, 23, 48, 48, null);
+        else
+            g2.drawImage(gp.player.down2, 22, 23, 48, 48, null);
     }
 
     public void drawPauseScreen()

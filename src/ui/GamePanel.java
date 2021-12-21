@@ -4,6 +4,8 @@ import entity.JobClass;
 import entity.Player;
 import entity.monster.Monster;
 import tile.PlainTile;
+import tile.TileManager;
+import tile.VillageTile;
 import util.AssetSetter;
 import util.CollisionChecker;
 import util.UtilityTool;
@@ -54,10 +56,16 @@ public class GamePanel extends JPanel implements Runnable
     public final int pauseState = 3;
 
     // Map pick
-    private int mapPick = 1;
+    private int mapPick = 0;
 
     // Map
-    public PlainTile plain = new PlainTile(this);
+    public TileManager[] map;
+    public final int village = 0;
+    public final int plain = 1;
+    public final int dungeon = 2;
+    public final int castle = 3;
+    public final int snow = 4;
+//    public PlainTile plain = new PlainTile(this);
 
     // Player
     public Player player;
@@ -80,6 +88,12 @@ public class GamePanel extends JPanel implements Runnable
         aSetter.setMonster();
     }
 
+    public void setupMap()
+    {
+        map = new TileManager[5];
+        map[village] = new VillageTile(this);
+        map[plain] = new PlainTile(this);
+    }
 
     public void startGameThread()
     {
@@ -116,7 +130,7 @@ public class GamePanel extends JPanel implements Runnable
         {
             player.update();
 
-            for(Monster monster: plain.monsters)
+            for(Monster monster: map[mapPick].monsters)
             {
                 if(monster != null)
                 {
@@ -134,9 +148,9 @@ public class GamePanel extends JPanel implements Runnable
             ui.draw(g2);
         else if(gameState == playState)
         {
-            plain.draw(g2);
+            map[mapPick].draw(g2);
 
-            for(Monster monster: plain.monsters)
+            for(Monster monster: map[mapPick].monsters)
             {
                 if(monster != null)
                     monster.draw(g2);
@@ -178,6 +192,7 @@ public class GamePanel extends JPanel implements Runnable
         worldHeight = tileSize * maxWorldRow;
         mapPick = i;
     }
+
     public void generatePlayer(JobClass job, boolean gender)
     {
         switch (job)
