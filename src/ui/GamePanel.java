@@ -77,8 +77,6 @@ public class GamePanel extends JPanel implements Runnable
     public void setupGame()
     {
         gameState = startState;
-        adjustWorldWidth(mapPick);
-        adjustWorldHeight(mapPick);
         aSetter.setMonster();
     }
 
@@ -180,14 +178,18 @@ public class GamePanel extends JPanel implements Runnable
         worldHeight = tileSize * maxWorldRow;
         mapPick = i;
     }
-    public void generatePlayer(JobClass job)
+    public void generatePlayer(JobClass job, boolean gender)
     {
         switch (job)
         {
-            case PALADIN -> this.player = new Player(this, JobClass.PALADIN);
-            case WIZARD -> this.player = new Player(this, JobClass.WIZARD);
-            case ARCHER -> this.player = new Player(this, JobClass.ARCHER);
+            case PALADIN -> this.player = new Player(this, JobClass.PALADIN, gender);
+            case WIZARD -> this.player = new Player(this, JobClass.WIZARD, gender);
+            case ARCHER -> this.player = new Player(this, JobClass.ARCHER, gender);
         }
+
+        gameState = playState;
+        adjustWorldWidth(mapPick);
+        adjustWorldHeight(mapPick);
     }
 
     // Getter and Setter

@@ -13,18 +13,29 @@ public class Player extends Entity
     private final int screenX;
     private final int screenY;
     private final JobClass jobClass;
-    public Player(GamePanel gp, JobClass jobClass)
+    private boolean gender;
+
+    public Player(GamePanel gp, JobClass jobClass, boolean gender)
     {
         super(gp);
         this.jobClass = jobClass;
+        this.gender = gender;
 
-        setImgHeight(64);
-        setImgWidth(64);
+        if(jobClass == JobClass.PALADIN)
+        {
+            setImgHeight(64);
+            setImgWidth(64);
+            solidArea = new Rectangle(16, 32, 32, 32);
+        }
+        else
+        {
+            setImgHeight(32);
+            setImgWidth(48);
+            solidArea = new Rectangle(10, 32, 32, 32);
+        }
 
         screenX = gp.screenWidth/2 - (gp.tileSize/2);
         screenY = gp.screenHeight/2 - (gp.tileSize/2);
-
-        solidArea = new Rectangle(10, 32, 32, 32);
         setSolidAreaDefaultX(solidArea.x);
         setSolidAreaDefaultY(solidArea.y);
 
@@ -86,19 +97,60 @@ public class Player extends Entity
 
     private void getPlayerImage()
     {
-        String txt = "/character/32x48/archer/archer";
-        down1 = setup(txt + " 1", 1.5, true);
-        down2 = setup(txt + " 2", 1.5, true);
-        down3 = setup(txt + " 3", 1.5, true);
-        left1 = setup(txt + " 4", 1.5, true);
-        left2 = setup(txt + " 5", 1.5, true);
-        left3 = setup(txt + " 6", 1.5, true);
-        right1 = setup(txt + " 7", 1.5, true);
-        right2 = setup(txt + " 8", 1.5, true);
-        right3 = setup(txt + " 9", 1.5, true);
-        up1 = setup(txt + " 10", 1.5, true);
-        up2 = setup(txt + " 11", 1.5, true);
-        up3 = setup(txt + " 12", 1.5, true);
+        String txt = "/character";
+
+        if(jobClass == JobClass.PALADIN)
+        {
+            if(gender)
+                txt += "/64x64/warrior/female_warrior";
+            else
+                txt += "/64x64/warrior/warrior";
+        }
+        else if(jobClass == JobClass.WIZARD)
+        {
+            if(gender)
+                txt += "/32x48/femalemagician/female_magician";
+            else
+                txt += "/32x48/magician/magician";
+        }
+        else if(jobClass == JobClass.ARCHER)
+        {
+            if(gender)
+                txt += "/32x48/femalearcher/female_archer";
+            else
+                txt += "/32x48/archer/archer";
+        }
+
+        if(jobClass != JobClass.PALADIN)
+        {
+            down1 = setup(txt + " 1", 1.5, true);
+            down2 = setup(txt + " 2", 1.5, true);
+            down3 = setup(txt + " 3", 1.5, true);
+            left1 = setup(txt + " 4", 1.5, true);
+            left2 = setup(txt + " 5", 1.5, true);
+            left3 = setup(txt + " 6", 1.5, true);
+            right1 = setup(txt + " 7", 1.5, true);
+            right2 = setup(txt + " 8", 1.5, true);
+            right3 = setup(txt + " 9", 1.5, true);
+            up1 = setup(txt + " 10", 1.5, true);
+            up2 = setup(txt + " 11", 1.5, true);
+            up3 = setup(txt + " 12", 1.5, true);
+        }
+        else
+        {
+            down1 = setup(txt + " 1");
+            down2 = setup(txt + " 2");
+            down3 = setup(txt + " 3");
+            left1 = setup(txt + " 4");
+            left2 = setup(txt + " 5");
+            left3 = setup(txt + " 6");
+            right1 = setup(txt + " 7");
+            right2 = setup(txt + " 8");
+            right3 = setup(txt + " 9");
+            up1 = setup(txt + " 10");
+            up2 = setup(txt + " 11");
+            up3 = setup(txt + " 12");
+        }
     }
 
     @Override

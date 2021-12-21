@@ -106,9 +106,9 @@ public class KeyHandler implements KeyListener
                         {
                             switch (gp.ui.states[gp.ui.chooseState].commandNum)
                             {
-                                case 0 -> gp.generatePlayer(JobClass.PALADIN);
-                                case 1 -> gp.generatePlayer(JobClass.WIZARD);
-                                case 2 -> gp.generatePlayer(JobClass.ARCHER);
+                                case 0 -> gp.generatePlayer(JobClass.PALADIN, ((ChooseState)gp.ui.states[gp.ui.chooseState]).gender);
+                                case 1 -> gp.generatePlayer(JobClass.WIZARD, ((ChooseState)gp.ui.states[gp.ui.chooseState]).gender);
+                                case 2 -> gp.generatePlayer(JobClass.ARCHER, ((ChooseState)gp.ui.states[gp.ui.chooseState]).gender);
                                 case 3 -> {
                                     gp.ui.states[gp.ui.chooseState].commandNum = 0;
                                     ((ChooseState)gp.ui.states[gp.ui.chooseState]).chooseGender = true;
