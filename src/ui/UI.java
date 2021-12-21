@@ -1,6 +1,7 @@
 package ui;
 
 import state.BattleState;
+import state.HomeState;
 import state.State;
 import state.TitleState;
 
@@ -19,11 +20,11 @@ public class UI
     BufferedImage imagePlayer;
     public static Font maruMonica;
     public static Font pokemon;
-    public int startScreenState = 1;
     public int homeState = 0;
     public int titleState = 1;
     public int chooseState = 2;
     public int battleState = 3;
+    public int startScreenState = homeState;
     public State[] states = new State[4];
 
     public UI(GamePanel gp)
@@ -49,6 +50,7 @@ public class UI
 
     public void setState()
     {
+        states[homeState] = new HomeState(gp);
         states[titleState] = new TitleState(gp);
         states[battleState] = new BattleState(gp);
     }
