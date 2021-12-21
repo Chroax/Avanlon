@@ -12,10 +12,11 @@ public class Player extends Entity
 
     private final int screenX;
     private final int screenY;
-
-    public Player(GamePanel gp)
+    private final JobClass jobClass;
+    public Player(GamePanel gp, JobClass jobClass)
     {
         super(gp);
+        this.jobClass = jobClass;
 
         setImgHeight(64);
         setImgWidth(64);

@@ -56,4 +56,22 @@ public abstract class State
         }
         return scaledImage;
     }
+
+    public BufferedImage setup(String imagePath, double scale, boolean width)
+    {
+        BufferedImage scaledImage = null;
+        try
+        {
+            scaledImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(imagePath + ".png")));
+            if(width)
+                scaledImage = gp.uTool.scaleImage(scaledImage, gp.tileSize, gp.tileSize, (int) (scaledImage.getWidth() * scale), gp.tileSize);
+            else
+                scaledImage = gp.uTool.scaleImage(scaledImage, gp.tileSize, gp.tileSize, gp.tileSize, (int) (scaledImage.getHeight() * scale));
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return scaledImage;
+    }
 }

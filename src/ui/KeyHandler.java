@@ -1,6 +1,8 @@
 package ui;
 
+import entity.JobClass;
 import state.BattleState;
+import state.ChooseState;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -54,7 +56,67 @@ public class KeyHandler implements KeyListener
             }
             else if(gp.ui.startScreenState == gp.ui.chooseState)
             {
-
+                switch (e.getKeyCode())
+                {
+                    case KeyEvent.VK_W -> {
+                        gp.ui.states[gp.ui.chooseState].commandNum--;
+                        if (gp.ui.states[gp.ui.chooseState].commandNum < 0)
+                        {
+                            if(((ChooseState)gp.ui.states[gp.ui.chooseState]).chooseGender)
+                                gp.ui.states[gp.ui.chooseState].commandNum = 2;
+                            else
+                                gp.ui.states[gp.ui.chooseState].commandNum = 3;
+                        }
+                    }
+                    case KeyEvent.VK_S -> {
+                        gp.ui.states[gp.ui.chooseState].commandNum++;
+                        if(((ChooseState)gp.ui.states[gp.ui.chooseState]).chooseGender)
+                        {
+                            if (gp.ui.states[gp.ui.chooseState].commandNum > 2)
+                                gp.ui.states[gp.ui.chooseState].commandNum = 0;
+                        }
+                        else
+                        {
+                            if (gp.ui.states[gp.ui.chooseState].commandNum > 3)
+                                gp.ui.states[gp.ui.chooseState].commandNum = 0;
+                        }
+                    }
+                    case KeyEvent.VK_ENTER -> {
+                        if (((ChooseState)gp.ui.states[gp.ui.chooseState]).chooseGender)
+                        {
+                            switch (gp.ui.states[gp.ui.chooseState].commandNum)
+                            {
+                                case 0 -> {
+                                    ((ChooseState)gp.ui.states[gp.ui.chooseState]).gender = false;
+                                    ((ChooseState)gp.ui.states[gp.ui.chooseState]).chooseGender = false;
+                                }
+                                case 1 -> {
+                                    gp.ui.states[gp.ui.chooseState].commandNum = 0;
+                                    ((ChooseState)gp.ui.states[gp.ui.chooseState]).gender = true;
+                                    ((ChooseState)gp.ui.states[gp.ui.chooseState]).chooseGender = false;
+                                }
+                                case 2 -> {
+                                    gp.ui.startScreenState = gp.ui.titleState;
+                                    gp.ui.states[gp.ui.chooseState].commandNum = 0;
+                                    gp.ui.states[gp.ui.titleState].commandNum = 0;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            switch (gp.ui.states[gp.ui.chooseState].commandNum)
+                            {
+                                case 0 -> gp.generatePlayer(JobClass.PALADIN);
+                                case 1 -> gp.generatePlayer(JobClass.WIZARD);
+                                case 2 -> gp.generatePlayer(JobClass.ARCHER);
+                                case 3 -> {
+                                    gp.ui.states[gp.ui.chooseState].commandNum = 0;
+                                    ((ChooseState)gp.ui.states[gp.ui.chooseState]).chooseGender = true;
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
         // Key Handling at play state

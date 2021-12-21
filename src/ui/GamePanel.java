@@ -1,5 +1,6 @@
 package ui;
 
+import entity.JobClass;
 import entity.Player;
 import entity.monster.Monster;
 import tile.PlainTile;
@@ -59,7 +60,7 @@ public class GamePanel extends JPanel implements Runnable
     public PlainTile plain = new PlainTile(this);
 
     // Player
-    public Player player = new Player(this);
+    public Player player;
 
     // Index monster
     public int monsterIndex;
@@ -81,32 +82,6 @@ public class GamePanel extends JPanel implements Runnable
         aSetter.setMonster();
     }
 
-    public void adjustWorldWidth(int i)
-    {
-        switch (i)
-        {
-            case 0,1 -> maxWorldCol = 50;
-            case 2 -> maxWorldCol = 66;
-            case 3 -> maxWorldCol = 69;
-            case 4 -> maxWorldCol = 31;
-        }
-        worldWidth = tileSize * maxWorldCol;
-        mapPick = i;
-    }
-
-    public void adjustWorldHeight(int i)
-    {
-        switch (i)
-        {
-            case 0 -> maxWorldRow = 38;
-            case 1 -> maxWorldRow = 50;
-            case 2 -> maxWorldRow = 35;
-            case 3 -> maxWorldRow = 40;
-            case 4 -> maxWorldRow = 39;
-        }
-        worldHeight = tileSize * maxWorldRow;
-        mapPick = i;
-    }
 
     public void startGameThread()
     {
@@ -177,6 +152,42 @@ public class GamePanel extends JPanel implements Runnable
             ui.draw(g2);
 
         g2.dispose();
+    }
+
+    public void adjustWorldWidth(int i)
+    {
+        switch (i)
+        {
+            case 0,1 -> maxWorldCol = 50;
+            case 2 -> maxWorldCol = 66;
+            case 3 -> maxWorldCol = 69;
+            case 4 -> maxWorldCol = 31;
+        }
+        worldWidth = tileSize * maxWorldCol;
+        mapPick = i;
+    }
+
+    public void adjustWorldHeight(int i)
+    {
+        switch (i)
+        {
+            case 0 -> maxWorldRow = 38;
+            case 1 -> maxWorldRow = 50;
+            case 2 -> maxWorldRow = 35;
+            case 3 -> maxWorldRow = 40;
+            case 4 -> maxWorldRow = 39;
+        }
+        worldHeight = tileSize * maxWorldRow;
+        mapPick = i;
+    }
+    public void generatePlayer(JobClass job)
+    {
+        switch (job)
+        {
+            case PALADIN -> this.player = new Player(this, JobClass.PALADIN);
+            case WIZARD -> this.player = new Player(this, JobClass.WIZARD);
+            case ARCHER -> this.player = new Player(this, JobClass.ARCHER);
+        }
     }
 
     // Getter and Setter

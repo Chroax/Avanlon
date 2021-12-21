@@ -1,9 +1,6 @@
 package ui;
 
-import state.BattleState;
-import state.HomeState;
-import state.State;
-import state.TitleState;
+import state.*;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -52,6 +49,7 @@ public class UI
     {
         states[homeState] = new HomeState(gp);
         states[titleState] = new TitleState(gp);
+        states[chooseState] = new ChooseState(gp);
         states[battleState] = new BattleState(gp);
     }
 
