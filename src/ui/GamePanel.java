@@ -58,6 +58,9 @@ public class GamePanel extends JPanel implements Runnable
     // Player
     public Player player = new Player(this);
 
+    // Index monster
+    public int monsterIndex;
+
     public GamePanel()
     {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));

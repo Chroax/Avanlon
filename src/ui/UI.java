@@ -1,5 +1,6 @@
 package ui;
 
+import state.BattleState;
 import state.State;
 
 import java.awt.*;
@@ -10,7 +11,8 @@ public class UI
 {
     GamePanel gp;
     Graphics2D g2;
-    Font maruMonica;
+    public static Font maruMonica;
+    public static Font pokemon;
     public State[] states = new State[1];
 
     public UI(GamePanel gp)
@@ -23,6 +25,20 @@ public class UI
         } catch (FontFormatException | IOException e) {
             e.printStackTrace();
         }
+
+        try {
+            InputStream is = getClass().getResourceAsStream("/font/Pokemon.ttf");
+            pokemon = Font.createFont(Font.TRUETYPE_FONT, is);
+        } catch (FontFormatException | IOException e) {
+            e.printStackTrace();
+        }
+
+        setState();
+    }
+
+    public void setState()
+    {
+        states[0] = new BattleState(gp);
     }
 
     public void draw(Graphics2D g2)
@@ -33,9 +49,7 @@ public class UI
         g2.setColor(Color.white);
 
         if(gp.gameState == gp.battleState)
-        {
-
-        }
+            states[0].draw(g2);
     }
 
     public int getXCenteredText(String text)

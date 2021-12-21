@@ -14,8 +14,8 @@ public class Player extends Entity
     {
         super(gp);
 
-        imgHeight = 64;
-        imgWidth = 64;
+        setImgHeight(64);
+        setImgWidth(64);
 
         screenX = gp.screenWidth/2 - (gp.tileSize/2);
         screenY = gp.screenHeight/2 - (gp.tileSize/2);
@@ -139,7 +139,10 @@ public class Player extends Entity
         if(i != 999)
         {
             if(gp.keyH.enterPressed)
+            {
                 gp.gameState = gp.battleState;
+                gp.monsterIndex = i;
+            }
         }
         gp.keyH.enterPressed = false;
     };

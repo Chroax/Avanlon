@@ -18,7 +18,7 @@ public abstract class Entity
 
     // Sprites Image
     protected BufferedImage up1, up2, up3;
-    protected BufferedImage down1, down2, down3;
+    public BufferedImage down1, down2, down3;
     protected BufferedImage left1, left2, left3;
     protected BufferedImage right1, right2, right3;
     private String direction;
@@ -27,8 +27,8 @@ public abstract class Entity
     protected int standCounter = 0;
     protected int actionLockCounter = 0;
 
-    protected int imgWidth;
-    protected int imgHeight;
+    private int imgWidth;
+    private int imgHeight;
 
     // Dialog Chat
     protected String[][] dialogues;
@@ -188,4 +188,8 @@ public abstract class Entity
     public void setSolidAreaDefaultX(int solidAreaDefaultX) {this.solidAreaDefaultX = solidAreaDefaultX;}
     public int getSolidAreaDefaultY() {return solidAreaDefaultY;}
     public void setSolidAreaDefaultY(int solidAreaDefaultY) {this.solidAreaDefaultY = solidAreaDefaultY;}
+    public int getImgWidth() {return imgWidth;}
+    public void setImgWidth(int imgWidth) {this.imgWidth = imgWidth;}
+    public int getImgHeight() {return imgHeight;}
+    public void setImgHeight(int imgHeight) {this.imgHeight = imgHeight;}
 }

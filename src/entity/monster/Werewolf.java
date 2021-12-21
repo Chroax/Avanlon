@@ -10,8 +10,8 @@ public class Werewolf extends Monster
     public Werewolf(GamePanel gp)
     {
         super(gp);
-        imgHeight = 48;
-        imgWidth = 48;
+        setImgHeight(48);
+        setImgWidth(48);
         solidArea = new Rectangle(0, 0, 64, 64);
         setSolidAreaDefaultX(solidArea.x);
         setSolidAreaDefaultY(solidArea.y);
