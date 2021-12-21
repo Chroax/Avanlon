@@ -55,9 +55,68 @@ public class CollisionChecker
         }
     }
 
-    public void checkEntity(Entity entity, Entity[] target)
+    public int checkEntity(Entity entity, Entity[] target)
     {
+        int index = 999;
 
+        for (int i = 0; i < target.length; i++)
+        {
+            if(target[i] != null)
+            {
+                // Get entity solid area position
+                entity.solidArea.x = entity.getWorldX() + entity.solidArea.x;
+                entity.solidArea.y = entity.getWorldY() + entity.solidArea.y;
+
+                // Get the object solid area position
+                target[i].solidArea.x += target[i].getWorldX();
+                target[i].solidArea.y += target[i].getWorldY();
+
+                switch (entity.getDirection())
+                {
+                    case "up" -> {
+                        // To predict what tiles are player to step in
+                        entity.solidArea.y -= entity.getSpeed();
+                        if(entity.solidArea.intersects(target[i].solidArea))
+                        {
+                            entity.setCollisionOn(true);
+                            index = i;
+                        }
+                    }
+                    case "down" -> {
+                        // To predict what tiles are player to step in
+                        entity.solidArea.y += entity.getSpeed();
+                        if(entity.solidArea.intersects(target[i].solidArea))
+                        {
+                            entity.setCollisionOn(true);
+                            index = i;
+                        }
+                    }
+                    case "left" -> {
+                        // To predict what tiles are player to step in
+                        entity.solidArea.x -= entity.getSpeed();
+                        if(entity.solidArea.intersects(target[i].solidArea))
+                        {
+                            entity.setCollisionOn(true);
+                            index = i;
+                        }
+                    }
+                    case "right" -> {
+                        // To predict what tiles are player to step in
+                        entity.solidArea.x += entity.getSpeed();
+                        if(entity.solidArea.intersects(target[i].solidArea))
+                        {
+                            entity.setCollisionOn(true);
+                            index = i;
+                        }
+                    }
+                }
+                entity.solidArea.x = entity.getSolidAreaDefaultX();
+                entity.solidArea.y = entity.getSolidAreaDefaultY();
+                target[i].solidArea.x = target[i].getSolidAreaDefaultX();
+                target[i].solidArea.y = target[i].getSolidAreaDefaultY();
+            }
+        }
+        return index;
     }
 
     public void checkPlayer(Entity entity)

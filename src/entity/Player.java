@@ -99,6 +99,9 @@ public class Player extends Entity
             this.setCollisionOn(false);
             gp.cChecker.checkTile(this);
 
+            int monsterIndex = gp.cChecker.checkEntity(this, gp.plain.monsters);
+            interactEntity(monsterIndex);
+
             if(!isCollisionOn())
             {
                 switch (getDirection())
@@ -130,6 +133,8 @@ public class Player extends Entity
             }
         }
     }
+
+    public void interactEntity(int i){};
 
     @Override
     public void draw(Graphics2D g2)
