@@ -47,6 +47,7 @@ public class GamePanel extends JPanel implements Runnable
     // Game state
     public int gameState;
     public int returnState;
+    public final int startState = 0;
     public final int playState = 1;
     public final int battleState = 2;
     public final int pauseState = 3;
@@ -74,7 +75,7 @@ public class GamePanel extends JPanel implements Runnable
 
     public void setupGame()
     {
-        gameState = playState;
+        gameState = startState;
         adjustWorldWidth(mapPick);
         adjustWorldHeight(mapPick);
         aSetter.setMonster();
@@ -156,7 +157,9 @@ public class GamePanel extends JPanel implements Runnable
     {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        if(gameState == playState)
+        if(gameState == startState)
+            ui.draw(g2);
+        else if(gameState == playState)
         {
             plain.draw(g2);
 

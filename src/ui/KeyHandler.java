@@ -21,8 +21,44 @@ public class KeyHandler implements KeyListener
     @Override
     public void keyPressed(KeyEvent e)
     {
+        if(gp.gameState == gp.startState)
+        {
+            if(gp.ui.startScreenState == gp.ui.homeState)
+            {
+                if(e.getKeyCode() == KeyEvent.VK_ENTER)
+                    gp.ui.startScreenState = gp.ui.titleState;
+            }
+            else if(gp.ui.startScreenState == gp.ui.titleState)
+            {
+                switch (e.getKeyCode())
+                {
+                    case KeyEvent.VK_W -> {
+                        gp.ui.states[gp.ui.titleState].commandNum--;
+                        if (gp.ui.states[gp.ui.titleState].commandNum < 0)
+                            gp.ui.states[gp.ui.titleState].commandNum = 2;
+                    }
+                    case KeyEvent.VK_S -> {
+                        gp.ui.states[gp.ui.titleState].commandNum++;
+                        if (gp.ui.states[gp.ui.titleState].commandNum > 2)
+                            gp.ui.states[gp.ui.titleState].commandNum = 0;
+                    }
+                    case KeyEvent.VK_ENTER -> {
+                        switch (gp.ui.states[gp.ui.titleState].commandNum)
+                        {
+                            case 0 -> gp.ui.startScreenState = gp.ui.chooseState;
+                            case 1 -> {}
+                            case 2 -> System.exit(0);
+                        }
+                    }
+                }
+            }
+            else if(gp.ui.startScreenState == gp.ui.chooseState)
+            {
+
+            }
+        }
         // Key Handling at play state
-        if(gp.gameState == gp.playState)
+        else if(gp.gameState == gp.playState)
         {
             switch (e.getKeyCode())
             {
@@ -39,37 +75,37 @@ public class KeyHandler implements KeyListener
         }
         else if(gp.gameState == gp.battleState)
         {
-            if(((BattleState)gp.ui.states[0]).messageOn)
+            if(((BattleState)gp.ui.states[gp.ui.battleState]).messageOn)
             {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER)
-                    ((BattleState)gp.ui.states[0]).messageOn = false;
+                    ((BattleState)gp.ui.states[gp.ui.battleState]).messageOn = false;
             }
             else
             {
                 switch (e.getKeyCode())
                 {
                     case KeyEvent.VK_W, KeyEvent.VK_S -> {
-                        if (gp.ui.states[0].commandNum == 0)
-                            gp.ui.states[0].commandNum = 2;
-                        else if (gp.ui.states[0].commandNum == 1)
-                            gp.ui.states[0].commandNum = 3;
-                        else if (gp.ui.states[0].commandNum == 2)
-                            gp.ui.states[0].commandNum = 0;
-                        else if (gp.ui.states[0].commandNum == 3)
-                            gp.ui.states[0].commandNum = 1;
+                        if (gp.ui.states[gp.ui.battleState].commandNum == 0)
+                            gp.ui.states[gp.ui.battleState].commandNum = 2;
+                        else if (gp.ui.states[gp.ui.battleState].commandNum == 1)
+                            gp.ui.states[gp.ui.battleState].commandNum = 3;
+                        else if (gp.ui.states[gp.ui.battleState].commandNum == 2)
+                            gp.ui.states[gp.ui.battleState].commandNum = 0;
+                        else if (gp.ui.states[gp.ui.battleState].commandNum == 3)
+                            gp.ui.states[gp.ui.battleState].commandNum = 1;
                     }
                     case KeyEvent.VK_A, KeyEvent.VK_D ->{
-                        if (gp.ui.states[0].commandNum == 0)
-                            gp.ui.states[0].commandNum = 1;
-                        else if (gp.ui.states[0].commandNum == 1)
-                            gp.ui.states[0].commandNum = 0;
-                        else if (gp.ui.states[0].commandNum == 2)
-                            gp.ui.states[0].commandNum = 3;
-                        else if (gp.ui.states[0].commandNum == 3)
-                            gp.ui.states[0].commandNum = 2;
+                        if (gp.ui.states[gp.ui.battleState].commandNum == 0)
+                            gp.ui.states[gp.ui.battleState].commandNum = 1;
+                        else if (gp.ui.states[gp.ui.battleState].commandNum == 1)
+                            gp.ui.states[gp.ui.battleState].commandNum = 0;
+                        else if (gp.ui.states[gp.ui.battleState].commandNum == 2)
+                            gp.ui.states[gp.ui.battleState].commandNum = 3;
+                        else if (gp.ui.states[gp.ui.battleState].commandNum == 3)
+                            gp.ui.states[gp.ui.battleState].commandNum = 2;
                     }
                     case KeyEvent.VK_ENTER -> {
-                        switch (gp.ui.states[0].commandNum)
+                        switch (gp.ui.states[gp.ui.battleState].commandNum)
                         {
                             case 0 -> {
                                 {

@@ -2,6 +2,7 @@ package ui;
 
 import state.BattleState;
 import state.State;
+import state.TitleState;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -18,7 +19,12 @@ public class UI
     BufferedImage imagePlayer;
     public static Font maruMonica;
     public static Font pokemon;
-    public State[] states = new State[1];
+    public int startScreenState = 1;
+    public int homeState = 0;
+    public int titleState = 1;
+    public int chooseState = 2;
+    public int battleState = 3;
+    public State[] states = new State[4];
 
     public UI(GamePanel gp)
     {
@@ -43,7 +49,8 @@ public class UI
 
     public void setState()
     {
-        states[0] = new BattleState(gp);
+        states[titleState] = new TitleState(gp);
+        states[battleState] = new BattleState(gp);
     }
 
     public void getUIImage()
@@ -66,8 +73,10 @@ public class UI
         g2.setFont(maruMonica);
         g2.setColor(Color.white);
 
-        if(gp.gameState == gp.battleState)
-            states[0].draw(g2);
+        if(gp.gameState == gp.startState)
+            states[startScreenState].draw(g2);
+        else if(gp.gameState == gp.battleState)
+            states[gp.ui.battleState].draw(g2);
         else if(gp.gameState == gp.playState)
             drawPlayUI();
         else if(gp.gameState == gp.pauseState)

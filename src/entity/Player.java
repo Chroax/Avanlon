@@ -158,7 +158,7 @@ public class Player extends Entity
         {
             if(gp.keyH.enterPressed)
             {
-                ((BattleState)gp.ui.states[0]).messageOn = false;
+                ((BattleState)gp.ui.states[gp.ui.battleState]).messageOn = false;
                 gp.gameState = gp.battleState;
                 gp.monsterIndex = i;
             }

@@ -11,6 +11,7 @@ import java.util.Objects;
 
 public abstract class State
 {
+    protected String text;
     GamePanel gp;
     Graphics2D g2;
     BufferedImage[] imageScreen;
