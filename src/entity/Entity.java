@@ -10,6 +10,8 @@ import java.util.Objects;
 
 public abstract class Entity
 {
+    protected String name;
+
     protected int worldX;
     protected int worldY;
     private int speed;
