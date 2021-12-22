@@ -25,8 +25,9 @@ public class UI
     public int titleState = 1;
     public int chooseState = 2;
     public int battleState = 3;
+    public int inventoryState = 4;
     public int startScreenState = homeState;
-    public State[] states = new State[4];
+    public State[] states = new State[5];
 
     public int commandNum = 0;
 
@@ -57,6 +58,7 @@ public class UI
         states[titleState] = new TitleState(gp);
         states[chooseState] = new ChooseState(gp);
         states[battleState] = new BattleState(gp);
+        states[inventoryState] = new InventoryState(gp);
     }
 
     public void getUIImage()
@@ -82,13 +84,18 @@ public class UI
         if(gp.gameState == gp.startState)
             states[startScreenState].draw(g2);
         else if(gp.gameState == gp.battleState)
-            states[gp.ui.battleState].draw(g2);
+            states[battleState].draw(g2);
         else if(gp.gameState == gp.playState)
             drawPlayUI();
         else if(gp.gameState == gp.pauseState)
             drawPauseScreen();
         else if(gp.gameState == gp.chooseMapState)
             drawChooseMapScreen();
+        else if(gp.gameState == gp.inventoryState)
+        {
+            drawPlayUI();
+            states[inventoryState].draw(g2);
+        }
     }
 
     public void drawChooseMapScreen()

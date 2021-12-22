@@ -143,9 +143,7 @@ public class GamePanel extends JPanel implements Runnable
             for(Monster monster: map[mapPick].monsters)
             {
                 if(monster != null)
-                {
                     monster.update();
-                }
             }
         }
     }

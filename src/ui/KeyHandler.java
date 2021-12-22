@@ -133,6 +133,7 @@ public class KeyHandler implements KeyListener
                     gp.returnState = gp.gameState;
                     gp.gameState = gp.pauseState;
                 }
+                case KeyEvent.VK_I -> gp.gameState = gp.inventoryState;
             }
         }
         else if(gp.gameState == gp.battleState)
@@ -259,6 +260,34 @@ public class KeyHandler implements KeyListener
                         }
                     }
                 }
+            }
+        }
+        else if(gp.gameState == gp.inventoryState)
+        {
+            switch (e.getKeyCode())
+            {
+                case KeyEvent.VK_W -> {
+                    gp.ui.states[gp.ui.inventoryState].commandNum -= 8;
+                    if(gp.ui.states[gp.ui.inventoryState].commandNum < 0)
+                        gp.ui.states[gp.ui.inventoryState].commandNum += 32;
+                }
+                case KeyEvent.VK_S -> {
+                    gp.ui.states[gp.ui.inventoryState].commandNum += 8;
+                    if(gp.ui.states[gp.ui.inventoryState].commandNum > 31)
+                        gp.ui.states[gp.ui.inventoryState].commandNum -= 32;
+                }
+                case KeyEvent.VK_A -> {
+                    gp.ui.states[gp.ui.inventoryState].commandNum -= 1;
+                    if((gp.ui.states[gp.ui.inventoryState].commandNum + 1) % 8 == 0 || gp.ui.states[gp.ui.inventoryState].commandNum < 0)
+                        gp.ui.states[gp.ui.inventoryState].commandNum += 8;
+                }
+                case KeyEvent.VK_D -> {
+                    gp.ui.states[gp.ui.inventoryState].commandNum += 1;
+                    if(gp.ui.states[gp.ui.inventoryState].commandNum % 8 == 0)
+                        gp.ui.states[gp.ui.inventoryState].commandNum -= 8;
+                }
+                case KeyEvent.VK_ENTER -> enterPressed = true;
+                case KeyEvent.VK_I -> gp.gameState = gp.playState;
             }
         }
     }
