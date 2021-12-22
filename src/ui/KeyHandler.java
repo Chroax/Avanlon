@@ -1,9 +1,12 @@
 package ui;
 
 import entity.JobClass;
+import object.weapon.Weapon;
 import state.BattleState;
+import state.BuyState;
 import state.ChooseState;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -183,7 +186,7 @@ public class KeyHandler implements KeyListener
                                     }
                                     else if(gp.player.getHP() <= 0)
                                     {
-                                        gp.ui.dieAnimation();
+                                        gp.ui.dieAnimationOn = true;
                                         gp.gameState = gp.playState;
                                         gp.player.respawn();
                                         gp.player.resetStat();
@@ -194,6 +197,7 @@ public class KeyHandler implements KeyListener
                             case 1 -> System.out.println("DO OPEN INVENTORY");
                             case 2 -> {
                                 gp.gameState = gp.playState;
+                                gp.ui.states[gp.ui.battleState].commandNum = 0;
                                 gp.map[gp.getMapPick()].monsters[gp.monsterIndex].generateMonster();
                             }
                             case 3 -> System.out.println("DO SHOW STATUS");
@@ -288,9 +292,248 @@ public class KeyHandler implements KeyListener
                         gp.ui.states[gp.ui.inventoryState].commandNum -= 8;
                 }
                 case KeyEvent.VK_ENTER -> {
-                    gp.player.useItem(gp.ui.states[gp.ui.inventoryState].commandNum);
+                    gp.player.useItem(gp.ui.states[gp.ui.inventoryState].commandNum, false);
                 }
                 case KeyEvent.VK_I -> gp.gameState = gp.playState;
+            }
+        }
+        else if(gp.gameState == gp.dialogueState)
+        {
+            if (e.getKeyCode() == KeyEvent.VK_ENTER)
+            {
+                gp.map[gp.getMapPick()].NPC[gp.npcIndex].speak();
+                if(gp.ui.endDialogue)
+                    gp.gameState = gp.playState;
+            }
+        }
+        else if(gp.gameState == gp.merchantState)
+        {
+            if(gp.ui.selectionMerchantState == gp.ui.merchantState)
+            {
+                switch (e.getKeyCode()) {
+                    case KeyEvent.VK_W -> {
+                        gp.ui.commandNum--;
+                        if (gp.ui.commandNum < 0)
+                            gp.ui.commandNum = 2;
+                    }
+                    case KeyEvent.VK_S -> {
+                        gp.ui.commandNum++;
+                        if (gp.ui.commandNum > 2)
+                            gp.ui.commandNum = 0;
+                    }
+                    case KeyEvent.VK_ENTER -> {
+                        switch (gp.ui.commandNum) {
+                            case 0 -> gp.ui.selectionMerchantState = gp.ui.buyState;
+                            case 1 -> {
+                                gp.ui.commandNum = 0;
+                                gp.ui.selectionMerchantState = gp.ui.sellState;
+                            }
+                            case 2 -> {
+                                gp.ui.commandNum = 0;
+                                gp.gameState = gp.playState;
+                            }
+                        }
+                    }
+                }
+            }
+            else if(gp.ui.selectionMerchantState == gp.ui.buyState)
+            {
+                switch (e.getKeyCode()) {
+                    case KeyEvent.VK_W -> {
+                        gp.ui.commandNum--;
+                        if (gp.ui.commandNum < 0)
+                            gp.ui.commandNum = 3;
+                    }
+                    case KeyEvent.VK_S -> {
+                        gp.ui.commandNum++;
+                        if (gp.ui.commandNum > 3)
+                            gp.ui.commandNum = 0;
+                    }
+                    case KeyEvent.VK_ENTER -> {
+                        switch (gp.ui.commandNum) {
+                            case 0 -> {
+                                gp.ui.selectionMerchantState = gp.ui.buyingThingState;
+                                ((BuyState)gp.ui.states[gp.ui.buyMerchantState]).setState("WEAPON");
+                            }
+                            case 1 -> {
+                                gp.ui.selectionMerchantState = gp.ui.buyingThingState;
+                                ((BuyState)gp.ui.states[gp.ui.buyMerchantState]).setState("ARMOR");
+                            }
+                            case 2 -> {
+                                gp.ui.selectionMerchantState = gp.ui.buyingThingState;
+                                ((BuyState)gp.ui.states[gp.ui.buyMerchantState]).setState("POTION");
+                            }
+                            case 3 -> {
+                                gp.ui.selectionMerchantState = gp.ui.merchantState;
+                                gp.ui.commandNum = 0;
+                            }
+                        }
+                    }
+                }
+            }
+            else if(gp.ui.selectionMerchantState == gp.ui.buyingThingState)
+            {
+                switch (e.getKeyCode())
+                {
+                    case KeyEvent.VK_W -> {
+                        if(gp.ui.states[gp.ui.buyMerchantState].commandNum >= 0 && gp.ui.states[gp.ui.buyMerchantState].commandNum <= 7)
+                            gp.ui.states[gp.ui.buyMerchantState].commandNum = 33;
+                        else if(gp.ui.states[gp.ui.buyMerchantState].commandNum == 33)
+                            gp.ui.states[gp.ui.buyMerchantState].commandNum = 24;
+                        else
+                        {
+                            gp.ui.states[gp.ui.buyMerchantState].commandNum -= 8;
+                            if(gp.ui.states[gp.ui.buyMerchantState].commandNum < 0)
+                                gp.ui.states[gp.ui.buyMerchantState].commandNum += 32;
+                        }
+                    }
+                    case KeyEvent.VK_S -> {
+                        if(gp.ui.states[gp.ui.buyMerchantState].commandNum >= 24 && gp.ui.states[gp.ui.buyMerchantState].commandNum <= 31)
+                            gp.ui.states[gp.ui.buyMerchantState].commandNum = 33;
+                        else if(gp.ui.states[gp.ui.buyMerchantState].commandNum == 33)
+                            gp.ui.states[gp.ui.buyMerchantState].commandNum = 0;
+                        else
+                        {
+                            gp.ui.states[gp.ui.buyMerchantState].commandNum += 8;
+                            if(gp.ui.states[gp.ui.buyMerchantState].commandNum > 31)
+                                gp.ui.states[gp.ui.buyMerchantState].commandNum -= 32;
+                        }
+                    }
+                    case KeyEvent.VK_A -> {
+                        if(gp.ui.states[gp.ui.buyMerchantState].commandNum != 33)
+                        {
+                            gp.ui.states[gp.ui.buyMerchantState].commandNum -= 1;
+                            if ((gp.ui.states[gp.ui.buyMerchantState].commandNum + 1) % 8 == 0 || gp.ui.states[gp.ui.buyMerchantState].commandNum < 0)
+                                gp.ui.states[gp.ui.buyMerchantState].commandNum += 8;
+                        }
+                    }
+                    case KeyEvent.VK_D -> {
+                        if(gp.ui.states[gp.ui.buyMerchantState].commandNum != 33)
+                        {
+                            gp.ui.states[gp.ui.buyMerchantState].commandNum += 1;
+                            if(gp.ui.states[gp.ui.buyMerchantState].commandNum % 8 == 0)
+                                gp.ui.states[gp.ui.buyMerchantState].commandNum -= 8;
+                        }
+                    }
+                    case KeyEvent.VK_ENTER -> {
+                        if(gp.ui.states[gp.ui.buyMerchantState].commandNum != 33)
+                        {
+                            gp.ui.buying = true;
+                            switch (((BuyState)gp.ui.states[gp.ui.buyMerchantState]).getState())
+                            {
+                                case "WEAPON", "ARMOR" -> {
+                                    if(gp.ui.states[gp.ui.buyMerchantState].commandNum < 30)
+                                        gp.ui.selectionMerchantState = gp.ui.confirmationState;
+                                }
+                                case "POTION" -> {
+                                    if(gp.ui.states[gp.ui.buyMerchantState].commandNum < 8)
+                                        gp.ui.selectionMerchantState = gp.ui.confirmationState;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            gp.ui.selectionMerchantState = gp.ui.buyState;
+                            gp.ui.states[gp.ui.buyMerchantState].commandNum = 0;
+                        }
+                    }
+                }
+            }
+            else if(gp.ui.selectionMerchantState == gp.ui.sellState)
+            {
+                switch (e.getKeyCode())
+                {
+                    case KeyEvent.VK_W -> {
+                        if(gp.ui.states[gp.ui.inventoryState].commandNum >= 0 && gp.ui.states[gp.ui.inventoryState].commandNum <= 7)
+                            gp.ui.states[gp.ui.inventoryState].commandNum = 33;
+                        else if(gp.ui.states[gp.ui.inventoryState].commandNum == 33)
+                            gp.ui.states[gp.ui.inventoryState].commandNum = 24;
+                        else
+                        {
+                            gp.ui.states[gp.ui.inventoryState].commandNum -= 8;
+                            if(gp.ui.states[gp.ui.inventoryState].commandNum < 0)
+                                gp.ui.states[gp.ui.inventoryState].commandNum += 32;
+                        }
+                    }
+                    case KeyEvent.VK_S -> {
+                        if(gp.ui.states[gp.ui.inventoryState].commandNum >= 24 && gp.ui.states[gp.ui.inventoryState].commandNum <= 31)
+                            gp.ui.states[gp.ui.inventoryState].commandNum = 33;
+                        else if(gp.ui.states[gp.ui.inventoryState].commandNum == 33)
+                            gp.ui.states[gp.ui.inventoryState].commandNum = 0;
+                        else
+                        {
+                            gp.ui.states[gp.ui.inventoryState].commandNum += 8;
+                            if(gp.ui.states[gp.ui.inventoryState].commandNum > 31)
+                                gp.ui.states[gp.ui.inventoryState].commandNum -= 32;
+                        }
+                    }
+                    case KeyEvent.VK_A -> {
+                        if(gp.ui.states[gp.ui.inventoryState].commandNum != 33)
+                        {
+                            gp.ui.states[gp.ui.inventoryState].commandNum -= 1;
+                            if ((gp.ui.states[gp.ui.inventoryState].commandNum + 1) % 8 == 0 || gp.ui.states[gp.ui.inventoryState].commandNum < 0)
+                                gp.ui.states[gp.ui.inventoryState].commandNum += 8;
+                        }
+                    }
+                    case KeyEvent.VK_D -> {
+                        if(gp.ui.states[gp.ui.inventoryState].commandNum != 33)
+                        {
+                            gp.ui.states[gp.ui.inventoryState].commandNum += 1;
+                            if(gp.ui.states[gp.ui.inventoryState].commandNum % 8 == 0)
+                                gp.ui.states[gp.ui.inventoryState].commandNum -= 8;
+                        }
+                    }
+                    case KeyEvent.VK_ENTER -> {
+                        if(gp.ui.states[gp.ui.inventoryState].commandNum != 33)
+                        {
+                            gp.ui.buying = false;
+                            if(gp.ui.states[gp.ui.inventoryState].commandNum < gp.player.items.size())
+                                gp.ui.selectionMerchantState = gp.ui.confirmationState;
+                        }
+                        else
+                        {
+                            gp.ui.selectionMerchantState = gp.ui.merchantState;
+                            gp.ui.states[gp.ui.inventoryState].commandNum = 0;
+                        }
+                    }
+                }
+            }
+            else if(gp.ui.selectionMerchantState == gp.ui.confirmationState)
+            {
+                switch (e.getKeyCode())
+                {
+                    case KeyEvent.VK_D-> {
+                        gp.ui.commandNum++;
+                        if(gp.ui.commandNum > 1)
+                            gp.ui.commandNum = 0;
+                    }
+                    case KeyEvent.VK_A -> {
+                        gp.ui.commandNum--;
+                        if(gp.ui.commandNum < 0)
+                            gp.ui.commandNum = 1;
+                    }
+                    case KeyEvent.VK_ENTER -> {
+                        if (gp.ui.commandNum == 0)
+                        {
+                            if (!gp.ui.buying)
+                                gp.player.useItem(gp.ui.states[gp.ui.inventoryState].commandNum, true);
+                            else
+                            {
+                                switch (((BuyState)gp.ui.states[gp.ui.buyMerchantState]).getState())
+                                {
+                                    case "WEAPON" -> gp.player.addItem(((BuyState) gp.ui.states[gp.ui.buyMerchantState]).weapons[gp.ui.states[gp.ui.buyMerchantState].commandNum], 1, true);
+                                    case "ARMOR" -> gp.player.addItem(((BuyState) gp.ui.states[gp.ui.buyMerchantState]).armors[gp.ui.states[gp.ui.buyMerchantState].commandNum], 1, true);
+                                    case "POTION" -> gp.player.addItem(((BuyState) gp.ui.states[gp.ui.buyMerchantState]).potions[gp.ui.states[gp.ui.buyMerchantState].commandNum], 1, true);
+                                }
+                            }
+                        }
+                        if(!gp.ui.buying)
+                            gp.ui.selectionMerchantState = gp.ui.sellState;
+                        else
+                            gp.ui.selectionMerchantState = gp.ui.buyingThingState;
+                        gp.ui.commandNum = 0;
+                    }
+                }
             }
         }
     }

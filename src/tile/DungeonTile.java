@@ -1,5 +1,6 @@
 package tile;
 
+import entity.Entity;
 import entity.monster.Monster;
 import object.SuperObject;
 import ui.GamePanel;
@@ -12,6 +13,7 @@ public class DungeonTile extends TileManager
         super(gp);
         monsters = new Monster[5];
         obj = new SuperObject[2];
+        NPC = new Entity[1];
         tile = new Tile[100];
         mapTileNum = new int[66][35];
         col = 66;

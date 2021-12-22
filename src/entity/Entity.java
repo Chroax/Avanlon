@@ -56,6 +56,8 @@ public abstract class Entity
     // Dialog Chat
     protected String[][] dialogues;
     protected int dialogueIndex;
+    protected int nextDialogue;
+    protected int prevDialogue;
 
     // Collision
     private boolean collisionOn;
@@ -71,7 +73,38 @@ public abstract class Entity
 
     public void setAction(){}
 
-    public void speak(){}
+    public void speak()
+    {
+        if(prevDialogue != nextDialogue)
+        {
+            gp.ui.endDialogue = true;
+            prevDialogue = nextDialogue;
+        }
+
+        if(dialogues[nextDialogue][dialogueIndex] != null)
+        {
+            gp.ui.currentDialogue = dialogues[nextDialogue][dialogueIndex];
+            dialogueIndex++;
+            if(dialogueIndex >= dialogues[nextDialogue].length)
+            {
+                dialogueIndex = 0;
+                if(dialogues[nextDialogue][dialogueIndex] != null)
+                    nextDialogue++;
+                else
+                    gp.ui.endDialogue = true;
+            }
+        }
+        else
+            gp.ui.endDialogue = true;
+
+        switch (gp.player.getDirection())
+        {
+            case "up" -> direction = "down";
+            case "down" -> direction = "up";
+            case "left" -> direction = "right";
+            case "right" -> direction = "left";
+        }
+    }
 
     public void attack(Entity entity, int index)
     {
@@ -150,21 +183,21 @@ public abstract class Entity
     public void draw(Graphics2D g2)
     {
         BufferedImage image = null;
-        int screenX = worldX - gp.player.worldX + gp.player.getScreenX();
-        int screenY = worldY - gp.player.worldY + gp.player.getScreenY();
+        int screenX = worldX - gp.player.getWorldX() + gp.player.getScreenX();
+        int screenY = worldY - gp.player.getWorldY() + gp.player.getScreenY();
 
         // STOP MOVING CAMERA
-        if(gp.player.worldX < gp.player.getScreenX())
+        if(gp.player.getWorldX() < gp.player.getScreenX())
             screenX = worldX;
-        if(gp.player.worldY < gp.player.getScreenY())
+        if(gp.player.getWorldY() < gp.player.getScreenY())
             screenY = worldY;
 
         int rightOffset = gp.screenWidth - gp.player.getScreenX();
-        if(rightOffset > gp.getWorldWidth() - gp.player.worldX)
+        if(rightOffset > gp.getWorldWidth() - gp.player.getWorldX())
             screenX = gp.screenWidth - (gp.getWorldWidth() - worldX);
 
         int bottomOffset = gp.screenHeight - gp.player.getScreenY();
-        if(bottomOffset > gp.getWorldHeight() - gp.player.worldY)
+        if(bottomOffset > gp.getWorldHeight() - gp.player.getWorldY())
             screenY = gp.screenHeight - (gp.getWorldHeight() - worldY);
 
         switch (direction)
@@ -203,17 +236,17 @@ public abstract class Entity
             }
         }
 
-        if(worldX + gp.tileSize > gp.player.worldX - gp.player.getScreenX() &&
-                worldX - gp.tileSize < gp.player.worldX + gp.player.getScreenX() &&
-                worldY + gp.tileSize > gp.player.worldY - gp.player.getScreenY() &&
-                worldY - gp.tileSize < gp.player.worldY + gp.player.getScreenY())
+        if(worldX + gp.tileSize > gp.player.getWorldX() - gp.player.getScreenX() &&
+                worldX - gp.tileSize < gp.player.getWorldX() + gp.player.getScreenX() &&
+                worldY + gp.tileSize > gp.player.getWorldY() - gp.player.getScreenY() &&
+                worldY - gp.tileSize < gp.player.getWorldY() + gp.player.getScreenY())
             g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
 
             // If player is around the edge, draw everything
-        else if(gp.player.worldX < gp.player.getScreenX() ||
-                gp.player.worldY < gp.player.getScreenY() ||
-                rightOffset > gp.getWorldWidth() - gp.player.worldX ||
-                bottomOffset > gp.getWorldHeight() - gp.player.worldY)
+        else if(gp.player.getWorldX() < gp.player.getScreenX() ||
+                gp.player.getWorldY() < gp.player.getScreenY() ||
+                rightOffset > gp.getWorldWidth() - gp.player.getWorldX() ||
+                bottomOffset > gp.getWorldHeight() - gp.player.getWorldY())
             g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
 
         g2.setColor(Color.BLACK);

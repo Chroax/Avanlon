@@ -5,9 +5,12 @@ import state.*;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class UI
@@ -17,6 +20,7 @@ public class UI
 
     BufferedImage imageEquip;
     BufferedImage imagePlayer;
+    BufferedImage dialogPointer;
 
     public static Font maruMonica;
     public static Font pokemon;
@@ -26,10 +30,25 @@ public class UI
     public int chooseState = 2;
     public int battleState = 3;
     public int inventoryState = 4;
+    public int buyMerchantState = 5;
     public int startScreenState = homeState;
-    public State[] states = new State[5];
+    public State[] states = new State[6];
+
+    public int merchantState = 0;
+    public int buyState = 1;
+    public int sellState = 2;
+    public int buyingThingState = 3;
+    public int confirmationState = 4;
+    public int selectionMerchantState = merchantState;
+    public boolean buying = false;
 
     public int commandNum = 0;
+    public int messageCounter = 0;
+    public String currentDialogue = "";
+    public boolean endDialogue = false;
+    public boolean notCompatibleItemOn = false;
+    public boolean inventoryFullMessageOn = false;
+    public boolean dieAnimationOn = false;
 
     public UI(GamePanel gp)
     {
@@ -59,6 +78,7 @@ public class UI
         states[chooseState] = new ChooseState(gp);
         states[battleState] = new BattleState(gp);
         states[inventoryState] = new InventoryState(gp);
+        states[buyMerchantState] = new BuyState(gp);
     }
 
     public void getUIImage()
@@ -67,6 +87,7 @@ public class UI
         {
             imageEquip = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/equip_ui.png")));
             imagePlayer = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/player_ui.png")));
+            dialogPointer = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/dialog_pointer.png")));
         }
         catch (IOException e)
         {
@@ -94,7 +115,41 @@ public class UI
         else if(gp.gameState == gp.inventoryState)
         {
             drawPlayUI();
+            ((InventoryState)states[inventoryState]).setSellState(false);
             states[inventoryState].draw(g2);
+        }
+        else if(gp.gameState == gp.dialogueState)
+            drawDialogueScreen();
+        else if(gp.gameState == gp.merchantState)
+        {
+            drawPlayUI();
+            if(selectionMerchantState == merchantState)
+                drawMerchantScreen();
+            else if(selectionMerchantState == buyState)
+                drawBuyOptionScreen();
+            else if(selectionMerchantState == sellState)
+            {
+                ((InventoryState)states[inventoryState]).setSellState(true);
+                states[inventoryState].draw(g2);
+            }
+            else if(selectionMerchantState == buyingThingState)
+                states[buyMerchantState].draw(g2);
+            else if(selectionMerchantState == confirmationState)
+            {
+                if(buying)
+                {
+                    states[buyMerchantState].draw(g2);
+                    if(selectionMerchantState == confirmationState)
+                        drawConfirmationScreen(false);
+                }
+                else
+                {
+                    ((InventoryState)states[inventoryState]).setSellState(true);
+                    states[inventoryState].draw(g2);
+                    if(selectionMerchantState == confirmationState)
+                        drawConfirmationScreen(true);
+                }
+            }
         }
     }
 
@@ -130,7 +185,7 @@ public class UI
         g2.fillRoundRect(x, y, width, height, 35, 35);
         g2.setColor(new Color(255, 255, 255));
         g2.setStroke(new BasicStroke(5));
-        g2.drawRoundRect(x + 5, y + 5, width - 10, height -10, 25, 25);
+        g2.drawRoundRect(x + 5, y + 5, width - 10, height - 10, 25, 25);
     }
 
     public void drawPlayUI()
@@ -208,9 +263,175 @@ public class UI
         g2.setFont(pokemon);
     }
 
-    public void lvlUpAnimation(){};
-    public void dieAnimation(){};
-    public void inventoryFullMessage(){}
+    public void drawDialogueScreen()
+    {
+        int x = gp.tileSize * 2;
+        int y = gp.tileSize / 2;
+        int width = gp.screenWidth - (gp.tileSize * 4);
+        int height = gp.tileSize * 4;
+        drawSubWindow(x, y, width, height);
+
+        x += 30;
+        y += gp.tileSize;
+        g2.setFont(pokemon);
+        Map<TextAttribute, Object> attributes = new HashMap<>();
+        attributes.put(TextAttribute.TRACKING, 0.1);
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 40F));
+        g2.setFont(g2.getFont().deriveFont(attributes));
+        for (String line: currentDialogue.split("\n"))
+        {
+            g2.drawString(line, x, y);
+            y += 40;
+        }
+
+        messageCounter++;
+        if(messageCounter < 15)
+            g2.drawImage(dialogPointer, 860, 260, 18, 11, null);
+        else if(messageCounter > 30)
+            messageCounter = 0;
+    }
+
+    public void drawMerchantScreen()
+    {
+        String mapOption = "BUY\nSELL\nBACK";
+
+        int i = 0;
+        int x = gp.tileSize * 2;
+        int y = gp.tileSize / 2;
+        int width = gp.screenWidth - (gp.tileSize * 4);
+        int height = (int) (gp.tileSize * 5);
+        drawSubWindow(x, y, width, height);
+
+        x += 50;
+        y += gp.tileSize;
+
+        g2.setFont(pokemon);
+        Map<TextAttribute, Object> attributes = new HashMap<>();
+        attributes.put(TextAttribute.TRACKING, 0.1);
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 40F));
+        g2.setFont(g2.getFont().deriveFont(attributes));
+
+        g2.drawString("What do you want to do ?", x, y);
+
+        y += 60;
+
+        for (String line: mapOption.split("\n"))
+        {
+            g2.drawString(line, x, y);
+            if(commandNum == i)
+                g2.drawString(">", x - 20, y);
+            i++;
+            if(i == 2)
+                y += 80;
+            else
+                y += 40;
+        }
+    }
+
+    public void drawBuyOptionScreen()
+    {
+        String mapOption = "WEAPON\nARMOR\nPOTION\nBACK";
+
+        int i = 0;
+        int x = gp.tileSize * 2;
+        int y = gp.tileSize / 2;
+        int width = gp.screenWidth - (gp.tileSize * 4);
+        int height = (int) (gp.tileSize * 5);
+        drawSubWindow(x, y, width, height);
+
+        x += 50;
+        y += gp.tileSize;
+
+        g2.setFont(pokemon);
+        Map<TextAttribute, Object> attributes = new HashMap<>();
+        attributes.put(TextAttribute.TRACKING, 0.1);
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 40F));
+        g2.setFont(g2.getFont().deriveFont(attributes));
+
+        g2.drawString("What do you want to buy ?", x, y);
+
+        y += 60;
+
+        for (String line: mapOption.split("\n"))
+        {
+            g2.drawString(line, x, y);
+            if(commandNum == i)
+                g2.drawString(">", x - 20, y);
+            i++;
+            if(i == 3)
+                y += 80;
+            else
+                y += 40;
+        }
+    }
+
+    public void drawConfirmationScreen(boolean isSell)
+    {
+        String mapOption = "YES\nNO";
+
+        int i = 0;
+        int x = 322;
+        int y = 278;
+        int width = 384;
+        int height = 140;
+
+        g2.setColor(new Color(214, 154, 77));
+        g2.fillRect(x, y, width, height);
+
+        g2.setColor(new Color(173, 124, 71));
+        g2.setStroke(new BasicStroke(4));
+        g2.drawRect(x - 2, y - 2, width + 3, height + 3);
+
+        g2.setColor(Color.WHITE);
+        g2.setFont(pokemon);
+        Map<TextAttribute, Object> attributes = new HashMap<>();
+        attributes.put(TextAttribute.TRACKING, 0.1);
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 29F));
+        g2.setFont(g2.getFont().deriveFont(attributes));
+
+        if(isSell)
+            g2.drawString("Do you want to sell this item ?", x + 16, y + 35);
+        else
+            g2.drawString("Do you want to buy this item ?", x + 19, y + 35);
+
+        width = 90;
+        height = 30;
+        x += 75;
+        y += 65;
+
+        g2.setColor(new Color(28, 153, 131));
+        g2.fillRect(x, y, width, height);
+
+        if(commandNum == 0)
+            g2.setColor(Color.WHITE);
+        else
+            g2.setColor(new Color(32, 106, 98));
+        g2.setStroke(new BasicStroke(4));
+        g2.drawRect(x - 2, y - 2, width + 3, height + 3);
+
+        x += width + 60;
+
+        g2.setColor(new Color(189, 81, 90));
+        g2.fillRect(x, y, width, height);
+
+        if(commandNum == 1)
+            g2.setColor(Color.WHITE);
+        else
+            g2.setColor(new Color(152, 67, 80));
+        g2.setStroke(new BasicStroke(4));
+        g2.drawRect(x - 2, y - 2, width + 3, height + 3);
+
+        g2.setColor(Color.WHITE);
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 33F));
+        y += 23;
+        x = 419;
+        for (String line: mapOption.split("\n"))
+        {
+            g2.drawString(line, x, y);
+            i++;
+            x += width + 69;
+        }
+    }
 
     public int getXCenteredText(String text)
     {

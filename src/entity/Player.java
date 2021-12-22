@@ -18,6 +18,7 @@ public class Player extends Entity
     public final JobClass jobClass;
     private final boolean gender;
     public HashMap <SuperObject, Integer> items = new HashMap<>();
+    private boolean fullInventory = false;
     private Weapon weapon;
 
     public Player(GamePanel gp, JobClass jobClass, boolean gender)
@@ -178,6 +179,9 @@ public class Player extends Entity
             int objIndex = gp.cChecker.checkObj(this, true);
             interactObj(objIndex);
 
+            int npcIndex = gp.cChecker.checkEntity(this, gp.map[gp.getMapPick()].NPC);
+            interactNPC(npcIndex);
+
             int monsterIndex = gp.cChecker.checkEntity(this, gp.map[gp.getMapPick()].monsters);
             interactMonster(monsterIndex);
 
@@ -225,7 +229,34 @@ public class Player extends Entity
             }
         }
         gp.keyH.enterPressed = false;
-    };
+    }
+
+    public void interactNPC(int i)
+    {
+        if(i != 999)
+        {
+            if(gp.keyH.enterPressed)
+            {
+                switch (gp.map[gp.getMapPick()].NPC[i].getName())
+                {
+                    case "Merchant" ->{
+                        if(gp.map[gp.getMapPick()].NPC[i].nextDialogue == 0)
+                        {
+                            gp.gameState = gp.dialogueState;
+                            gp.ui.endDialogue = false;
+                            gp.map[gp.getMapPick()].NPC[i].speak();
+                            gp.npcIndex = i;
+                        }
+                        else
+                        {
+                            gp.gameState = gp.merchantState;
+                        }
+                    }
+                }
+                gp.keyH.enterPressed = false;
+            }
+        }
+    }
 
     public void interactObj(int i)
     {
@@ -239,14 +270,17 @@ public class Player extends Entity
                         gp.gameState = gp.chooseMapState;
                 }
                 case "Rusty Sword" -> {
-                    addItem(gp.map[gp.getMapPick()].obj[i], 1);
-                    gp.map[gp.getMapPick()].obj[i] = null;
+                    if(!fullInventory)
+                    {
+                        addItem(gp.map[gp.getMapPick()].obj[i], 1, false);
+                        gp.map[gp.getMapPick()].obj[i] = null;
+                    }
                 }
             }
         }
     }
 
-    public void addItem(SuperObject object, int quantity)
+    public void addItem(SuperObject object, int quantity, boolean buyStatus)
     {
         for (Map.Entry<SuperObject, Integer> new_Map : items.entrySet())
         {
@@ -258,9 +292,14 @@ public class Player extends Entity
             }
         }
         if(items.size() == 32)
-            gp.ui.inventoryFullMessage();
+        {
+            fullInventory = true;
+            gp.ui.inventoryFullMessageOn = true;
+        }
         else
             items.put(object, quantity);
+        if(buyStatus && !fullInventory)
+            setGold(getGold() - object.getBuyPrice());
     }
 
     public void defeatMonster(Entity entity)
@@ -318,10 +357,9 @@ public class Player extends Entity
         setMaxEXP(getMaxEXP() + (int) (getMaxEXP() * 0.5));
         setLvl(getLvl() + 1);
         resetStat();
-        gp.ui.lvlUpAnimation();
     }
 
-    public void useItem(int index)
+    public void useItem(int index, boolean sellStatus)
     {
         int i = 0;
         if(index > items.size())
@@ -330,16 +368,27 @@ public class Player extends Entity
         {
             if(i == index)
             {
-                switch (new_Map.getKey().getType())
+                if(!sellStatus)
                 {
-                    case "Weapon" -> equipWeapon((Weapon) new_Map.getKey());
-                    case "Potion" -> System.out.println("Do something with potion");
-                    case "Armor" -> System.out.println("Do something with armor");
-                    case "Key" -> System.out.println("Do something with key");
+                    switch (new_Map.getKey().getType())
+                    {
+                        case "Weapon" -> equipWeapon((Weapon) new_Map.getKey());
+                        case "Potion" -> System.out.println("Do something with potion");
+                        case "Armor" -> System.out.println("Do something with armor");
+                        case "Key" -> System.out.println("Do something with key");
+                        case "Drop" -> System.out.println("Do something with drop item");
+                    }
                 }
+                else
+                    setGold(getGold() + new_Map.getKey().getSellPrice());
+
                 int total = new_Map.getValue() - 1;
                 if(total <= 0)
+                {
                     items.remove(new_Map.getKey());
+                    if(fullInventory)
+                        fullInventory = false;
+                }
                 else
                     items.put(new_Map.getKey(), total);
             }
@@ -351,14 +400,17 @@ public class Player extends Entity
     {
         if(this.weapon != null)
             unEquipWeapon();
-        this.setWeapon(weapon);
+        if(weapon.getJobClass().equals(this.jobClass))
+            this.setWeapon(weapon);
+        else
+            gp.ui.notCompatibleItemOn = true;
     }
 
     public void unEquipWeapon()
     {
         if(this.weapon != null)
         {
-            addItem(this.weapon, 1);
+            addItem(this.weapon, 1, false);
             this.weapon = null;
         }
     }

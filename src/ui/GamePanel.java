@@ -1,5 +1,6 @@
 package ui;
 
+import entity.Entity;
 import entity.JobClass;
 import entity.Player;
 import entity.monster.Monster;
@@ -55,12 +56,12 @@ public class GamePanel extends JPanel implements Runnable
     public final int loadingBattleState = 3;
     public final int winBattleState = 4;
     public final int pauseState = 5;
-    public final int dialogState = 6;
+    public final int dialogueState = 6;
     public final int chooseMapState = 7;
     public final int loadMapState = 8;
     public final int inventoryState = 9;
     public final int merchantState = 10;
-    public final int showStatusState = 11;
+    public final int showStatusState = 12;
 
     // Map pick
     private int mapPick = 0;
@@ -79,6 +80,8 @@ public class GamePanel extends JPanel implements Runnable
     // Index monster
     public int monsterIndex;
 
+    public int npcIndex;
+
     public GamePanel()
     {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -92,6 +95,7 @@ public class GamePanel extends JPanel implements Runnable
     {
         gameState = startState;
         aSetter.setMonster();
+        aSetter.setNPC();
         aSetter.setObj();
     }
 
@@ -145,6 +149,11 @@ public class GamePanel extends JPanel implements Runnable
                 if(monster != null)
                     monster.update();
             }
+            for(Entity npc: map[mapPick].NPC)
+            {
+                if(npc != null)
+                    npc.update();
+            }
         }
     }
 
@@ -170,6 +179,12 @@ public class GamePanel extends JPanel implements Runnable
             {
                 if(monster != null)
                     monster.draw(g2);
+            }
+
+            for(Entity npc: map[mapPick].NPC)
+            {
+                if(npc != null)
+                    npc.draw(g2);
             }
 
             player.draw(g2);

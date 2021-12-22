@@ -1,6 +1,7 @@
 package util;
 
 import entity.monster.Werewolf;
+import entity.npc.MerchantNPC;
 import object.drop.Stair;
 import object.weapon.RustySword;
 import ui.GamePanel;
@@ -38,5 +39,12 @@ public class AssetSetter
         gp.map[gp.village].obj[3] = new RustySword(gp);
         gp.map[gp.village].obj[3].setWorldX(gp.tileSize * 13);
         gp.map[gp.village].obj[3].setWorldY(gp.tileSize * 34);
+    }
+
+    public void setNPC()
+    {
+        gp.map[gp.village].NPC[0] = new MerchantNPC(gp);
+        gp.map[gp.village].NPC[0].setWorldX(gp.tileSize * 11);
+        gp.map[gp.village].NPC[0].setWorldY(gp.tileSize * 32);
     }
 }

@@ -16,8 +16,9 @@ import java.util.Objects;
 
 public class InventoryState extends State
 {
-    Rectangle[] rectangles = new Rectangle[33];
+    Rectangle[] rectangles = new Rectangle[34];
     BufferedImage coin;
+    private boolean sellState = false;
 
     public InventoryState(GamePanel gp)
     {
@@ -56,6 +57,8 @@ public class InventoryState extends State
             else
                 x += width + 13;
         }
+
+        rectangles[33] = new Rectangle(202, 630, 90, 25);
     }
 
     public void draw(Graphics2D g2)
@@ -128,5 +131,27 @@ public class InventoryState extends State
 
             i++;
         }
+
+        if(sellState)
+        {
+            if(commandNum == 33)
+                g2.setColor(new Color(65, 91, 189));
+            else
+                g2.setColor(Color.WHITE);
+            g2.setStroke(new BasicStroke(4));
+            g2.drawRoundRect(rectangles[33].x - 2, rectangles[33].y - 2, rectangles[33].width + 3, rectangles[33].height + 3, 0, 0);
+
+            g2.setColor(new Color(34, 34, 61));
+            g2.fillRoundRect(rectangles[33].x , rectangles[33].y, rectangles[33].width, rectangles[33].height, 0, 0);
+
+            g2.setColor(Color.WHITE);
+            attributes.put(TextAttribute.TRACKING, 0.00);
+            g2.setFont(g2.getFont().deriveFont(attributes));
+            g2.setFont(g2.getFont().deriveFont(Font.BOLD, 30F));
+            g2.drawString("BACK", rectangles[33].x + 10, rectangles[33].y + 20);
+        }
     }
+
+    public boolean isSellState() {return sellState;}
+    public void setSellState(boolean sellState) {this.sellState = sellState;}
 }

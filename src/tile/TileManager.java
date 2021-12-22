@@ -1,5 +1,6 @@
 package tile;
 
+import entity.Entity;
 import entity.monster.Monster;
 import object.SuperObject;
 import ui.GamePanel;
@@ -21,6 +22,7 @@ public abstract class TileManager
     protected int row;
     protected String filePath;
     public Monster[] monsters;
+    public Entity[] NPC;
     public SuperObject[] obj;
 
     public TileManager(GamePanel gp)
