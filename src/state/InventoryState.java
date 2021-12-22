@@ -1,17 +1,36 @@
 package state;
 
 import entity.Player;
+import object.SuperObject;
+import object.weapon.Weapon;
 import ui.GamePanel;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.font.TextAttribute;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class InventoryState extends State
 {
     Rectangle[] rectangles = new Rectangle[33];
+    BufferedImage coin;
 
-    public InventoryState(GamePanel gp) {
+    public InventoryState(GamePanel gp)
+    {
         super(gp);
         setRectangles();
+        try
+        {
+            coin = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream( "/ui/coin.png")));
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
     public void setRectangles()
     {
@@ -46,6 +65,12 @@ public class InventoryState extends State
         int y = 155;
         int width = 621;
         int height = 458;
+
+        g2.setColor(new Color(255, 190, 27));
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 32F));
+        g2.drawImage(coin, x, y - 40, 32, 32, null);
+        g2.drawString("" + gp.player.getGold(), x + 40, y - 15);
+
         g2.setColor(new Color(34, 34, 61));
         g2.fillRoundRect(x,y,width,height,0,0);
         g2.setColor(Color.WHITE);
@@ -64,5 +89,44 @@ public class InventoryState extends State
 
         g2.setColor(Color.WHITE);
         g2.fillRect(rectangles[32].x + 300, rectangles[32].y + 4, 3, 120);
+        int i = 0;
+
+        Map<TextAttribute, Object> attributes = new HashMap<>();
+
+        for (Map.Entry<SuperObject, Integer> newMap : gp.player.items.entrySet())
+        {
+            int total = newMap.getValue();
+            g2.drawImage(newMap.getKey().image, rectangles[i].x, rectangles[i].y, null);
+            x = rectangles[i].x + 60 - (int) g2.getFontMetrics().getStringBounds("" + total, g2).getWidth();
+            g2.setFont(g2.getFont().deriveFont(Font.BOLD, 16F));
+            attributes.put(TextAttribute.TRACKING, 0.00);
+            g2.setFont(g2.getFont().deriveFont(attributes));
+            g2.drawString("" + total, x, rectangles[i].y + 63);
+
+            if(i == commandNum)
+            {
+                g2.setFont(g2.getFont().deriveFont(Font.BOLD, 26F));
+                attributes.put(TextAttribute.TRACKING, 0.05);
+                g2.setFont(g2.getFont().deriveFont(attributes));
+                if(newMap.getKey().getType().equals("Weapon"))
+                {
+                    g2.drawString(newMap.getKey().getName() + "  -  " + ((Weapon)newMap.getKey()).getJobClass(), rectangles[32].x + 15, rectangles[32].y + 35);
+                    g2.drawString("Phy Att : " + ((Weapon) newMap.getKey()).getPhyDamage(), rectangles[32].x + 315, rectangles[32].y + 35);
+                    g2.drawString("Mag Att : " + ((Weapon) newMap.getKey()).getMagDamage(), rectangles[32].x + 315, rectangles[32].y + 63);
+                    g2.drawString("Speed   : " + ((Weapon) newMap.getKey()).getSpd(), rectangles[32].x + 315, rectangles[32].y + 90);
+                }
+                else
+                    g2.drawString(newMap.getKey().getName(), rectangles[32].x + 15, rectangles[32].y + 35);
+
+                int gap = 60;
+                for (String line: newMap.getKey().getDescription().split("\n"))
+                {
+                    gap += 15;
+                    g2.drawString(line, rectangles[32].x + 15, rectangles[32].y + gap);
+                }
+            }
+
+            i++;
+        }
     }
 }

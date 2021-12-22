@@ -22,6 +22,7 @@ public class RustySword extends Weapon
     public void setValue()
     {
         setName("Rusty Sword");
+        setType("Weapon");
         setDescription("Ya nanti lah isi sendiri\nYang penting ada dulu aja");
         setSpd(-2);
         setPhyDamage(15);

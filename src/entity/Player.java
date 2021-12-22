@@ -1,12 +1,13 @@
 package entity;
 
+import object.SuperObject;
 import object.weapon.Weapon;
 import state.BattleState;
 import ui.GamePanel;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Random;
+import java.util.*;
 
 public class Player extends Entity
 {
@@ -16,6 +17,7 @@ public class Player extends Entity
     private final int screenY;
     public final JobClass jobClass;
     private final boolean gender;
+    public HashMap <SuperObject, Integer> items = new HashMap<>();
     private Weapon weapon;
 
     public Player(GamePanel gp, JobClass jobClass, boolean gender)
@@ -58,7 +60,7 @@ public class Player extends Entity
         setRST(1);setMaxRST(1);
         setCRIT(6);setMaxCRIT(6);
         setLvl(1);
-        setGold(0);
+        setGold(100);
         setEXP(0);
         setMaxEXP(100);
 
@@ -237,11 +239,28 @@ public class Player extends Entity
                         gp.gameState = gp.chooseMapState;
                 }
                 case "Rusty Sword" -> {
-                    this.equipWeapon((Weapon) gp.map[gp.getMapPick()].obj[i]);
+                    addItem(gp.map[gp.getMapPick()].obj[i], 1);
                     gp.map[gp.getMapPick()].obj[i] = null;
                 }
             }
         }
+    }
+
+    public void addItem(SuperObject object, int quantity)
+    {
+        for (Map.Entry<SuperObject, Integer> new_Map : items.entrySet())
+        {
+            if (new_Map.getKey().equals(object))
+            {
+                int total = new_Map.getValue() + quantity;
+                items.put(new_Map.getKey(), total);
+                return;
+            }
+        }
+        if(items.size() == 32)
+            gp.ui.inventoryFullMessage();
+        else
+            items.put(object, quantity);
     }
 
     public void defeatMonster(Entity entity)
@@ -299,12 +318,49 @@ public class Player extends Entity
         setMaxEXP(getMaxEXP() + (int) (getMaxEXP() * 0.5));
         setLvl(getLvl() + 1);
         resetStat();
-        System.out.println("You LEVEL UP    Lvl "  + getLvl());
+        gp.ui.lvlUpAnimation();
+    }
+
+    public void useItem(int index)
+    {
+        int i = 0;
+        if(index > items.size())
+            return;
+        for (Map.Entry<SuperObject, Integer> new_Map : items.entrySet())
+        {
+            if(i == index)
+            {
+                switch (new_Map.getKey().getType())
+                {
+                    case "Weapon" -> equipWeapon((Weapon) new_Map.getKey());
+                    case "Potion" -> System.out.println("Do something with potion");
+                    case "Armor" -> System.out.println("Do something with armor");
+                    case "Key" -> System.out.println("Do something with key");
+                }
+                int total = new_Map.getValue() - 1;
+                if(total <= 0)
+                    items.remove(new_Map.getKey());
+                else
+                    items.put(new_Map.getKey(), total);
+            }
+            i++;
+        }
     }
 
     public void equipWeapon(Weapon weapon)
     {
+        if(this.weapon != null)
+            unEquipWeapon();
         this.setWeapon(weapon);
+    }
+
+    public void unEquipWeapon()
+    {
+        if(this.weapon != null)
+        {
+            addItem(this.weapon, 1);
+            this.weapon = null;
+        }
     }
 
     @Override

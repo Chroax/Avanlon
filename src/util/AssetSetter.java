@@ -34,5 +34,9 @@ public class AssetSetter
         gp.map[gp.village].obj[2] = new RustySword(gp);
         gp.map[gp.village].obj[2].setWorldX(gp.tileSize * 10);
         gp.map[gp.village].obj[2].setWorldY(gp.tileSize * 34);
+
+        gp.map[gp.village].obj[3] = new RustySword(gp);
+        gp.map[gp.village].obj[3].setWorldX(gp.tileSize * 13);
+        gp.map[gp.village].obj[3].setWorldY(gp.tileSize * 34);
     }
 }

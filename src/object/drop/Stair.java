@@ -17,6 +17,7 @@ public class Stair extends SuperObject
         setName("Stair");
         setDescription("A Magical Stair that can make player teleport to another place");
         setSellAble(false);
+        setType("Immutable");
         image = setup("/object/16x16/other/stairs");
 
         setCollision(true);

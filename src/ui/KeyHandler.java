@@ -134,6 +134,7 @@ public class KeyHandler implements KeyListener
                     gp.gameState = gp.pauseState;
                 }
                 case KeyEvent.VK_I -> gp.gameState = gp.inventoryState;
+                case KeyEvent.VK_U -> gp.player.unEquipWeapon();
             }
         }
         else if(gp.gameState == gp.battleState)
@@ -182,7 +183,7 @@ public class KeyHandler implements KeyListener
                                     }
                                     else if(gp.player.getHP() <= 0)
                                     {
-                                        System.out.println("YOU DIED");
+                                        gp.ui.dieAnimation();
                                         gp.gameState = gp.playState;
                                         gp.player.respawn();
                                         gp.player.resetStat();
@@ -286,7 +287,9 @@ public class KeyHandler implements KeyListener
                     if(gp.ui.states[gp.ui.inventoryState].commandNum % 8 == 0)
                         gp.ui.states[gp.ui.inventoryState].commandNum -= 8;
                 }
-                case KeyEvent.VK_ENTER -> enterPressed = true;
+                case KeyEvent.VK_ENTER -> {
+                    gp.player.useItem(gp.ui.states[gp.ui.inventoryState].commandNum);
+                }
                 case KeyEvent.VK_I -> gp.gameState = gp.playState;
             }
         }

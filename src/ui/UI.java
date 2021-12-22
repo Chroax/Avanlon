@@ -208,6 +208,10 @@ public class UI
         g2.setFont(pokemon);
     }
 
+    public void lvlUpAnimation(){};
+    public void dieAnimation(){};
+    public void inventoryFullMessage(){}
+
     public int getXCenteredText(String text)
     {
         return ((gp.screenWidth / 2) - ((int) g2.getFontMetrics().getStringBounds(text, g2).getWidth() / 2));

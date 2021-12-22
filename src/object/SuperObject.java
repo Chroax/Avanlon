@@ -11,6 +11,7 @@ import java.util.Objects;
 public abstract class SuperObject
 {
     private String name;
+    private String type;
     private String description;
     private int sellPrice;
     private int buyPrice;
@@ -77,6 +78,11 @@ public abstract class SuperObject
         return scaledImage;
     }
 
+    public boolean equals(SuperObject obj)
+    {
+        return Objects.equals(this.name, obj.getName());
+    }
+
     public String getName() {return name;}
     public void setName(String name) {this.name = name;}
     public int getSellPrice() {return sellPrice;}
@@ -93,4 +99,7 @@ public abstract class SuperObject
     public void setWorldY(int worldY) {this.worldY = worldY;}
     public String getDescription() {return description;}
     public void setDescription(String description) {this.description = description;}
+
+    public String getType() {return type;}
+    public void setType(String type) {this.type = type;}
 }
