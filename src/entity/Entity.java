@@ -110,7 +110,7 @@ public abstract class Entity
     {
         Random random = new Random();
         if(random.nextDouble() < 0.15 * entity.getEVD() / getACC())
-            ((BattleState)gp.ui.states[gp.ui.battleState]).showMessage(entity.name + "   dodge   the   attack", index);
+            ((BattleState)gp.ui.states[gp.ui.battleState]).showMessage(entity.name + "   dodge   the   attack", index, "ATTACK");
         else
         {
             int phyAtt = getSTR() * 2 - entity.getDEF();
@@ -119,7 +119,7 @@ public abstract class Entity
             if(random.nextDouble() < 0.15 * getCRIT() / entity.getEVD())
                 totalAtt *= 2;
             entity.setHP(entity.getHP() - totalAtt);
-            ((BattleState)gp.ui.states[gp.ui.battleState]).showMessage(name + "   give   " + totalAtt + "   damage", index);
+            ((BattleState)gp.ui.states[gp.ui.battleState]).showMessage(name + "   give   " + totalAtt + "   damage", index, "ATTACK");
         }
     }
 

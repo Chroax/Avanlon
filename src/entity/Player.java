@@ -20,6 +20,7 @@ public class Player extends Entity
     public HashMap <SuperObject, Integer> items = new HashMap<>();
     private boolean fullInventory = false;
     private Weapon weapon;
+    private int soundCounter = 0;
 
     public Player(GamePanel gp, JobClass jobClass, boolean gender)
     {
@@ -195,6 +196,15 @@ public class Player extends Entity
                     case "right" -> setWorldX(getWorldX() + getSpeed());
                 }
             }
+            else
+            {
+                soundCounter++;
+                if(soundCounter > 8)
+                {
+                    gp.playSE(7);
+                    soundCounter = 0;
+                }
+            }
 
             spriteCounter++;
             if (spriteCounter > 8)
@@ -224,6 +234,8 @@ public class Player extends Entity
             if(gp.keyH.enterPressed)
             {
                 ((BattleState)gp.ui.states[gp.ui.battleState]).messageOn = false;
+                gp.stopMusic();
+                gp.playMusic(6);
                 gp.gameState = gp.battleState;
                 gp.monsterIndex = i;
             }
@@ -272,6 +284,7 @@ public class Player extends Entity
                 case "Rusty Sword" -> {
                     if(!fullInventory)
                     {
+                        gp.playSE(14);
                         addItem(gp.map[gp.getMapPick()].obj[i], 1, false);
                         gp.map[gp.getMapPick()].obj[i] = null;
                     }
@@ -282,6 +295,16 @@ public class Player extends Entity
 
     public void addItem(SuperObject object, int quantity, boolean buyStatus)
     {
+        if(buyStatus)
+        {
+            if(!fullInventory && getGold() - object.getBuyPrice() >= 0)
+            {
+                setGold(getGold() - object.getBuyPrice());
+                gp.playSE(8);
+            }
+            else
+                return;
+        }
         for (Map.Entry<SuperObject, Integer> new_Map : items.entrySet())
         {
             if (new_Map.getKey().equals(object))
@@ -298,14 +321,15 @@ public class Player extends Entity
         }
         else
             items.put(object, quantity);
-        if(buyStatus && !fullInventory)
-            setGold(getGold() - object.getBuyPrice());
     }
 
     public void defeatMonster(Entity entity)
     {
+        gp.playSE(19);
         setGold(getGold() + entity.getGold());
         setEXP(getEXP() + entity.getEXP());
+        if(getEXP() >= getMaxEXP())
+            gp.playSE(12);
         while(getEXP() >= getMaxEXP())
             levelUp();
     }
@@ -329,7 +353,7 @@ public class Player extends Entity
         if(getWeapon() != null)
         {
             if(random.nextDouble() < 0.15 * (entity.getEVD() + getWeapon().getSpd()) / getACC())
-                ((BattleState)gp.ui.states[gp.ui.battleState]).showMessage(entity.name + "   dodge   the   attack", index);
+                ((BattleState)gp.ui.states[gp.ui.battleState]).showMessage(entity.name + "   dodge   the   attack", index, "ATTACK");
             else
             {
                 int phyAtt = getSTR() * 2 - entity.getDEF() + getWeapon().getPhyDamage();
@@ -338,7 +362,7 @@ public class Player extends Entity
                 if(random.nextDouble() < 0.15 * getCRIT() / entity.getEVD())
                     totalAtt *= 2;
                 entity.setHP(entity.getHP() - totalAtt);
-                ((BattleState)gp.ui.states[gp.ui.battleState]).showMessage(name + "   give   " + totalAtt + "   damage", index);
+                ((BattleState)gp.ui.states[gp.ui.battleState]).showMessage(name + "   give   " + totalAtt + "   damage", index, "ATTACK");
             }
         }
         else

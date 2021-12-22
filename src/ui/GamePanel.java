@@ -5,6 +5,7 @@ import entity.JobClass;
 import entity.Player;
 import entity.monster.Monster;
 import object.SuperObject;
+import sound.Sound;
 import tile.*;
 import util.AssetSetter;
 import util.CollisionChecker;
@@ -47,6 +48,10 @@ public class GamePanel extends JPanel implements Runnable
     // UI Handler
     public UI ui = new UI(this);
 
+    // Sound
+    Sound music = new Sound();
+    Sound soundEffect = new Sound();
+
     // Game state
     public int gameState;
     public int returnState;
@@ -54,14 +59,13 @@ public class GamePanel extends JPanel implements Runnable
     public final int playState = 1;
     public final int battleState = 2;
     public final int loadingBattleState = 3;
-    public final int winBattleState = 4;
-    public final int pauseState = 5;
-    public final int dialogueState = 6;
-    public final int chooseMapState = 7;
-    public final int loadMapState = 8;
-    public final int inventoryState = 9;
-    public final int merchantState = 10;
-    public final int showStatusState = 12;
+    public final int pauseState = 4;
+    public final int dialogueState = 5;
+    public final int chooseMapState = 6;
+    public final int transitionState = 7;
+    public final int inventoryState = 8;
+    public final int merchantState = 9;
+    public final int showStatusState = 10;
 
     // Map pick
     private int mapPick = 0;
@@ -94,6 +98,7 @@ public class GamePanel extends JPanel implements Runnable
     public void setupGame()
     {
         gameState = startState;
+        playMusic(5);
         aSetter.setMonster();
         aSetter.setNPC();
         aSetter.setObj();
@@ -232,8 +237,28 @@ public class GamePanel extends JPanel implements Runnable
         }
 
         gameState = playState;
+        stopMusic();
+        playMusic(0);
         adjustWorldWidth(mapPick);
         adjustWorldHeight(mapPick);
+    }
+
+    public void playMusic(int i)
+    {
+        music.setFile(i);
+        music.play();
+        music.loop();
+    }
+
+    public void stopMusic()
+    {
+        music.stop();
+    }
+
+    public void playSE(int i)
+    {
+        soundEffect.setFile(i);
+        soundEffect.play();
     }
 
     // Getter and Setter

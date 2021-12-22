@@ -23,6 +23,7 @@ public class BattleState extends State
     private String message1 = "";
     private String message2 = "";
     private int messageCounter = 0;
+    public String status = "";
 
     public BattleState(GamePanel gp)
     {
@@ -95,10 +96,13 @@ public class BattleState extends State
 
        if(!Objects.equals(gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getType(), "Boss"))
        {
-           if(gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getImgWidth() == gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getImgHeight())
-               g2.drawImage(gp.map[gp.getMapPick()].monsters[gp.monsterIndex].down2, 600, 270, 192, 192, null);
-           else
-               g2.drawImage(gp.map[gp.getMapPick()].monsters[gp.monsterIndex].down2, 620, 270, 144, 192, null);
+           if(!status.equals("WIN"))
+           {
+               if(gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getImgWidth() == gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getImgHeight())
+                   g2.drawImage(gp.map[gp.getMapPick()].monsters[gp.monsterIndex].down2, 600, 270, 192, 192, null);
+               else
+                   g2.drawImage(gp.map[gp.getMapPick()].monsters[gp.monsterIndex].down2, 620, 270, 144, 192, null);
+           }
        }
        else
        {
@@ -133,7 +137,8 @@ public class BattleState extends State
                    x = 450;
                }
            }
-           g2.drawImage(gp.map[gp.getMapPick()].monsters[gp.monsterIndex].down2, x, y, width, height, null);
+           if(!status.equals("WIN"))
+                g2.drawImage(gp.map[gp.getMapPick()].monsters[gp.monsterIndex].down2, x, y, width, height, null);
        }
 
        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 30F));
@@ -207,13 +212,38 @@ public class BattleState extends State
            attributes.put(TextAttribute.TRACKING, 0);
            g2.setFont(g2.getFont().deriveFont(attributes));
 
-           g2.setColor(new Color(95, 94, 110));
-           g2.drawString(message1, 70, 654);
-           g2.drawString(message2, 70, 702);
+           if(status.equals("ATTACK"))
+           {
+               g2.setColor(new Color(95, 94, 110));
+               g2.drawString(message1, 72, 654);
+               g2.drawString(message2, 72, 702);
 
-           g2.setColor(new Color(236, 239, 244));
-           g2.drawString(message1, 70, 652);
-           g2.drawString(message2, 70, 700);
+               g2.setColor(new Color(236, 239, 244));
+               g2.drawString(message1, 70, 652);
+               g2.drawString(message2, 70, 700);
+           }
+
+           else if(status.equals("RUN"))
+           {
+               g2.setColor(new Color(95, 94, 110));
+               g2.drawString("You run away", 72, 654);
+               g2.setColor(new Color(236, 239, 244));
+               g2.drawString("You run away", 70, 652);
+           }
+
+           else if(status.equals("WIN"))
+           {
+               g2.setColor(new Color(95, 94, 110));
+               g2.drawString("You win the battle", 72, 654);
+               g2.drawString("Get " + gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getEXP() + " EXP,   " +
+                       gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getGold() + " Gold", 72, 702);
+
+               g2.setColor(new Color(236, 239, 244));
+               g2.drawString("You win the battle", 70, 652);
+               g2.drawString("Get " + gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getEXP() + " EXP,   " +
+                       gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getGold() + " Gold", 70, 700);
+           }
+
            messageCounter++;
            if(messageCounter < 15)
                g2.drawImage(dialogPointer, 490, 710, 18, 11, null);
@@ -222,12 +252,17 @@ public class BattleState extends State
        }
    }
 
-    public void showMessage(String text, int index)
+    public void showMessage(String text, int index, String status)
     {
-        if(index == 1)
-            message1 = text;
-        else
-            message2 = text;
+        this.status = status;
+        if(status.equals("ATTACK"))
+        {
+            if(index == 1)
+                message1 = text;
+            else
+                message2 = text;
+        }
+
         messageOn = true;
     }
 }

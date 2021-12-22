@@ -42,6 +42,8 @@ public class UI
     public int selectionMerchantState = merchantState;
     public boolean buying = false;
 
+    public int timeTransition = 255;
+    public int countDown = 0;
     public int commandNum = 0;
     public int messageCounter = 0;
     public String currentDialogue = "";
@@ -151,6 +153,8 @@ public class UI
                 }
             }
         }
+        else if(gp.gameState == gp.transitionState)
+            drawTransition();
     }
 
     public void drawChooseMapScreen()
@@ -430,6 +434,54 @@ public class UI
             g2.drawString(line, x, y);
             i++;
             x += width + 69;
+        }
+    }
+
+    public void drawTransition()
+    {
+        g2.setColor(new Color(0, 0, 0, timeTransition));
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+        countDown++;
+        if(countDown >= 30)
+            timeTransition -=5;
+        switch (commandNum) {
+            case 0 -> {
+                gp.adjustWorldWidth(gp.plain);
+                gp.adjustWorldHeight(gp.plain);
+                gp.setMapPick(gp.plain);
+                gp.player.setXAndY(gp.plain);
+            }
+            case 1 -> {
+                gp.adjustWorldWidth(gp.dungeon);
+                gp.adjustWorldHeight(gp.dungeon);
+                gp.setMapPick(gp.dungeon);
+                gp.player.setXAndY(gp.dungeon);
+            }
+            case 2 -> {
+                gp.adjustWorldWidth(gp.castle);
+                gp.adjustWorldHeight(gp.castle);
+                gp.setMapPick(gp.castle);
+                gp.player.setXAndY(gp.castle);
+            }
+            case 3 -> {
+                gp.adjustWorldWidth(gp.snow);
+                gp.adjustWorldHeight(gp.snow);
+                gp.setMapPick(gp.snow);
+                gp.player.setXAndY(gp.snow);
+            }
+        }
+        if(timeTransition <= 0)
+        {
+            gp.gameState = gp.playState;
+            switch (commandNum) {
+                case 0 -> gp.playMusic(1);
+                case 1 -> gp.playMusic(2);
+                case 2 -> gp.playMusic(3);
+                case 3 -> gp.playMusic(4);
+            }
+            commandNum = 0;
+            timeTransition = 255;
+            countDown = 0;
         }
     }
 

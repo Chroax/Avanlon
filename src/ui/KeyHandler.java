@@ -13,6 +13,7 @@ import java.awt.event.KeyListener;
 public class KeyHandler implements KeyListener
 {
     public boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed;
+    public boolean stillBattle = true;
     GamePanel gp;
 
     public KeyHandler(GamePanel gp)
@@ -31,23 +32,29 @@ public class KeyHandler implements KeyListener
             if(gp.ui.startScreenState == gp.ui.homeState)
             {
                 if(e.getKeyCode() == KeyEvent.VK_ENTER)
+                {
+                    gp.playSE(9);
                     gp.ui.startScreenState = gp.ui.titleState;
+                }
             }
             else if(gp.ui.startScreenState == gp.ui.titleState)
             {
                 switch (e.getKeyCode())
                 {
                     case KeyEvent.VK_W -> {
+                        gp.playSE(18);
                         gp.ui.states[gp.ui.titleState].commandNum--;
                         if (gp.ui.states[gp.ui.titleState].commandNum < 0)
                             gp.ui.states[gp.ui.titleState].commandNum = 2;
                     }
                     case KeyEvent.VK_S -> {
+                        gp.playSE(18);
                         gp.ui.states[gp.ui.titleState].commandNum++;
                         if (gp.ui.states[gp.ui.titleState].commandNum > 2)
                             gp.ui.states[gp.ui.titleState].commandNum = 0;
                     }
                     case KeyEvent.VK_ENTER -> {
+                        gp.playSE(9);
                         switch (gp.ui.states[gp.ui.titleState].commandNum)
                         {
                             case 0 -> gp.ui.startScreenState = gp.ui.chooseState;
@@ -62,6 +69,7 @@ public class KeyHandler implements KeyListener
                 switch (e.getKeyCode())
                 {
                     case KeyEvent.VK_W -> {
+                        gp.playSE(18);
                         gp.ui.states[gp.ui.chooseState].commandNum--;
                         if (gp.ui.states[gp.ui.chooseState].commandNum < 0)
                         {
@@ -72,6 +80,7 @@ public class KeyHandler implements KeyListener
                         }
                     }
                     case KeyEvent.VK_S -> {
+                        gp.playSE(18);
                         gp.ui.states[gp.ui.chooseState].commandNum++;
                         if(((ChooseState)gp.ui.states[gp.ui.chooseState]).chooseGender)
                         {
@@ -85,6 +94,7 @@ public class KeyHandler implements KeyListener
                         }
                     }
                     case KeyEvent.VK_ENTER -> {
+                        gp.playSE(9);
                         if (((ChooseState)gp.ui.states[gp.ui.chooseState]).chooseGender)
                         {
                             switch (gp.ui.states[gp.ui.chooseState].commandNum)
@@ -145,13 +155,33 @@ public class KeyHandler implements KeyListener
             if(((BattleState)gp.ui.states[gp.ui.battleState]).messageOn)
             {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER)
+                {
+                    switch (((BattleState)gp.ui.states[gp.ui.battleState]).status)
+                    {
+                        case "ATTACK" -> gp.playSE(9);
+                        case "WIN" -> {
+                            gp.gameState = gp.playState;
+                            gp.map[gp.getMapPick()].monsters[gp.monsterIndex].generateMonster();
+                            gp.stopMusic();
+                            gp.playMusic(gp.getMapPick());
+                        }
+                        case "RUN" -> {
+                            gp.gameState = gp.playState;
+                            gp.stopMusic();
+                            gp.playMusic(gp.getMapPick());
+                            gp.ui.states[gp.ui.battleState].commandNum = 0;
+                            gp.map[gp.getMapPick()].monsters[gp.monsterIndex].generateMonster();
+                        }
+                    }
                     ((BattleState)gp.ui.states[gp.ui.battleState]).messageOn = false;
+                }
             }
             else
             {
                 switch (e.getKeyCode())
                 {
                     case KeyEvent.VK_W, KeyEvent.VK_S -> {
+                        gp.playSE(18);
                         if (gp.ui.states[gp.ui.battleState].commandNum == 0)
                             gp.ui.states[gp.ui.battleState].commandNum = 2;
                         else if (gp.ui.states[gp.ui.battleState].commandNum == 1)
@@ -162,6 +192,7 @@ public class KeyHandler implements KeyListener
                             gp.ui.states[gp.ui.battleState].commandNum = 1;
                     }
                     case KeyEvent.VK_A, KeyEvent.VK_D ->{
+                        gp.playSE(18);
                         if (gp.ui.states[gp.ui.battleState].commandNum == 0)
                             gp.ui.states[gp.ui.battleState].commandNum = 1;
                         else if (gp.ui.states[gp.ui.battleState].commandNum == 1)
@@ -172,6 +203,7 @@ public class KeyHandler implements KeyListener
                             gp.ui.states[gp.ui.battleState].commandNum = 2;
                     }
                     case KeyEvent.VK_ENTER -> {
+                        stillBattle = true;
                         switch (gp.ui.states[gp.ui.battleState].commandNum)
                         {
                             case 0 -> {
@@ -180,25 +212,29 @@ public class KeyHandler implements KeyListener
                                     gp.map[gp.getMapPick()].monsters[gp.monsterIndex].attack(gp.player, 2);
                                     if(gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getHP() <= 0)
                                     {
+                                        stillBattle = false;
                                         gp.player.defeatMonster(gp.map[gp.getMapPick()].monsters[gp.monsterIndex]);
-                                        gp.gameState = gp.playState;
-                                        gp.map[gp.getMapPick()].monsters[gp.monsterIndex].generateMonster();
+                                        ((BattleState)gp.ui.states[gp.ui.battleState]).showMessage("", 0, "WIN");
                                     }
                                     else if(gp.player.getHP() <= 0)
                                     {
+                                        stillBattle = false;
                                         gp.ui.dieAnimationOn = true;
                                         gp.gameState = gp.playState;
                                         gp.player.respawn();
                                         gp.player.resetStat();
                                         gp.map[gp.getMapPick()].monsters[gp.monsterIndex].generateMonster();
+                                        gp.stopMusic();
+                                        gp.playMusic(gp.getMapPick());
                                     }
+                                    if(stillBattle)
+                                        gp.playSE(9);
                                 }
                             }
                             case 1 -> System.out.println("DO OPEN INVENTORY");
                             case 2 -> {
-                                gp.gameState = gp.playState;
-                                gp.ui.states[gp.ui.battleState].commandNum = 0;
-                                gp.map[gp.getMapPick()].monsters[gp.monsterIndex].generateMonster();
+                                gp.playSE(15);
+                                ((BattleState)gp.ui.states[gp.ui.battleState]).showMessage("", 0, "RUN");
                             }
                             case 3 -> System.out.println("DO SHOW STATUS");
                         }
@@ -220,46 +256,26 @@ public class KeyHandler implements KeyListener
         else if(gp.gameState == gp.chooseMapState) {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_W -> {
+                    gp.playSE(18);
                     gp.ui.commandNum--;
                     if (gp.ui.commandNum < 0)
                         gp.ui.commandNum = 4;
                 }
                 case KeyEvent.VK_S -> {
+                    gp.playSE(18);
                     gp.ui.commandNum++;
                     if (gp.ui.commandNum > 4)
                         gp.ui.commandNum = 0;
                 }
                 case KeyEvent.VK_ENTER -> {
                     switch (gp.ui.commandNum) {
-                        case 0 -> {
-                            gp.adjustWorldWidth(gp.plain);
-                            gp.adjustWorldHeight(gp.plain);
-                            gp.setMapPick(gp.plain);
-                            gp.gameState = gp.playState;
-                            gp.player.setXAndY(gp.plain);
-                        }
-                        case 1 -> {
-                            gp.adjustWorldWidth(gp.dungeon);
-                            gp.adjustWorldHeight(gp.dungeon);
-                            gp.setMapPick(gp.dungeon);
-                            gp.gameState = gp.playState;
-                            gp.player.setXAndY(gp.dungeon);
-                        }
-                        case 2 -> {
-                            gp.adjustWorldWidth(gp.castle);
-                            gp.adjustWorldHeight(gp.castle);
-                            gp.setMapPick(gp.castle);
-                            gp.gameState = gp.playState;
-                            gp.player.setXAndY(gp.castle);
-                        }
-                        case 3 -> {
-                            gp.adjustWorldWidth(gp.snow);
-                            gp.adjustWorldHeight(gp.snow);
-                            gp.setMapPick(gp.snow);
-                            gp.gameState = gp.playState;
-                            gp.player.setXAndY(gp.snow);
+                        case 0,1,2,3 -> {
+                            gp.stopMusic();
+                            gp.playSE(16);
+                            gp.gameState = gp.transitionState;
                         }
                         case 4 -> {
+                            gp.playSE(9);
                             gp.ui.commandNum = 0;
                             gp.gameState = gp.playState;
                         }
@@ -272,26 +288,31 @@ public class KeyHandler implements KeyListener
             switch (e.getKeyCode())
             {
                 case KeyEvent.VK_W -> {
+                    gp.playSE(18);
                     gp.ui.states[gp.ui.inventoryState].commandNum -= 8;
                     if(gp.ui.states[gp.ui.inventoryState].commandNum < 0)
                         gp.ui.states[gp.ui.inventoryState].commandNum += 32;
                 }
                 case KeyEvent.VK_S -> {
+                    gp.playSE(18);
                     gp.ui.states[gp.ui.inventoryState].commandNum += 8;
                     if(gp.ui.states[gp.ui.inventoryState].commandNum > 31)
                         gp.ui.states[gp.ui.inventoryState].commandNum -= 32;
                 }
                 case KeyEvent.VK_A -> {
+                    gp.playSE(18);
                     gp.ui.states[gp.ui.inventoryState].commandNum -= 1;
                     if((gp.ui.states[gp.ui.inventoryState].commandNum + 1) % 8 == 0 || gp.ui.states[gp.ui.inventoryState].commandNum < 0)
                         gp.ui.states[gp.ui.inventoryState].commandNum += 8;
                 }
                 case KeyEvent.VK_D -> {
+                    gp.playSE(18);
                     gp.ui.states[gp.ui.inventoryState].commandNum += 1;
                     if(gp.ui.states[gp.ui.inventoryState].commandNum % 8 == 0)
                         gp.ui.states[gp.ui.inventoryState].commandNum -= 8;
                 }
                 case KeyEvent.VK_ENTER -> {
+                    gp.playSE(9);
                     gp.player.useItem(gp.ui.states[gp.ui.inventoryState].commandNum, false);
                 }
                 case KeyEvent.VK_I -> gp.gameState = gp.playState;
@@ -301,6 +322,7 @@ public class KeyHandler implements KeyListener
         {
             if (e.getKeyCode() == KeyEvent.VK_ENTER)
             {
+                gp.playSE(9);
                 gp.map[gp.getMapPick()].NPC[gp.npcIndex].speak();
                 if(gp.ui.endDialogue)
                     gp.gameState = gp.playState;
@@ -312,16 +334,19 @@ public class KeyHandler implements KeyListener
             {
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_W -> {
+                        gp.playSE(18);
                         gp.ui.commandNum--;
                         if (gp.ui.commandNum < 0)
                             gp.ui.commandNum = 2;
                     }
                     case KeyEvent.VK_S -> {
+                        gp.playSE(18);
                         gp.ui.commandNum++;
                         if (gp.ui.commandNum > 2)
                             gp.ui.commandNum = 0;
                     }
                     case KeyEvent.VK_ENTER -> {
+                        gp.playSE(9);
                         switch (gp.ui.commandNum) {
                             case 0 -> gp.ui.selectionMerchantState = gp.ui.buyState;
                             case 1 -> {
@@ -340,16 +365,19 @@ public class KeyHandler implements KeyListener
             {
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_W -> {
+                        gp.playSE(18);
                         gp.ui.commandNum--;
                         if (gp.ui.commandNum < 0)
                             gp.ui.commandNum = 3;
                     }
                     case KeyEvent.VK_S -> {
+                        gp.playSE(18);
                         gp.ui.commandNum++;
                         if (gp.ui.commandNum > 3)
                             gp.ui.commandNum = 0;
                     }
                     case KeyEvent.VK_ENTER -> {
+                        gp.playSE(9);
                         switch (gp.ui.commandNum) {
                             case 0 -> {
                                 gp.ui.selectionMerchantState = gp.ui.buyingThingState;
@@ -376,6 +404,7 @@ public class KeyHandler implements KeyListener
                 switch (e.getKeyCode())
                 {
                     case KeyEvent.VK_W -> {
+                        gp.playSE(18);
                         if(gp.ui.states[gp.ui.buyMerchantState].commandNum >= 0 && gp.ui.states[gp.ui.buyMerchantState].commandNum <= 7)
                             gp.ui.states[gp.ui.buyMerchantState].commandNum = 33;
                         else if(gp.ui.states[gp.ui.buyMerchantState].commandNum == 33)
@@ -388,6 +417,7 @@ public class KeyHandler implements KeyListener
                         }
                     }
                     case KeyEvent.VK_S -> {
+                        gp.playSE(18);
                         if(gp.ui.states[gp.ui.buyMerchantState].commandNum >= 24 && gp.ui.states[gp.ui.buyMerchantState].commandNum <= 31)
                             gp.ui.states[gp.ui.buyMerchantState].commandNum = 33;
                         else if(gp.ui.states[gp.ui.buyMerchantState].commandNum == 33)
@@ -400,6 +430,7 @@ public class KeyHandler implements KeyListener
                         }
                     }
                     case KeyEvent.VK_A -> {
+                        gp.playSE(18);
                         if(gp.ui.states[gp.ui.buyMerchantState].commandNum != 33)
                         {
                             gp.ui.states[gp.ui.buyMerchantState].commandNum -= 1;
@@ -408,6 +439,7 @@ public class KeyHandler implements KeyListener
                         }
                     }
                     case KeyEvent.VK_D -> {
+                        gp.playSE(18);
                         if(gp.ui.states[gp.ui.buyMerchantState].commandNum != 33)
                         {
                             gp.ui.states[gp.ui.buyMerchantState].commandNum += 1;
@@ -433,6 +465,7 @@ public class KeyHandler implements KeyListener
                         }
                         else
                         {
+                            gp.playSE(9);
                             gp.ui.selectionMerchantState = gp.ui.buyState;
                             gp.ui.states[gp.ui.buyMerchantState].commandNum = 0;
                         }
@@ -444,6 +477,7 @@ public class KeyHandler implements KeyListener
                 switch (e.getKeyCode())
                 {
                     case KeyEvent.VK_W -> {
+                        gp.playSE(18);
                         if(gp.ui.states[gp.ui.inventoryState].commandNum >= 0 && gp.ui.states[gp.ui.inventoryState].commandNum <= 7)
                             gp.ui.states[gp.ui.inventoryState].commandNum = 33;
                         else if(gp.ui.states[gp.ui.inventoryState].commandNum == 33)
@@ -456,6 +490,7 @@ public class KeyHandler implements KeyListener
                         }
                     }
                     case KeyEvent.VK_S -> {
+                        gp.playSE(18);
                         if(gp.ui.states[gp.ui.inventoryState].commandNum >= 24 && gp.ui.states[gp.ui.inventoryState].commandNum <= 31)
                             gp.ui.states[gp.ui.inventoryState].commandNum = 33;
                         else if(gp.ui.states[gp.ui.inventoryState].commandNum == 33)
@@ -468,6 +503,7 @@ public class KeyHandler implements KeyListener
                         }
                     }
                     case KeyEvent.VK_A -> {
+                        gp.playSE(18);
                         if(gp.ui.states[gp.ui.inventoryState].commandNum != 33)
                         {
                             gp.ui.states[gp.ui.inventoryState].commandNum -= 1;
@@ -476,6 +512,7 @@ public class KeyHandler implements KeyListener
                         }
                     }
                     case KeyEvent.VK_D -> {
+                        gp.playSE(18);
                         if(gp.ui.states[gp.ui.inventoryState].commandNum != 33)
                         {
                             gp.ui.states[gp.ui.inventoryState].commandNum += 1;
@@ -492,6 +529,7 @@ public class KeyHandler implements KeyListener
                         }
                         else
                         {
+                            gp.playSE(9);
                             gp.ui.selectionMerchantState = gp.ui.merchantState;
                             gp.ui.states[gp.ui.inventoryState].commandNum = 0;
                         }
@@ -503,11 +541,13 @@ public class KeyHandler implements KeyListener
                 switch (e.getKeyCode())
                 {
                     case KeyEvent.VK_D-> {
+                        gp.playSE(18);
                         gp.ui.commandNum++;
                         if(gp.ui.commandNum > 1)
                             gp.ui.commandNum = 0;
                     }
                     case KeyEvent.VK_A -> {
+                        gp.playSE(18);
                         gp.ui.commandNum--;
                         if(gp.ui.commandNum < 0)
                             gp.ui.commandNum = 1;
@@ -516,7 +556,10 @@ public class KeyHandler implements KeyListener
                         if (gp.ui.commandNum == 0)
                         {
                             if (!gp.ui.buying)
+                            {
                                 gp.player.useItem(gp.ui.states[gp.ui.inventoryState].commandNum, true);
+                                gp.playSE(8);
+                            }
                             else
                             {
                                 switch (((BuyState)gp.ui.states[gp.ui.buyMerchantState]).getState())
@@ -528,9 +571,13 @@ public class KeyHandler implements KeyListener
                             }
                         }
                         if(!gp.ui.buying)
+                        {
                             gp.ui.selectionMerchantState = gp.ui.sellState;
+                        }
                         else
+                        {
                             gp.ui.selectionMerchantState = gp.ui.buyingThingState;
+                        }
                         gp.ui.commandNum = 0;
                     }
                 }
