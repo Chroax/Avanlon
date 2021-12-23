@@ -1,6 +1,7 @@
 package state;
 
 import object.SuperObject;
+import object.potion.HPPotion;
 import object.weapon.RustySword;
 import object.weapon.Weapon;
 import ui.GamePanel;
@@ -74,7 +75,7 @@ public class BuyState extends State
         for (int i = 0; i < 30; i++)
             armors[i] = new RustySword(this.gp);
         for (int i = 0; i < 8; i++)
-            potions[i] = new RustySword(this.gp);
+            potions[i] = new HPPotion(this.gp);
     }
 
     public void draw(Graphics2D g2)

@@ -1,6 +1,8 @@
 package entity;
 
 import object.SuperObject;
+import object.armor.Armor;
+import object.potion.Potion;
 import object.weapon.Weapon;
 import state.BattleState;
 import ui.GamePanel;
@@ -20,6 +22,7 @@ public class Player extends Entity
     public HashMap <SuperObject, Integer> items = new HashMap<>();
     private boolean fullInventory = false;
     private Weapon weapon;
+    private Armor armor;
     private int soundCounter = 0;
 
     public Player(GamePanel gp, JobClass jobClass, boolean gender)
@@ -52,7 +55,7 @@ public class Player extends Entity
 
     private void setDefaultValues()
     {
-        setHP(150);setMaxHP(150);
+        setHP(20);setMaxHP(150);
         setMP(100);setMaxMP(100);
         setSTR(12);setMaxSTR(12);
         setINT(6);setMaxINT(6);
@@ -385,6 +388,7 @@ public class Player extends Entity
 
     public void useItem(int index, boolean sellStatus)
     {
+        boolean use = false;
         int i = 0;
         if(index > items.size())
             return;
@@ -396,25 +400,44 @@ public class Player extends Entity
                 {
                     switch (new_Map.getKey().getType())
                     {
-                        case "Weapon" -> equipWeapon((Weapon) new_Map.getKey());
-                        case "Potion" -> System.out.println("Do something with potion");
-                        case "Armor" -> System.out.println("Do something with armor");
+                        case "Weapon" -> {
+                            if(((Weapon) new_Map.getKey()).getJobClass().equals(this.jobClass))
+                            {
+                                equipWeapon((Weapon) new_Map.getKey());
+                                use = true;
+                            }
+                        }
+                        case "Potion" -> use = usePotion((Potion) new_Map.getKey());
+                        case "Armor" -> {
+                            if(((Armor) new_Map.getKey()).getJobClass().equals(this.jobClass))
+                            {
+                                equipArmor((Armor) new_Map.getKey());
+                                use = true;
+                            }
+                        }
                         case "Key" -> System.out.println("Do something with key");
                         case "Drop" -> System.out.println("Do something with drop item");
                     }
                 }
                 else
-                    setGold(getGold() + new_Map.getKey().getSellPrice());
-
-                int total = new_Map.getValue() - 1;
-                if(total <= 0)
                 {
-                    items.remove(new_Map.getKey());
-                    if(fullInventory)
-                        fullInventory = false;
+                    setGold(getGold() + new_Map.getKey().getSellPrice());
+                    use = true;
                 }
-                else
-                    items.put(new_Map.getKey(), total);
+
+                if(use)
+                {
+                    int total = new_Map.getValue() - 1;
+                    if(total <= 0)
+                    {
+                        items.remove(new_Map.getKey());
+                        if(fullInventory)
+                            fullInventory = false;
+                    }
+                    else
+                        items.put(new_Map.getKey(), total);
+                    break;
+                }
             }
             i++;
         }
@@ -424,10 +447,7 @@ public class Player extends Entity
     {
         if(this.weapon != null)
             unEquipWeapon();
-        if(weapon.getJobClass().equals(this.jobClass))
-            this.setWeapon(weapon);
-        else
-            gp.ui.notCompatibleItemOn = true;
+        this.setWeapon(weapon);
     }
 
     public void unEquipWeapon()
@@ -437,6 +457,93 @@ public class Player extends Entity
             addItem(this.weapon, 1, false);
             this.weapon = null;
         }
+    }
+
+    public void equipArmor(Armor armor)
+    {
+        if(this.weapon != null)
+            unEquipArmor();
+        this.setArmor(armor);
+        this.setMaxDEF(getMaxDEF() + armor.getPhyDef());
+        this.setMaxRST(getMaxRST() + armor.getMagDef());
+        if(!gp.keyH.stillBattle)
+        {
+            this.setRST(getMaxRST());
+            this.setDEF(getMaxDEF());
+        }
+    }
+
+    public void unEquipArmor()
+    {
+        if(this.armor != null)
+        {
+            this.setMaxDEF(getMaxDEF() - armor.getPhyDef());
+            this.setMaxRST(getMaxRST() - armor.getMagDef());
+            if(!gp.keyH.stillBattle)
+            {
+                this.setRST(getMaxRST());
+                this.setDEF(getMaxDEF());
+            }
+            addItem(this.armor, 1, false);
+            this.armor = null;
+        }
+    }
+
+    public boolean usePotion(Potion potion)
+    {
+        boolean use = true;
+        switch (potion.getGenre())
+        {
+            case "HP" -> {
+                if(getHP() == getMaxHP())
+                    use = false;
+                else
+                {
+                    setHP(getHP() + potion.getPoint());
+                    if(getHP() > getMaxHP())
+                        setHP(getMaxHP());
+                }
+            }
+            case "MP" -> {
+                if(getMP() == getMaxMP())
+                    use = false;
+                else
+                {
+                    setMP(getMP() + potion.getPoint());
+                    if(getMP() > getMaxMP())
+                        setMP(getMaxMP());
+                }
+            }
+            case "STR" -> {
+                setMaxSTR(getMaxSTR() + potion.getPoint());
+                setSTR(getMaxSTR());
+            }
+            case "INT" ->{
+                setMaxINT(getMaxINT() + potion.getPoint());
+                setINT(getMaxINT());
+            }
+            case "ACC" ->{
+                setMaxACC(getMaxACC() + potion.getPoint());
+                setACC(getMaxACC());
+            }
+            case "EVD" ->{
+                setMaxEVD(getMaxEVD() + potion.getPoint());
+                setEVD(getMaxEVD());
+            }
+            case "DEF" ->{
+                setMaxDEF(getMaxDEF() + potion.getPoint());
+                setDEF(getMaxDEF());
+            }
+            case "RST" ->{
+                setMaxRST(getMaxRST() + potion.getPoint());
+                setRST(getMaxRST());
+            }
+            case "CRIT" ->{
+                setMaxCRIT(getMaxCRIT() + potion.getPoint());
+                setCRIT(getMaxCRIT());
+            }
+        }
+        return use;
     }
 
     @Override
@@ -507,4 +614,12 @@ public class Player extends Entity
     public void setMaxEXP(int maxEXP) {this.maxEXP = maxEXP;}
     public Weapon getWeapon() {return weapon;}
     public void setWeapon(Weapon weapon) {this.weapon = weapon;}
+
+    public Armor getArmor() {
+        return armor;
+    }
+
+    public void setArmor(Armor armor) {
+        this.armor = armor;
+    }
 }

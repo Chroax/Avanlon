@@ -199,6 +199,8 @@ public class UI
 
         if(gp.player.getWeapon() != null)
             g2.drawImage(gp.player.getWeapon().image, 33, 92, 32, 32, null);
+        if(gp.player.getArmor() != null)
+            g2.drawImage(gp.player.getArmor().image, 84, 92, 32, 32, null);
 
         g2.setFont(pokemon);
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 20F));
@@ -221,7 +223,7 @@ public class UI
         else
         {
             g2.setColor(new Color(133, 149, 161));
-            g2.fillRect(84 , 28, healthBar - 2, 4);
+            g2.fillRect(84 , 28, 100, 4);
         }
 
         if(mpBar != 0)
@@ -234,7 +236,7 @@ public class UI
         else
         {
             g2.setColor(new Color(133, 149, 161));
-            g2.fillRect(84 , 47, healthBar - 2, 4);
+            g2.fillRect(84 , 47, 100, 4);
         }
 
         if(expBar != 0)
@@ -247,7 +249,7 @@ public class UI
         else
         {
             g2.setColor(new Color(133, 149, 161));
-            g2.fillRect(84 , 67, healthBar - 2, 4);
+            g2.fillRect(84 , 67, 100, 4);
         }
         if(gp.player.jobClass == JobClass.PALADIN)
             g2.drawImage(gp.player.down2, 18, 23, 48, 48, null);

@@ -1,19 +1,17 @@
 package ui;
 
 import entity.JobClass;
-import object.weapon.Weapon;
 import state.BattleState;
 import state.BuyState;
 import state.ChooseState;
 
-import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener
 {
     public boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed;
-    public boolean stillBattle = true;
+    public boolean stillBattle = false;
     GamePanel gp;
 
     public KeyHandler(GamePanel gp)
@@ -152,6 +150,7 @@ public class KeyHandler implements KeyListener
         }
         else if(gp.gameState == gp.battleState)
         {
+            stillBattle = true;
             if(((BattleState)gp.ui.states[gp.ui.battleState]).messageOn)
             {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER)
@@ -203,7 +202,6 @@ public class KeyHandler implements KeyListener
                             gp.ui.states[gp.ui.battleState].commandNum = 2;
                     }
                     case KeyEvent.VK_ENTER -> {
-                        stillBattle = true;
                         switch (gp.ui.states[gp.ui.battleState].commandNum)
                         {
                             case 0 -> {
@@ -462,6 +460,7 @@ public class KeyHandler implements KeyListener
                                         gp.ui.selectionMerchantState = gp.ui.confirmationState;
                                 }
                             }
+                            gp.ui.commandNum = 0;
                         }
                         else
                         {
@@ -571,13 +570,9 @@ public class KeyHandler implements KeyListener
                             }
                         }
                         if(!gp.ui.buying)
-                        {
                             gp.ui.selectionMerchantState = gp.ui.sellState;
-                        }
                         else
-                        {
                             gp.ui.selectionMerchantState = gp.ui.buyingThingState;
-                        }
                         gp.ui.commandNum = 0;
                     }
                 }
