@@ -68,6 +68,9 @@ public class BattleState extends State
 
         imageScreen[0] = setup("/screen/plain_battle", gp.screenWidth, gp.screenHeight);
         imageScreen[1] = setup("/screen/plain_battle", gp.screenWidth, gp.screenHeight);
+        imageScreen[2] = setup("/screen/dungeon_battle", gp.screenWidth, gp.screenHeight);
+        imageScreen[3] = setup("/screen/castle_battle", gp.screenWidth, gp.screenHeight);
+        imageScreen[4] = setup("/screen/snow_battle", gp.screenWidth, gp.screenHeight);
    }
 
    @Override

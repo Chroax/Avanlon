@@ -3,11 +3,15 @@ package object.weapon;
 import entity.JobClass;
 import ui.GamePanel;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.io.IOException;
+import java.util.Objects;
 
-public class RustySword extends Weapon
+public class FuryBow extends Weapon
 {
-    public RustySword(GamePanel gp)
+
+    public FuryBow(GamePanel gp)
     {
         super(gp);
         setValue();
@@ -17,7 +21,7 @@ public class RustySword extends Weapon
 
     public void setValue()
     {
-        setName("Rusty Sword");
+        setName("Fury Bow");
         setType("Weapon");
         setDescription("Ya nanti lah isi sendiri\nYang penting ada dulu aja");
         setSpd(-2);
@@ -26,12 +30,12 @@ public class RustySword extends Weapon
         setBuyPrice(200);
         setSellPrice((int) (getBuyPrice() * 0.5));
         setSellAble(true);
-        setJobClass(JobClass.PALADIN);
+        setJobClass(JobClass.ARCHER);
         setCollision(false);
     }
 
     public void getWeaponImage()
     {
-        image = setup("/object/32x32/weapon/sword/sword 1");
+        image = setup("/object/32x32/weapon/bow/bow 7");
     }
 }

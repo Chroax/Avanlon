@@ -5,24 +5,24 @@ import ui.GamePanel;
 import java.awt.*;
 import java.util.Random;
 
-public class Werewolf extends Monster
+public class Zomb extends Monster
 {
-    public Werewolf(GamePanel gp)
+    public Zomb(GamePanel gp)
     {
         super(gp);
-        setImgHeight(48);
-        setImgWidth(48);
+        setImgHeight(64);
+        setImgWidth(64);
         solidArea = new Rectangle(0, 0, 60, 60);
         setSolidAreaDefaultX(solidArea.x);
         setSolidAreaDefaultY(solidArea.y);
 
         setDefaultValues();
-        getWerewolfImage();
+        getZombImage();
     }
 
     public void setDefaultValues()
     {
-        setName("Ice Werewolf");
+        setName("Zomb");
         setType("Common");
         setHP(100);setMaxHP(100);
         setMP(50);setMaxMP(50);
@@ -44,9 +44,9 @@ public class Werewolf extends Monster
         spriteCounter = 0;
     }
 
-    public void getWerewolfImage()
+    public void getZombImage()
     {
-        String txt = "/monster/48x48/icewerewolf/ice_werewolf";
+        String txt = "/monster/64x64/zombs/zomb";
         down1 = setup(txt + " 1");
         down2 = setup(txt + " 2");
         down3 = setup(txt + " 3");

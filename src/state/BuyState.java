@@ -1,9 +1,9 @@
 package state;
 
 import object.SuperObject;
+import object.armor.*;
 import object.potion.*;
-import object.weapon.RustySword;
-import object.weapon.Weapon;
+import object.weapon.*;
 import ui.GamePanel;
 
 import javax.imageio.ImageIO;
@@ -70,10 +70,67 @@ public class BuyState extends State
 
     public void setItems()
     {
-        for (int i = 0; i < 30; i++)
-            weapons[i] = new RustySword(this.gp);
-        for (int i = 0; i < 30; i++)
-            armors[i] = new RustySword(this.gp);
+        weapons[0] = new RustySword(this.gp);
+        weapons[1] = new BlueFlareSword(this.gp);
+        weapons[2] = new CoadSword(this.gp);
+        weapons[3] = new IronSword(this.gp);
+        weapons[4] = new LightBornSword(this.gp);
+        weapons[5] = new MetalSword(this.gp);
+        weapons[6] = new RubySword(this.gp);
+        weapons[7] = new StarfallSword(this.gp);
+        weapons[8] = new ThinSword(this.gp);
+        weapons[9] = new PurpleFlareSword(this.gp);
+        weapons[10] = new BloinStaff(this.gp);
+        weapons[11] = new BrenStaff(this.gp);
+        weapons[12] = new CrystalStaff(this.gp);
+        weapons[13] = new DreamStaff(this.gp);
+        weapons[14] = new FrostStaff(this.gp);
+        weapons[15] = new GoldenStaff(this.gp);
+        weapons[16] = new HolyStaff(this.gp);
+        weapons[17] = new MajestyStaff(this.gp);
+        weapons[18] = new SnowyStaff(this.gp);
+        weapons[19] = new StoneStaff(this.gp);
+        weapons[20] = new CrimsonBow(this.gp);
+        weapons[21] = new EmeraldBow(this.gp);
+        weapons[22] = new FireBow(this.gp);
+        weapons[23] = new FuryBow(this.gp);
+        weapons[24] = new GreenBow(this.gp);
+        weapons[25] = new JadeBow(this.gp);
+        weapons[26] = new MagmaBow(this.gp);
+        weapons[27] = new NightBow(this.gp);
+        weapons[28] = new RootBow(this.gp);
+        weapons[29] = new SkyBow(this.gp);
+
+        armors[0] = new LustyArmor(this.gp);
+        armors[1] = new PlainArmor(this.gp);
+        armors[2] = new RadiantArmor(this.gp);
+        armors[3] = new ToyArmor(this.gp);
+        armors[4] = new SolceArmor(this.gp);
+        armors[5] = new PorcArmor(this.gp);
+        armors[6] = new AthenaArmor(this.gp);
+        armors[7] = new BindArmor(this.gp);
+        armors[8] = new GoldenArmor(this.gp);
+        armors[9] = new BoldArmor(this.gp);
+        armors[10] = new MagicRobe(this.gp);
+        armors[11] = new StarRobe(this.gp);
+        armors[12] = new BynnRobe(this.gp);
+        armors[13] = new BuzzRobe(this.gp);
+        armors[14] = new SaintRobe(this.gp);
+        armors[15] = new YevRobe(this.gp);
+        armors[16] = new ExArmor(this.gp);
+        armors[17] = new FiragaArmor(this.gp);
+        armors[18] = new PrimeArmor(this.gp);
+        armors[19] = new SolemArmor(this.gp);
+        armors[20] = new BeastArmor(this.gp);
+        armors[21] = new ClawArmor(this.gp);
+        armors[22] = new SeyzArmor(this.gp);
+        armors[23] = new BullArmor(this.gp);
+        armors[24] = new PrismArmor(this.gp);
+        armors[25] = new SolidArmor(this.gp);
+        armors[26] = new VoyageArmor(this.gp);
+        armors[27] = new TimeArmor(this.gp);
+        armors[28] = new CloneArmor(this.gp);
+        armors[29] = new DimArmor(this.gp);
 
         potions[0] = new HPPotion(this.gp);
         potions[1] = new MPPotion(this.gp);
@@ -147,10 +204,10 @@ public class BuyState extends State
                     g2.drawImage(armors[j].image, rectangles[j].x, rectangles[j].y, null);
                 if(commandNum < 30)
                 {
-                    g2.drawString(armors[commandNum].getName() + "  -  " + ((Weapon)armors[commandNum]).getJobClass(), rectangles[32].x + 15, rectangles[32].y + 20);
-                    g2.drawString("Phy Def  :  " + ((Weapon) armors[commandNum]).getPhyDamage(), rectangles[32].x + 15, rectangles[32].y + 45);
-                    g2.drawString("Mag Def  :  " + ((Weapon) armors[commandNum]).getMagDamage(), rectangles[32].x + 15, rectangles[32].y + 70);
-                    g2.drawString("Speed    :  " + ((Weapon) armors[commandNum]).getSpd(), rectangles[32].x + 15, rectangles[32].y + 95);
+                    g2.drawString(armors[commandNum].getName() + "  -  " + ((Armor)armors[commandNum]).getJobClass(), rectangles[32].x + 15, rectangles[32].y + 20);
+                    g2.drawString("Phy Def  :  " + ((Armor) armors[commandNum]).getPhyDef(), rectangles[32].x + 15, rectangles[32].y + 45);
+                    g2.drawString("Mag Def  :  " + ((Armor) armors[commandNum]).getMagDef(), rectangles[32].x + 15, rectangles[32].y + 70);
+                    g2.drawString("Speed    :  " + ((Armor) armors[commandNum]).getSpd(), rectangles[32].x + 15, rectangles[32].y + 95);
                     g2.drawImage(coin, rectangles[32].x + 15, rectangles[32].y + 110, 32, 32, null);
                     g2.setColor(new Color(255, 190, 27));
                     g2.drawString("" + armors[commandNum].getBuyPrice(), rectangles[32].x + 50, rectangles[32].y + 134);

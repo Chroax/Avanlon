@@ -254,7 +254,7 @@ public class Player extends Entity
             {
                 switch (gp.map[gp.getMapPick()].NPC[i].getName())
                 {
-                    case "Merchant" ->{
+                    case "Merchant" -> {
                         if(gp.map[gp.getMapPick()].NPC[i].nextDialogue == 0)
                         {
                             gp.gameState = gp.dialogueState;

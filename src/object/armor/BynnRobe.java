@@ -1,13 +1,16 @@
-package object.weapon;
+package object.armor;
 
 import entity.JobClass;
 import ui.GamePanel;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.io.IOException;
+import java.util.Objects;
 
-public class RustySword extends Weapon
+public class BynnRobe extends Armor
 {
-    public RustySword(GamePanel gp)
+    public BynnRobe(GamePanel gp)
     {
         super(gp);
         setValue();
@@ -17,21 +20,21 @@ public class RustySword extends Weapon
 
     public void setValue()
     {
-        setName("Rusty Sword");
-        setType("Weapon");
+        setName("Bynn Robe");
+        setType("Armor");
         setDescription("Ya nanti lah isi sendiri\nYang penting ada dulu aja");
         setSpd(-2);
-        setPhyDamage(15);
-        setMagDamage(15);
+        setPhyDef(15);
+        setMagDef(15);
         setBuyPrice(200);
         setSellPrice((int) (getBuyPrice() * 0.5));
         setSellAble(true);
-        setJobClass(JobClass.PALADIN);
+        setJobClass(JobClass.WIZARD);
         setCollision(false);
     }
 
     public void getWeaponImage()
     {
-        image = setup("/object/32x32/weapon/sword/sword 1");
+        image = setup("/object/64x64/armor/armor 13");
     }
 }

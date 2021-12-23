@@ -1,6 +1,6 @@
 package util;
 
-import entity.monster.Werewolf;
+import entity.monster.IceWerewolf;
 import entity.npc.MerchantNPC;
 import object.drop.Stair;
 import object.weapon.RustySword;
@@ -17,7 +17,7 @@ public class AssetSetter
 
     public void setMonster()
     {
-        gp.map[gp.plain].monsters[0] = new Werewolf(gp);
+        gp.map[gp.plain].monsters[0] = new IceWerewolf(gp);
         gp.map[gp.plain].monsters[0].setWorldX(gp.tileSize * 20);
         gp.map[gp.plain].monsters[0].setWorldY(gp.tileSize * 20);
     }

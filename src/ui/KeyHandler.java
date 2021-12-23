@@ -224,8 +224,6 @@ public class KeyHandler implements KeyListener
                                         gp.player.respawn();
                                         gp.player.resetStat();
                                         gp.map[gp.getMapPick()].monsters[gp.monsterIndex].generateMonster();
-                                        gp.stopMusic();
-                                        gp.playMusic(gp.getMapPick());
                                     }
                                     if(stillBattle)
                                         gp.playSE(9);
