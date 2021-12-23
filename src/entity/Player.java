@@ -55,7 +55,7 @@ public class Player extends Entity
 
     private void setDefaultValues()
     {
-        setHP(20);setMaxHP(150);
+        setHP(1);setMaxHP(150);
         setMP(100);setMaxMP(100);
         setSTR(12);setMaxSTR(12);
         setINT(6);setMaxINT(6);
@@ -112,7 +112,7 @@ public class Player extends Entity
         if(jobClass == JobClass.PALADIN)
         {
             if(gender)
-                txt += "/64x64/warrior/female_warrior";
+                txt += "/64x64/femalewarrior/female_warrior";
             else
                 txt += "/64x64/warrior/warrior";
         }
@@ -346,7 +346,10 @@ public class Player extends Entity
         if(getGold() < 0)
             setGold(0);
 
-        setXAndY(gp.getMapPick());
+        gp.stopMusic();
+        gp.playSE(16);
+        gp.ui.respawn = true;
+        gp.gameState = gp.transitionState;
     }
 
     @Override

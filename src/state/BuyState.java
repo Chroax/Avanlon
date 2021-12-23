@@ -1,7 +1,7 @@
 package state;
 
 import object.SuperObject;
-import object.potion.HPPotion;
+import object.potion.*;
 import object.weapon.RustySword;
 import object.weapon.Weapon;
 import ui.GamePanel;
@@ -20,7 +20,7 @@ public class BuyState extends State
     Rectangle[] rectangles = new Rectangle[34];
     public SuperObject[] weapons = new SuperObject[30];
     public SuperObject[] armors = new SuperObject[30];
-    public SuperObject[] potions = new SuperObject[8];
+    public SuperObject[] potions = new SuperObject[9];
     BufferedImage coin;
     private String state = "";
     public BuyState(GamePanel gp)
@@ -74,8 +74,16 @@ public class BuyState extends State
             weapons[i] = new RustySword(this.gp);
         for (int i = 0; i < 30; i++)
             armors[i] = new RustySword(this.gp);
-        for (int i = 0; i < 8; i++)
-            potions[i] = new HPPotion(this.gp);
+
+        potions[0] = new HPPotion(this.gp);
+        potions[1] = new MPPotion(this.gp);
+        potions[2] = new STRPotion(this.gp);
+        potions[3] = new INTPotion(this.gp);
+        potions[4] = new ACCPotion(this.gp);
+        potions[5] = new EVDPotion(this.gp);
+        potions[6] = new DEFPotion(this.gp);
+        potions[7] = new RSTPotion(this.gp);
+        potions[8] = new CRITPotion(this.gp);
     }
 
     public void draw(Graphics2D g2)
@@ -151,7 +159,7 @@ public class BuyState extends State
             case "POTION" -> {
                 for (int j = 0; j < potions.length; j++)
                     g2.drawImage(potions[j].image, rectangles[j].x, rectangles[j].y, null);
-                if(commandNum < 8)
+                if(commandNum < 9)
                 {
                     g2.drawString(potions[commandNum].getName(), rectangles[32].x + 15, rectangles[32].y + 25);
                     int gap = 50;

@@ -1,5 +1,5 @@
 # Ignore folder res, bin, .idea, .settings
-res/
+#res/
 bin/
 .idea/
 .settings/

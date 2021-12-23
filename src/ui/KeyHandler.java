@@ -159,6 +159,7 @@ public class KeyHandler implements KeyListener
                     {
                         case "ATTACK" -> gp.playSE(9);
                         case "WIN" -> {
+                            ((BattleState)gp.ui.states[gp.ui.battleState]).status = "ATTACK";
                             gp.gameState = gp.playState;
                             gp.map[gp.getMapPick()].monsters[gp.monsterIndex].generateMonster();
                             gp.stopMusic();
@@ -212,6 +213,7 @@ public class KeyHandler implements KeyListener
                                     {
                                         stillBattle = false;
                                         gp.player.defeatMonster(gp.map[gp.getMapPick()].monsters[gp.monsterIndex]);
+                                        gp.stopMusic();
                                         ((BattleState)gp.ui.states[gp.ui.battleState]).showMessage("", 0, "WIN");
                                     }
                                     else if(gp.player.getHP() <= 0)
@@ -231,6 +233,7 @@ public class KeyHandler implements KeyListener
                             }
                             case 1 -> System.out.println("DO OPEN INVENTORY");
                             case 2 -> {
+                                gp.stopMusic();
                                 gp.playSE(15);
                                 ((BattleState)gp.ui.states[gp.ui.battleState]).showMessage("", 0, "RUN");
                             }
@@ -456,7 +459,7 @@ public class KeyHandler implements KeyListener
                                         gp.ui.selectionMerchantState = gp.ui.confirmationState;
                                 }
                                 case "POTION" -> {
-                                    if(gp.ui.states[gp.ui.buyMerchantState].commandNum < 8)
+                                    if(gp.ui.states[gp.ui.buyMerchantState].commandNum < 9)
                                         gp.ui.selectionMerchantState = gp.ui.confirmationState;
                                 }
                             }

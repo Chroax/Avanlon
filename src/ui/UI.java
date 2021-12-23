@@ -41,6 +41,7 @@ public class UI
     public int confirmationState = 4;
     public int selectionMerchantState = merchantState;
     public boolean buying = false;
+    public boolean respawn = false;
 
     public int timeTransition = 255;
     public int countDown = 0;
@@ -446,44 +447,62 @@ public class UI
         countDown++;
         if(countDown >= 30)
             timeTransition -=5;
-        switch (commandNum) {
-            case 0 -> {
-                gp.adjustWorldWidth(gp.plain);
-                gp.adjustWorldHeight(gp.plain);
-                gp.setMapPick(gp.plain);
-                gp.player.setXAndY(gp.plain);
+        if(!respawn)
+        {
+            switch (commandNum) {
+                case 0 -> {
+                    gp.adjustWorldWidth(gp.plain);
+                    gp.adjustWorldHeight(gp.plain);
+                    gp.setMapPick(gp.plain);
+                    gp.player.setXAndY(gp.plain);
+                }
+                case 1 -> {
+                    gp.adjustWorldWidth(gp.dungeon);
+                    gp.adjustWorldHeight(gp.dungeon);
+                    gp.setMapPick(gp.dungeon);
+                    gp.player.setXAndY(gp.dungeon);
+                }
+                case 2 -> {
+                    gp.adjustWorldWidth(gp.castle);
+                    gp.adjustWorldHeight(gp.castle);
+                    gp.setMapPick(gp.castle);
+                    gp.player.setXAndY(gp.castle);
+                }
+                case 3 -> {
+                    gp.adjustWorldWidth(gp.snow);
+                    gp.adjustWorldHeight(gp.snow);
+                    gp.setMapPick(gp.snow);
+                    gp.player.setXAndY(gp.snow);
+                }
             }
-            case 1 -> {
-                gp.adjustWorldWidth(gp.dungeon);
-                gp.adjustWorldHeight(gp.dungeon);
-                gp.setMapPick(gp.dungeon);
-                gp.player.setXAndY(gp.dungeon);
-            }
-            case 2 -> {
-                gp.adjustWorldWidth(gp.castle);
-                gp.adjustWorldHeight(gp.castle);
-                gp.setMapPick(gp.castle);
-                gp.player.setXAndY(gp.castle);
-            }
-            case 3 -> {
-                gp.adjustWorldWidth(gp.snow);
-                gp.adjustWorldHeight(gp.snow);
-                gp.setMapPick(gp.snow);
-                gp.player.setXAndY(gp.snow);
+            if(timeTransition <= 0)
+            {
+                gp.gameState = gp.playState;
+                switch (commandNum) {
+                    case 0 -> gp.playMusic(1);
+                    case 1 -> gp.playMusic(2);
+                    case 2 -> gp.playMusic(3);
+                    case 3 -> gp.playMusic(4);
+                }
+                commandNum = 0;
+                timeTransition = 255;
+                countDown = 0;
             }
         }
-        if(timeTransition <= 0)
+        else
         {
-            gp.gameState = gp.playState;
-            switch (commandNum) {
-                case 0 -> gp.playMusic(1);
-                case 1 -> gp.playMusic(2);
-                case 2 -> gp.playMusic(3);
-                case 3 -> gp.playMusic(4);
+            gp.adjustWorldWidth(gp.village);
+            gp.adjustWorldHeight(gp.village);
+            gp.setMapPick(gp.village);
+            gp.player.setXAndY(gp.village);
+            if(timeTransition <= 0)
+            {
+                gp.gameState = gp.playState;
+                gp.playMusic(0);
+                timeTransition = 255;
+                countDown = 0;
+                respawn = false;
             }
-            commandNum = 0;
-            timeTransition = 255;
-            countDown = 0;
         }
     }
 
