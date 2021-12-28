@@ -59,7 +59,6 @@ Chronicles Of Avanlon is RPG-based game where the player can be creative with th
 > Boss Challenge<br>
 ![This is an image](https://github.com/Chroax/Avanlon/blob/main/SourceGithub/BossChallenge.png)
 
-<br><br>
 
 # Link Resource
-You can download the resource link <a href="https://github.com/Chroax/Avanlon/blob/main/ResourceLink.txt" target="_blank" download>here</a>.
+You can access the resource link <a href="https://github.com/Chroax/Avanlon/blob/main/ResourceLink.txt" target="_blank">here</a>.
