@@ -77,6 +77,7 @@ public class GamePanel extends JPanel implements Runnable
     public final int dungeon = 2;
     public final int castle = 3;
     public final int snow = 4;
+    public boolean[] unlockMap = new boolean[5];
 
     // Player
     public Player player;
@@ -97,6 +98,9 @@ public class GamePanel extends JPanel implements Runnable
 
     public void setupGame()
     {
+        unlockMap[plain] = true;
+        unlockMap[village] = true;
+        unlockMap[snow] = true;
         gameState = startState;
         playMusic(5);
         aSetter.setMonster();
@@ -207,7 +211,7 @@ public class GamePanel extends JPanel implements Runnable
             case 0,1 -> maxWorldCol = 50;
             case 2 -> maxWorldCol = 66;
             case 3 -> maxWorldCol = 69;
-            case 4 -> maxWorldCol = 42;
+            case 4 -> maxWorldCol = 45;
         }
         worldWidth = tileSize * maxWorldCol;
         mapPick = i;

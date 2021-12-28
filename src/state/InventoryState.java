@@ -2,6 +2,7 @@ package state;
 
 import entity.Player;
 import object.SuperObject;
+import object.armor.Armor;
 import object.weapon.Weapon;
 import ui.GamePanel;
 
@@ -117,6 +118,13 @@ public class InventoryState extends State
                     g2.drawString("Phy Att : " + ((Weapon) newMap.getKey()).getPhyDamage(), rectangles[32].x + 315, rectangles[32].y + 35);
                     g2.drawString("Mag Att : " + ((Weapon) newMap.getKey()).getMagDamage(), rectangles[32].x + 315, rectangles[32].y + 63);
                     g2.drawString("Speed   : " + ((Weapon) newMap.getKey()).getSpd(), rectangles[32].x + 315, rectangles[32].y + 90);
+                }
+                else if(newMap.getKey().getType().equals("Armor"))
+                {
+                    g2.drawString(newMap.getKey().getName() + "  -  " + ((Armor)newMap.getKey()).getJobClass(), rectangles[32].x + 15, rectangles[32].y + 35);
+                    g2.drawString("Phy Def : " + ((Armor) newMap.getKey()).getPhyDef(), rectangles[32].x + 315, rectangles[32].y + 35);
+                    g2.drawString("Mag Def : " + ((Armor) newMap.getKey()).getMagDef(), rectangles[32].x + 315, rectangles[32].y + 63);
+                    g2.drawString("Speed   : " + ((Armor) newMap.getKey()).getSpd(), rectangles[32].x + 315, rectangles[32].y + 90);
                 }
                 else
                     g2.drawString(newMap.getKey().getName(), rectangles[32].x + 15, rectangles[32].y + 35);

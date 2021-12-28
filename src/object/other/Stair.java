@@ -1,4 +1,4 @@
-package object.drop;
+package object.other;
 
 import object.SuperObject;
 import ui.GamePanel;

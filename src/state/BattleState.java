@@ -24,13 +24,14 @@ public class BattleState extends State
     private String message2 = "";
     private int messageCounter = 0;
     public String status = "";
+    public boolean isDrop = false;
 
     public BattleState(GamePanel gp)
     {
         super(gp);
         rectangles = new Rectangle[4];
 
-        imageScreen = new BufferedImage[4];
+        imageScreen = new BufferedImage[5];
         setOptionMenu();
         setRectangles();
         getBattleImage();
@@ -237,14 +238,19 @@ public class BattleState extends State
            else if(status.equals("WIN"))
            {
                g2.setColor(new Color(95, 94, 110));
-               g2.drawString("You win the battle", 72, 654);
+               g2.drawString("You win the battle", 72, 632);
                g2.drawString("Get " + gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getEXP() + " EXP,   " +
-                       gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getGold() + " Gold", 72, 702);
+                       gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getGold() + " Gold", 72, 680);
+               if(gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getDropItem() != null && isDrop)
+                   g2.drawString("Get " + gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getDropItem().getName(), 72, 728);
 
                g2.setColor(new Color(236, 239, 244));
-               g2.drawString("You win the battle", 70, 652);
+               g2.drawString("You win the battle", 70, 630);
                g2.drawString("Get " + gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getEXP() + " EXP,   " +
-                       gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getGold() + " Gold", 70, 700);
+                       gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getGold() + " Gold", 70, 678);
+
+               if(gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getDropItem() != null && isDrop)
+                   g2.drawString("Get " + gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getDropItem().getName(), 70, 726);
            }
 
            messageCounter++;

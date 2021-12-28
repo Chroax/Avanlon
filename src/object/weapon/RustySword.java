@@ -21,7 +21,7 @@ public class RustySword extends Weapon
         setType("Weapon");
         setDescription("Ya nanti lah isi sendiri\nYang penting ada dulu aja");
         setSpd(-2);
-        setPhyDamage(15);
+        setPhyDamage(300000);
         setMagDamage(15);
         setBuyPrice(200);
         setSellPrice((int) (getBuyPrice() * 0.5));

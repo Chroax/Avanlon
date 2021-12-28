@@ -11,9 +11,9 @@ public class PlainTile extends TileManager
     public PlainTile(GamePanel gp)
     {
         super(gp);
-        monsters = new Monster[5];
+        monsters = new Monster[7];
         obj = new SuperObject[2];
-        NPC = new Entity[1];
+        NPC = new Entity[5];
         tile = new Tile[42];
         mapTileNum = new int[50][50];
         col = 50;

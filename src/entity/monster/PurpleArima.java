@@ -61,61 +61,7 @@ public class PurpleArima extends Monster
         up3 = setup(txt + " 12");
     }
 
-    @Override
-    public void update()
-    {
-        if(!stopMov)
-        {
-            setAction();
 
-            setCollisionOn(false);
-            gp.cChecker.checkTile(this);
-            gp.cChecker.checkObj(this, false);
-            gp.cChecker.checkPlayer(this);
-
-            if(!isCollisionOn())
-            {
-                switch (getDirection())
-                {
-                    case "up" -> worldY -= getSpeed();
-                    case "down" -> worldY += getSpeed();
-                    case "left" -> worldX -= getSpeed();
-                    case "right" -> worldX += getSpeed();
-                }
-            }
-
-            spriteCounter++;
-            stopCounter++;
-            if (spriteCounter > 15)
-            {
-                if (spriteNum == 1)
-                    spriteNum = 3;
-                else if (spriteNum == 3 || spriteNum == 2)
-                    spriteNum = 1;
-                spriteCounter = 0;
-            }
-            if(stopCounter == 120)
-            {
-                stopMov = true;
-                stopCounter = 0;
-            }
-        }
-        else
-        {
-            standCounter++;
-            stopCounter++;
-            if(standCounter == 8)
-            {
-                spriteNum = 2;
-                standCounter = 0;
-            }
-            if(stopCounter == 60)
-            {
-                stopMov = false;
-                stopCounter = 0;
-            }
-        }
-    }
 
     @Override
     public void setAction()

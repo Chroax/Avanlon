@@ -116,6 +116,8 @@ public abstract class Entity
             int phyAtt = getSTR() * 2 - entity.getDEF();
             int magAtt = getINT() * 2 - entity.getRST();
             int totalAtt = phyAtt + magAtt;
+            if(totalAtt < 0)
+                totalAtt = 0;
             if(random.nextDouble() < 0.15 * getCRIT() / entity.getEVD())
                 totalAtt *= 2;
             entity.setHP(entity.getHP() - totalAtt);

@@ -52,9 +52,8 @@ public class Aerith extends Entity
     public void setDialogue()
     {
         dialogues[0][0] = "Hello,  adventure";
-        dialogues[0][1] = "Im  a  merchant";
-        dialogues[0][2] = "What  is  a  merchant  ?";
-        dialogues[0][3] = "Merchant  is  a  place  where  adventurers\nmake  transactions  to  buy  and  sell  items";
+        dialogues[0][1] = "Im    Aerith";
+        dialogues[0][2] = "Good    Luck    for    your    adventure";
     }
 
     public void speak()

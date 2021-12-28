@@ -42,6 +42,7 @@ public class UI
     public int selectionMerchantState = merchantState;
     public boolean buying = false;
     public boolean respawn = false;
+    public boolean doneTp = false;
 
     public int timeTransition = 255;
     public int countDown = 0;
@@ -161,6 +162,15 @@ public class UI
     public void drawChooseMapScreen()
     {
         String mapOption = "PLAIN\nDUNGEON\nCASTLE\nSNOW\nBACK";
+        if(gp.getMapPick() == gp.plain)
+            mapOption = "VILLAGE\nDUNGEON\nCASTLE\nSNOW\nBACK";
+        else if(gp.getMapPick() == gp.dungeon)
+            mapOption = "VILLAGE\nPLAIN\nCASTLE\nSNOW\nBACK";
+        else if(gp.getMapPick() == gp.castle)
+            mapOption = "VILLAGE\nPLAIN\nDUNGEON\nSNOW\nBACK";
+        else if(gp.getMapPick() == gp.snow)
+            mapOption = "VILLAGE\nPLAIN\nDUNGEON\nCASTLE\nBACK";
+
         int i = 0;
         int x = gp.tileSize * 2;
         int y = gp.tileSize / 2;
@@ -449,32 +459,77 @@ public class UI
             timeTransition -=5;
         if(!respawn)
         {
-            switch (commandNum) {
-                case 0 -> {
-                    gp.adjustWorldWidth(gp.plain);
-                    gp.adjustWorldHeight(gp.plain);
-                    gp.setMapPick(gp.plain);
-                    gp.player.setXAndY(gp.plain);
+            if(doneTp)
+            {
+                switch (commandNum) {
+                    case 0 -> {
+                        if(gp.getMapPick() == gp.village)
+                        {
+                            gp.adjustWorldWidth(gp.plain);
+                            gp.adjustWorldHeight(gp.plain);
+                            gp.setMapPick(gp.plain);
+                            gp.player.setXAndY(gp.plain);
+                        }
+                        else
+                        {
+                            gp.adjustWorldWidth(gp.village);
+                            gp.adjustWorldHeight(gp.village);
+                            gp.setMapPick(gp.village);
+                            gp.player.setXAndY(gp.village);
+                        }
+                    }
+                    case 1 -> {
+                        if(gp.getMapPick() == gp.village || gp.getMapPick() == gp.plain)
+                        {
+                            gp.adjustWorldWidth(gp.dungeon);
+                            gp.adjustWorldHeight(gp.dungeon);
+                            gp.setMapPick(gp.dungeon);
+                            gp.player.setXAndY(gp.dungeon);
+                        }
+                        else
+                        {
+                            gp.adjustWorldWidth(gp.plain);
+                            gp.adjustWorldHeight(gp.plain);
+                            gp.setMapPick(gp.plain);
+                            gp.player.setXAndY(gp.plain);
+                        }
+                    }
+                    case 2 -> {
+                        if(gp.getMapPick() != gp.snow || gp.getMapPick() != gp.castle)
+                        {
+                            gp.adjustWorldWidth(gp.castle);
+                            gp.adjustWorldHeight(gp.castle);
+                            gp.setMapPick(gp.castle);
+                            gp.player.setXAndY(gp.castle);
+                        }
+                        else
+                        {
+                            gp.adjustWorldWidth(gp.dungeon);
+                            gp.adjustWorldHeight(gp.dungeon);
+                            gp.setMapPick(gp.dungeon);
+                            gp.player.setXAndY(gp.dungeon);
+                        }
+                    }
+                    case 3 -> {
+                        if(gp.getMapPick() != gp.snow)
+                        {
+                            gp.adjustWorldWidth(gp.snow);
+                            gp.adjustWorldHeight(gp.snow);
+                            gp.setMapPick(gp.snow);
+                            gp.player.setXAndY(gp.snow);
+                        }
+                        else
+                        {
+                            gp.adjustWorldWidth(gp.castle);
+                            gp.adjustWorldHeight(gp.castle);
+                            gp.setMapPick(gp.castle);
+                            gp.player.setXAndY(gp.castle);
+                        }
+                    }
                 }
-                case 1 -> {
-                    gp.adjustWorldWidth(gp.dungeon);
-                    gp.adjustWorldHeight(gp.dungeon);
-                    gp.setMapPick(gp.dungeon);
-                    gp.player.setXAndY(gp.dungeon);
-                }
-                case 2 -> {
-                    gp.adjustWorldWidth(gp.castle);
-                    gp.adjustWorldHeight(gp.castle);
-                    gp.setMapPick(gp.castle);
-                    gp.player.setXAndY(gp.castle);
-                }
-                case 3 -> {
-                    gp.adjustWorldWidth(gp.snow);
-                    gp.adjustWorldHeight(gp.snow);
-                    gp.setMapPick(gp.snow);
-                    gp.player.setXAndY(gp.snow);
-                }
+                doneTp = false;
             }
+
             if(timeTransition <= 0)
             {
                 gp.gameState = gp.playState;

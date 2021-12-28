@@ -145,7 +145,10 @@ public class KeyHandler implements KeyListener
                     gp.gameState = gp.pauseState;
                 }
                 case KeyEvent.VK_I -> gp.gameState = gp.inventoryState;
-                case KeyEvent.VK_U -> gp.player.unEquipWeapon();
+                case KeyEvent.VK_U -> {
+                    gp.player.unEquipArmor();
+                    gp.player.unEquipWeapon();
+                }
             }
         }
         else if(gp.gameState == gp.battleState)
@@ -161,7 +164,10 @@ public class KeyHandler implements KeyListener
                         case "WIN" -> {
                             ((BattleState)gp.ui.states[gp.ui.battleState]).status = "ATTACK";
                             gp.gameState = gp.playState;
-                            gp.map[gp.getMapPick()].monsters[gp.monsterIndex].generateMonster();
+                            if(gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getType().equals("Common"))
+                                gp.map[gp.getMapPick()].monsters[gp.monsterIndex].generateMonster();
+                            else
+                                gp.map[gp.getMapPick()].monsters[gp.monsterIndex] = null;
                             gp.stopMusic();
                             gp.playMusic(gp.getMapPick());
                         }
@@ -170,7 +176,10 @@ public class KeyHandler implements KeyListener
                             gp.stopMusic();
                             gp.playMusic(gp.getMapPick());
                             gp.ui.states[gp.ui.battleState].commandNum = 0;
-                            gp.map[gp.getMapPick()].monsters[gp.monsterIndex].generateMonster();
+                            if(gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getType().equals("Common"))
+                                gp.map[gp.getMapPick()].monsters[gp.monsterIndex].generateMonster();
+                            else
+                                gp.map[gp.getMapPick()].monsters[gp.monsterIndex].resetStat();
                         }
                     }
                     ((BattleState)gp.ui.states[gp.ui.battleState]).messageOn = false;
@@ -223,7 +232,10 @@ public class KeyHandler implements KeyListener
                                         gp.gameState = gp.playState;
                                         gp.player.respawn();
                                         gp.player.resetStat();
-                                        gp.map[gp.getMapPick()].monsters[gp.monsterIndex].generateMonster();
+                                        if(gp.map[gp.getMapPick()].monsters[gp.monsterIndex].getType().equals("Common"))
+                                            gp.map[gp.getMapPick()].monsters[gp.monsterIndex].generateMonster();
+                                        else
+                                            gp.map[gp.getMapPick()].monsters[gp.monsterIndex].resetStat();
                                     }
                                     if(stillBattle)
                                         gp.playSE(9);
@@ -267,17 +279,71 @@ public class KeyHandler implements KeyListener
                         gp.ui.commandNum = 0;
                 }
                 case KeyEvent.VK_ENTER -> {
+                    boolean teleport = false;
                     switch (gp.ui.commandNum) {
-                        case 0,1,2,3 -> {
-                            gp.stopMusic();
-                            gp.playSE(16);
-                            gp.gameState = gp.transitionState;
+                        case 0 ->{
+                            switch (gp.getMapPick())
+                            {
+                                case 0 ->  {
+                                    if(gp.unlockMap[gp.plain])
+                                        teleport = true;
+                                }
+                                case 1, 2, 3, 4 -> {
+                                    if(gp.unlockMap[gp.village])
+                                        teleport = true;
+                                }
+                            }
+                        }
+                        case 1 ->{
+                            switch (gp.getMapPick())
+                            {
+                                case 0, 1 ->  {
+                                    if(gp.unlockMap[gp.dungeon])
+                                        teleport = true;
+                                }
+                                case 2, 3, 4 -> {
+                                    if(gp.unlockMap[gp.plain])
+                                        teleport = true;
+                                }
+                            }
+                        }
+                        case 2 ->{
+                            switch (gp.getMapPick())
+                            {
+                                case 0, 1, 2 ->  {
+                                    if(gp.unlockMap[gp.castle])
+                                        teleport = true;
+                                }
+                                case 3, 4 -> {
+                                    if(gp.unlockMap[gp.dungeon])
+                                        teleport = true;
+                                }
+                            }
+                        }
+                        case 3 ->{
+                            switch (gp.getMapPick())
+                            {
+                                case 0, 1, 2, 3 ->  {
+                                    if(gp.unlockMap[gp.snow])
+                                        teleport = true;
+                                }
+                                case 4 -> {
+                                    if(gp.unlockMap[gp.castle])
+                                        teleport = true;
+                                }
+                            }
                         }
                         case 4 -> {
                             gp.playSE(9);
                             gp.ui.commandNum = 0;
                             gp.gameState = gp.playState;
                         }
+                    }
+                    if(teleport)
+                    {
+                        gp.stopMusic();
+                        gp.playSE(16);
+                        gp.gameState = gp.transitionState;
                     }
                 }
             }

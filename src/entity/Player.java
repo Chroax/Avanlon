@@ -1,7 +1,9 @@
 package entity;
 
+import entity.monster.Monster;
 import object.SuperObject;
 import object.armor.Armor;
+import object.other.Pillar;
 import object.potion.Potion;
 import object.weapon.Weapon;
 import state.BattleState;
@@ -55,9 +57,9 @@ public class Player extends Entity
 
     private void setDefaultValues()
     {
-        setHP(1);setMaxHP(150);
+        setHP(150);setMaxHP(150);
         setMP(100);setMaxMP(100);
-        setSTR(12);setMaxSTR(12);
+        setSTR(10);setMaxSTR(10);
         setINT(6);setMaxINT(6);
         setACC(8);setMaxACC(8);
         setEVD(15);setMaxEVD(15);
@@ -65,7 +67,7 @@ public class Player extends Entity
         setRST(1);setMaxRST(1);
         setCRIT(6);setMaxCRIT(6);
         setLvl(1);
-        setGold(100);
+        setGold(1000);
         setEXP(0);
         setMaxEXP(100);
 
@@ -236,6 +238,7 @@ public class Player extends Entity
         {
             if(gp.keyH.enterPressed)
             {
+                ((BattleState)gp.ui.states[gp.ui.battleState]).isDrop = false;
                 ((BattleState)gp.ui.states[gp.ui.battleState]).messageOn = false;
                 gp.stopMusic();
                 gp.playMusic(6);
@@ -263,9 +266,13 @@ public class Player extends Entity
                             gp.npcIndex = i;
                         }
                         else
-                        {
                             gp.gameState = gp.merchantState;
-                        }
+                    }
+                    default -> {
+                        gp.gameState = gp.dialogueState;
+                        gp.ui.endDialogue = false;
+                        gp.map[gp.getMapPick()].NPC[i].speak();
+                        gp.npcIndex = i;
                     }
                 }
                 gp.keyH.enterPressed = false;
@@ -280,11 +287,44 @@ public class Player extends Entity
             String objectName = gp.map[gp.getMapPick()].obj[i].getName();
             switch (objectName)
             {
-                case "Stair" -> {
+                case "Stair", "Portal" -> {
                     if(gp.keyH.enterPressed)
+                    {
+                        gp.ui.doneTp = true;
                         gp.gameState = gp.chooseMapState;
+                    }
                 }
-                case "Rusty Sword" -> {
+                case "Pillar" -> {
+                    if(gp.keyH.enterPressed)
+                    {
+                        if(((Pillar)gp.map[gp.getMapPick()].obj[i]).notSpawn)
+                        {
+                            if(gp.getMapPick() == gp.plain)
+                                gp.aSetter.setBoss(gp.plain);
+                            else if(gp.getMapPick() == gp.dungeon)
+                                gp.aSetter.setBoss(gp.dungeon);
+                            else if(gp.getMapPick() == gp.castle)
+                                gp.aSetter.setBoss(gp.castle);
+                            else if(gp.getMapPick() == gp.snow)
+                                gp.aSetter.setBoss(gp.snow);
+                            ((Pillar)gp.map[gp.getMapPick()].obj[i]).notSpawn = false;
+                        }
+                    }
+                }
+                case "Rusty Sword", "Bloin Staff", "Blue Flare Sword", "Coad Sword", "Bren Staff",
+                        "Crimson Bow", "Crystal Staff", "Dream Staff", "Emerald Bow", "Fire Bow",
+                        "Frost Staff", "Fury Bow", "Golden Staff", "Green Bow", "Holy Staff",
+                        "Iron Sword", "Jade Bow", "Light Born Sword", "Magma Bow", "Majesty Staff",
+                        "Metal Sword", "Night Bow", "Purple Flare Sword", "Root Bow", "Ruby Sword",
+                        "Sky Bow", "Snowy Staff", "Starfall Sword", "Stone Staff", "Thin Sword",
+                        "Athena Armor", "Beast Armor", "Bind Armor", "Bold Armor", "Bull Armor",
+                        "Buzz Robe", "Bynn Robe", "Claw Armor", "Clone Armor", "Dim Armor", "Ex Armor",
+                        "Firaga Armor", "Golden Armor", "Lusty Armor", "Magic Robe", "Plain Armor",
+                        "Porc Armor", "Prime Armor", "Prism Armor", "Radiant Armor", "Saint Robe",
+                        "Seyz Armor", "Solce Armor", "Solem Armor", "Solid Armor", "Star Robe", "Time Armor",
+                        "Toy Armor", "Voyage Armor", "Yev Robe", "Health Potion", "Magic Point Potion",
+                        "Strength Potion", "Intelligence Potion", "Accuracy Potion", "Evasion Potion",
+                        "Defence Potion", "Resistance Potion", "Critical Potion" -> {
                     if(!fullInventory)
                     {
                         gp.playSE(14);
@@ -328,6 +368,15 @@ public class Player extends Entity
 
     public void defeatMonster(Entity entity)
     {
+        if(((Monster)entity).getDropItem() != null)
+        {
+            Random random = new Random();
+            if (random.nextDouble() >= 0.5)
+            {
+                ((BattleState)gp.ui.states[gp.ui.battleState]).isDrop = true;
+                addItem(((Monster)entity).getDropItem(), 1, false);
+            }
+        }
         gp.playSE(19);
         setGold(getGold() + entity.getGold());
         setEXP(getEXP() + entity.getEXP());
@@ -335,6 +384,25 @@ public class Player extends Entity
             gp.playSE(12);
         while(getEXP() >= getMaxEXP())
             levelUp();
+        switch (entity.getName())
+        {
+            case "Behemoth" -> {
+                gp.aSetter.setPortal();
+                gp.unlockMap[gp.dungeon] = true;
+            }
+            case "Dragon" -> {
+                gp.aSetter.setPortal();
+                gp.unlockMap[gp.castle] = true;
+            }
+            case "Dragon Lord" -> {
+                gp.aSetter.setPortal();
+                gp.unlockMap[gp.snow] = true;
+            }
+            case "Fire Demon" -> {
+                System.out.println("TAMAT");
+            }
+        }
+
     }
 
     public void respawn()

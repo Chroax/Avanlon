@@ -22,7 +22,7 @@ public class TitleState extends State
 
         optionMenu = new String[3];
         optionMenu[0] = "NEW GAME";
-        optionMenu[1] = "QUIT GAME";
+        optionMenu[1] = "LOAD GAME";
         optionMenu[2] = "QUIT";
     }
     public void getTitleImage()

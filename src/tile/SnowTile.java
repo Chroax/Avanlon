@@ -11,12 +11,12 @@ public class SnowTile extends TileManager
     public SnowTile(GamePanel gp)
     {
         super(gp);
-        monsters = new Monster[5];
+        monsters = new Monster[7];
         obj = new SuperObject[2];
-        NPC = new Entity[1];
+        NPC = new Entity[10];
         tile = new Tile[500];
-        mapTileNum = new int[42][30];
-        col = 42;
+        mapTileNum = new int[45][30];
+        col = 45;
         row = 30;
         filePath = "/map/worldV5.txt";
         getTileImage();
